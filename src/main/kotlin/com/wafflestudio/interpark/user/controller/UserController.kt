@@ -7,6 +7,4 @@ import org.springframework.web.bind.annotation.*
 @RestController
 class UserController(
     private val userService: UserService,
-) {
-
-}
+)
