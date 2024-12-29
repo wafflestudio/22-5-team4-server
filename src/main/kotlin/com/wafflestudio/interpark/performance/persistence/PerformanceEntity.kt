@@ -1,4 +1,12 @@
-package org.example.com.wafflestudio.interpark.performance.persistence
+package com.wafflestudio.interpark.performance.persistence
 
-class PerformanceEntity {
-}
+import jakarta.persistence.*
+
+@Entity(name = "performances")
+class PerformanceEntity (
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    val id: String? = null,
+
+    val detail: String? = null
+)

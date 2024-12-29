@@ -1,4 +1,4 @@
-package org.example.com.wafflestudio.interpark.seat.service
+package com.wafflestudio.interpark.seat.service
 
 class SeatService {
 }

@@ -1,4 +1,4 @@
-package org.example.com.wafflestudio.interpark.user.service
+package com.wafflestudio.interpark.user.service
 
 class UserService {
 }

@@ -1,2 +1,2 @@
-package org.example.com.wafflestudio.interpark.review.controller
+package com.wafflestudio.interpark.review.controller
 

@@ -9,7 +9,7 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
 }
 
-group = "com.wafflestudio.toy"
+group = "com.wafflestudio.interpark"
 version = "0.0.1-SNAPSHOT"
 
 repositories {

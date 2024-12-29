@@ -1,4 +1,4 @@
-package org.example.com.wafflestudio.interpark.user.persistence
+package com.wafflestudio.interpark.user.persistence
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue

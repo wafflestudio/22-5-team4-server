@@ -1,4 +1,4 @@
-package org.example.com.wafflestudio.interpark.seat.persistence
+package com.wafflestudio.interpark.seat.persistence
 
 class SeatEntity {
 }
