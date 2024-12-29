@@ -1,15 +1,13 @@
-package org.example.com.wafflestudio.interpark.user.persistence
+package com.wafflestudio.interpark.user.persistence
 
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
+import jakarta.persistence.*
 
 @Entity
 class UserIdentityEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     val id: String? = null,
-    
+    @Column(name = "hashedPassword", nullable = false)
+    val hashedPassword: String,
 ) {
 }
