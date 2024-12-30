@@ -3,13 +3,17 @@ package com.wafflestudio.interpark.user.service
 import com.wafflestudio.interpark.user.*
 import com.wafflestudio.interpark.user.controller.User
 import com.wafflestudio.interpark.user.persistence.UserEntity
+import com.wafflestudio.interpark.user.persistence.UserIdentityEntity
+import com.wafflestudio.interpark.user.persistence.UserIdentityRepository
 import com.wafflestudio.interpark.user.persistence.UserRepository
+import org.mindrot.jbcrypt.BCrypt
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserService(
     private val userRepository: UserRepository,
+    private val userIdentityRepository: UserIdentityRepository,
 ) {
     @Transactional
     fun signUp(
@@ -19,7 +23,16 @@ class UserService(
         phoneNumber: String,
         email: String,
     ): User {
-        //TODO : 회원가입 기능 만들기
+        if (username.length < 6 || username.length > 20) {
+            throw SignUpBadUsernameException()
+        }
+        if (password.length < 8 || password.length > 12) {
+            throw SignUpBadPasswordException()
+        }
+        if (userRepository.existsByUsername(username)) {
+            throw SignUpUsernameConflictException()
+        }
+        val encryptedPassword = BCrypt.hashpw(password, BCrypt.gensalt())
         val user =
             userRepository.save(
                 UserEntity(
@@ -29,6 +42,14 @@ class UserService(
                     email = email,
                 ),
             )
+        userIdentityRepository.save(
+            UserIdentityEntity(
+                user = user,
+                role = "USER",
+                hashedPassword = encryptedPassword,
+                provider = "self",
+            )
+        )
         return User.fromEntity(user)
     }
 }
