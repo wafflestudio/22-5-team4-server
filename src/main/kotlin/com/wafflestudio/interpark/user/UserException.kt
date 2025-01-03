@@ -24,6 +24,18 @@ class SignUpBadPasswordException : UserException(
 
 class SignUpUsernameConflictException : UserException(
     errorCode = 0,
-    httpStatusCode = HttpStatus.BAD_REQUEST,
+    httpStatusCode = HttpStatus.CONFLICT,
     msg = "Username Conflict",
+)
+
+class SignInUserNotFoundException : UserException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.NOT_FOUND,
+    msg = "User not found",
+)
+
+class SignInInvalidPasswordException : UserException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.UNAUTHORIZED,
+    msg = "Invalid Password",
 )

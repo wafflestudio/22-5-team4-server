@@ -52,4 +52,19 @@ class UserService(
         )
         return User.fromEntity(user)
     }
+
+    @Transactional
+    fun signIn(
+        username: String,
+        password: String,
+    ): Pair<User, Pair<String, String>> {
+        val targetUser = userRepository.findByUsername(username) ?: throw SignInUserNotFoundException()
+        val targetIdentity = userIdentityRepository.findByUser(targetUser) ?: throw SignInUserNotFoundException()
+        if(!BCrypt.checkpw(password, targetIdentity.hashedPassword)) {
+            throw SignInInvalidPasswordException()
+        }
+        val accessToken = UserAccessTokenUtil.generateAccessToken(targetUser.id!!)
+        val refreshToken = UserAccessTokenUtil.generateRefreshToken(targetIdentity.id!!)
+        return Pair(User.fromEntity(targetUser), Pair(accessToken, refreshToken))
+    }
 }
