@@ -26,9 +26,9 @@ class UserController(
     @PostMapping("/api/v1/signin")
     fun signin(
         @RequestBody request: SignInRequest,
-    ): ResponseEntity<SignInResponse> {
+    ): ResponseEntity<TokenResponse> {
         val (accessToken, refreshToken) = userService.signIn(request.username, request.password)
-        return ResponseEntity.ok(SignInResponse(accessToken, refreshToken))
+        return ResponseEntity.ok(TokenResponse(accessToken, refreshToken))
     }
 
     @PostMapping("/api/v1/signout")
@@ -37,6 +37,14 @@ class UserController(
     ): ResponseEntity<Void> {
         userService.signOut(request.refreshToken)
         return ResponseEntity.noContent().build()
+    }
+
+    @PostMapping("/api/v1/refresh_token")
+    fun refreshToken(
+        @RequestBody request: RefreshTokenRequest,
+    ): ResponseEntity<TokenResponse> {
+        val (accessToken, refreshToken) = userService.refreshAccessToken(request.refreshToken)
+        return ResponseEntity.ok(TokenResponse(accessToken, refreshToken))
     }
 }
 
@@ -55,9 +63,11 @@ data class SignInRequest(
     val password: String,
 )
 
-data class SignInResponse(
+data class TokenResponse(
     val accessToken: String,
     val refreshToken: String,
 )
 
 data class SignOutRequest(val refreshToken: String)
+
+data class RefreshTokenRequest(val refreshToken: String)
