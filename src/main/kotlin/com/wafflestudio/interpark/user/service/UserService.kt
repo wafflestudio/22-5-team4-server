@@ -50,7 +50,7 @@ class UserService(
                 role = "USER",
                 hashedPassword = encryptedPassword,
                 provider = "self",
-            )
+            ),
         )
         return User.fromEntity(user)
     }
@@ -62,7 +62,7 @@ class UserService(
     ): Pair<String, String> {
         val targetUser = userRepository.findByUsername(username) ?: throw SignInUserNotFoundException()
         val targetIdentity = userIdentityRepository.findByUser(targetUser) ?: throw SignInUserNotFoundException()
-        if(!BCrypt.checkpw(password, targetIdentity.hashedPassword)) {
+        if (!BCrypt.checkpw(password, targetIdentity.hashedPassword)) {
             throw SignInInvalidPasswordException()
         }
         val accessToken = userAccessTokenUtil.generateAccessToken(targetUser.id!!)

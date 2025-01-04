@@ -13,13 +13,14 @@ class UserController(
     fun signup(
         @RequestBody request: SignUpRequest,
     ): ResponseEntity<SignUpResponse> {
-        val user = userService.signUp(
-            request.username,
-            request.password,
-            request.nickname,
-            request.email,
-            request.phoneNumber
-        )
+        val user =
+            userService.signUp(
+                request.username,
+                request.password,
+                request.nickname,
+                request.email,
+                request.phoneNumber,
+            )
         return ResponseEntity.ok(SignUpResponse(user))
     }
 

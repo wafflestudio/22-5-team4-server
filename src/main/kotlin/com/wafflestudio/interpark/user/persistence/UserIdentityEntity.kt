@@ -24,5 +24,4 @@ class UserIdentityEntity(
     val provider: String,
     @Column(name = "social_id", nullable = true)
     val socialId: String? = null,
-) {
-}
+)
