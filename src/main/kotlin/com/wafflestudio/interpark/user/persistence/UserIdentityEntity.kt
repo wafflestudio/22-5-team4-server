@@ -7,7 +7,16 @@ class UserIdentityEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     val id: String? = null,
-    @Column(name = "hashedPassword", nullable = false)
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    var user: UserEntity,
+    @Column(name = "role", nullable = false)
+    var role: String,
+    @Column(name = "hashed_password", nullable = false)
     val hashedPassword: String,
+    @Column(name = "provider", nullable = false)
+    val provider: String,
+    @Column(name = "social_id", nullable = true)
+    val socialId: String? = null,
 ) {
 }
