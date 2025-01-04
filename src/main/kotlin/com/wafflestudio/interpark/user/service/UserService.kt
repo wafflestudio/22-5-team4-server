@@ -1,6 +1,5 @@
 package com.wafflestudio.interpark.user.service
 
-import com.wafflestudio.interpark.user.*
 import com.wafflestudio.interpark.user.controller.User
 import com.wafflestudio.interpark.user.persistence.UserEntity
 import com.wafflestudio.interpark.user.persistence.UserRepository
@@ -19,7 +18,7 @@ class UserService(
         phoneNumber: String,
         email: String,
     ): User {
-        //TODO : 회원가입 기능 만들기
+        // TODO : 회원가입 기능 만들기
         val user =
             userRepository.save(
                 UserEntity(
