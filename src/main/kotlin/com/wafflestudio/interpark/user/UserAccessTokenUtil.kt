@@ -37,7 +37,7 @@ object UserAccessTokenUtil{
                     .parseClaimsJws(accessToken)
                     .body
             if (claims.expiration < Date()) {
-                return null
+                throw TokenExpiredException()
             }
             return claims.subject
         } catch (e: Exception) {
@@ -69,12 +69,17 @@ object UserAccessTokenUtil{
     fun refreshAccessToken(refreshToken: String): Pair<String, String>? {
         val storedRefreshToken = refreshTokenRepository.findByRefreshToken(refreshToken) ?: return null
 
-        if(storedRefreshToken.expiryDate < Date()) return null
+        if(storedRefreshToken.expiryDate < Date()) throw TokenExpiredException()
 
         val newAccessToken = generateAccessToken(storedRefreshToken.userId)
         val newRefreshToken = generateRefreshToken(storedRefreshToken.userId)
 
         return Pair(newAccessToken, newRefreshToken)
+    }
+
+    fun removeRefreshToken(refreshToken: String) {
+        val storedRefreshToken = refreshTokenRepository.findByRefreshToken(refreshToken) ?: return
+        refreshTokenRepository.delete(storedRefreshToken)
     }
     private const val ACCESS_EXPIRATION_TIME = 1000 * 60 * 15 // 15 minutes
     private const val REFRESH_EXPIRATION_TIME = 1000 * 60 * 60 * 24 // 1 day

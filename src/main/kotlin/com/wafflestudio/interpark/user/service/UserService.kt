@@ -7,6 +7,7 @@ import com.wafflestudio.interpark.user.persistence.UserIdentityEntity
 import com.wafflestudio.interpark.user.persistence.UserIdentityRepository
 import com.wafflestudio.interpark.user.persistence.UserRepository
 import org.mindrot.jbcrypt.BCrypt
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -66,5 +67,22 @@ class UserService(
         val accessToken = UserAccessTokenUtil.generateAccessToken(targetUser.id!!)
         val refreshToken = UserAccessTokenUtil.generateRefreshToken(targetIdentity.id!!)
         return Pair(User.fromEntity(targetUser), Pair(accessToken, refreshToken))
+    }
+
+    @Transactional
+    fun logout(refreshToken: String) {
+        UserAccessTokenUtil.removeRefreshToken(refreshToken)
+    }
+
+    @Transactional
+    fun authenticate(accessToken: String): User {
+        val userId = UserAccessTokenUtil.validateAccessToken(accessToken) ?: throw AuthenticateException()
+        val user = userRepository.findByIdOrNull(userId) ?: throw AuthenticateException()
+        return User.fromEntity(user)
+    }
+
+    @Transactional
+    fun refreshAccessToken(refreshToken: String): Pair<String, String> {
+        return UserAccessTokenUtil.refreshAccessToken(refreshToken) ?: throw AuthenticateException()
     }
 }

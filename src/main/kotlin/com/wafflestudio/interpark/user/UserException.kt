@@ -39,3 +39,15 @@ class SignInInvalidPasswordException : UserException(
     httpStatusCode = HttpStatus.UNAUTHORIZED,
     msg = "Invalid Password",
 )
+
+class AuthenticateException : UserException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.UNAUTHORIZED,
+    msg = "Unauthorized",
+)
+
+class TokenExpiredException : UserException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.UNAUTHORIZED,
+    msg = "Token Expired",
+)
