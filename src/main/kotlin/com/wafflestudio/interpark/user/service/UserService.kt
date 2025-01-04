@@ -1,5 +1,6 @@
 package com.wafflestudio.interpark.user.service
 
+import com.wafflestudio.interpark.user.*
 import com.wafflestudio.interpark.user.controller.User
 import com.wafflestudio.interpark.user.persistence.UserEntity
 import com.wafflestudio.interpark.user.persistence.UserIdentityEntity
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 class UserService(
     private val userRepository: UserRepository,
     private val userIdentityRepository: UserIdentityRepository,
+    private val userAccessTokenUtil: UserAccessTokenUtil,
 ) {
     @Transactional
     fun signUp(
@@ -63,25 +65,25 @@ class UserService(
         if(!BCrypt.checkpw(password, targetIdentity.hashedPassword)) {
             throw SignInInvalidPasswordException()
         }
-        val accessToken = UserAccessTokenUtil.generateAccessToken(targetUser.id!!)
-        val refreshToken = UserAccessTokenUtil.generateRefreshToken(targetIdentity.id!!)
+        val accessToken = userAccessTokenUtil.generateAccessToken(targetUser.id!!)
+        val refreshToken = userAccessTokenUtil.generateRefreshToken(targetIdentity.id!!)
         return Pair(accessToken, refreshToken)
     }
 
     @Transactional
     fun signOut(refreshToken: String) {
-        UserAccessTokenUtil.removeRefreshToken(refreshToken)
+        userAccessTokenUtil.removeRefreshToken(refreshToken)
     }
 
     @Transactional
     fun authenticate(accessToken: String): User {
-        val userId = UserAccessTokenUtil.validateAccessToken(accessToken) ?: throw AuthenticateException()
+        val userId = userAccessTokenUtil.validateAccessToken(accessToken) ?: throw AuthenticateException()
         val user = userRepository.findByIdOrNull(userId) ?: throw AuthenticateException()
         return User.fromEntity(user)
     }
 
     @Transactional
     fun refreshAccessToken(refreshToken: String): Pair<String, String> {
-        return UserAccessTokenUtil.refreshAccessToken(refreshToken) ?: throw AuthenticateException()
+        return userAccessTokenUtil.refreshAccessToken(refreshToken) ?: throw AuthenticateException()
     }
 }

@@ -31,7 +31,7 @@ class SignUpUsernameConflictException : UserException(
 
 class SignInUserNotFoundException : UserException(
     errorCode = 0,
-    httpStatusCode = HttpStatus.NOT_FOUND,
+    httpStatusCode = HttpStatus.UNAUTHORIZED,
     msg = "User not found",
 )
 

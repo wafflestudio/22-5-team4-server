@@ -2,21 +2,16 @@ package com.wafflestudio.interpark.user
 
 import com.wafflestudio.interpark.user.persistence.RefreshTokenEntity
 import com.wafflestudio.interpark.user.persistence.RefreshTokenRepository
-import com.wafflestudio.interpark.user.persistence.UserEntity
-import com.wafflestudio.interpark.user.persistence.UserRepository
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
 import java.util.*
 
 @Component
-object UserAccessTokenUtil{
-    //object 에는 매개변수를 넣을 수 없어 @Autowired 사용
-    @Autowired
-    private lateinit var refreshTokenRepository : RefreshTokenRepository
-
+class UserAccessTokenUtil(
+    private var refreshTokenRepository: RefreshTokenRepository,
+){
     fun generateAccessToken(username: String): String {
         val now = Date()
         val expiryDate = Date(now.time + ACCESS_EXPIRATION_TIME)
@@ -81,7 +76,10 @@ object UserAccessTokenUtil{
         val storedRefreshToken = refreshTokenRepository.findByRefreshToken(refreshToken) ?: return
         refreshTokenRepository.delete(storedRefreshToken)
     }
-    private const val ACCESS_EXPIRATION_TIME = 1000 * 60 * 15 // 15 minutes
-    private const val REFRESH_EXPIRATION_TIME = 1000 * 60 * 60 * 24 // 1 day
-    private val SECRET_KEY = Keys.hmacShaKeyFor("THISSHOULDBEPROTECTED".toByteArray(StandardCharsets.UTF_8))
+
+    companion object {
+        private const val ACCESS_EXPIRATION_TIME = 1000 * 60 * 15 // 15 minutes
+        private const val REFRESH_EXPIRATION_TIME = 1000 * 60 * 60 * 24 // 1 day
+        private val SECRET_KEY = Keys.hmacShaKeyFor("THISSHOULDBEPROTECTEDASDFASDFASDFASDFASDFASDF".toByteArray(StandardCharsets.UTF_8))
+    }
 }

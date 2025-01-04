@@ -31,6 +31,13 @@ class UserController(
         return ResponseEntity.ok(TokenResponse(accessToken, refreshToken))
     }
 
+    @GetMapping("/api/v1/users/me")
+    fun me(
+        @AuthUser user: User,
+    ): ResponseEntity<User> {
+        return ResponseEntity.ok(user)
+    }
+
     @PostMapping("/api/v1/signout")
     fun signout(
         @RequestBody request: SignOutRequest,
