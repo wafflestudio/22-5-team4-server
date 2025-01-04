@@ -58,7 +58,7 @@ class UserService(
     fun signIn(
         username: String,
         password: String,
-    ): Pair<User, Pair<String, String>> {
+    ): Pair<String, String> {
         val targetUser = userRepository.findByUsername(username) ?: throw SignInUserNotFoundException()
         val targetIdentity = userIdentityRepository.findByUser(targetUser) ?: throw SignInUserNotFoundException()
         if(!BCrypt.checkpw(password, targetIdentity.hashedPassword)) {
@@ -66,11 +66,11 @@ class UserService(
         }
         val accessToken = UserAccessTokenUtil.generateAccessToken(targetUser.id!!)
         val refreshToken = UserAccessTokenUtil.generateRefreshToken(targetIdentity.id!!)
-        return Pair(User.fromEntity(targetUser), Pair(accessToken, refreshToken))
+        return Pair(accessToken, refreshToken)
     }
 
     @Transactional
-    fun logout(refreshToken: String) {
+    fun signOut(refreshToken: String) {
         UserAccessTokenUtil.removeRefreshToken(refreshToken)
     }
 
