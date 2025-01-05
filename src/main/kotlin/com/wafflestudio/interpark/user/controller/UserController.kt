@@ -54,9 +54,12 @@ class UserController(
 
     @PostMapping("/api/v1/signout")
     fun signout(
-        @RequestBody request: SignOutRequest,
+        @CookieValue(value = "refresh_token", required = false) refreshToken: String?,
     ): ResponseEntity<Void> {
-        userService.signOut(request.refreshToken)
+        if (refreshToken == null) {
+            throw TokenNotFoundException()
+        }
+        userService.signOut(refreshToken)
         return ResponseEntity.noContent().build()
     }
 
