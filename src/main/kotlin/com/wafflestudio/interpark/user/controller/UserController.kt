@@ -2,6 +2,8 @@ package com.wafflestudio.interpark.user.controller
 
 import com.wafflestudio.interpark.user.*
 import com.wafflestudio.interpark.user.service.UserService
+import jakarta.servlet.http.Cookie
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -27,9 +29,20 @@ class UserController(
     @PostMapping("/api/v1/signin")
     fun signin(
         @RequestBody request: SignInRequest,
+        response: HttpServletResponse,
     ): ResponseEntity<TokenResponse> {
         val (accessToken, refreshToken) = userService.signIn(request.username, request.password)
-        return ResponseEntity.ok(TokenResponse(accessToken, refreshToken))
+
+        val cookie = Cookie("refreshToken", refreshToken).apply {
+            isHttpOnly = true
+            secure = true
+            path = "/api/v1/refresh_token"
+            maxAge = 60 * 60 * 24 * 7
+            // TODO("domain 설정하기")
+        }
+        response.addCookie(cookie)
+
+        return ResponseEntity.ok(TokenResponse(accessToken))
     }
 
     @GetMapping("/api/v1/users/me")
@@ -49,11 +62,25 @@ class UserController(
 
     @PostMapping("/api/v1/refresh_token")
     fun refreshToken(
-        @RequestBody request: RefreshTokenRequest,
+        @CookieValue(value = "refreshToken", required = false) refreshToken: String?,
+        response: HttpServletResponse,
     ): ResponseEntity<TokenResponse> {
-        //TODO("refresh Token 을 Http only secure cookie 로 변경")
-        val (accessToken, refreshToken) = userService.refreshAccessToken(request.refreshToken)
-        return ResponseEntity.ok(TokenResponse(accessToken, refreshToken))
+        if(refreshToken == null) {
+            throw TokenNotFoundException()
+        }
+
+        val (newAccessToken, newRefreshToken) = userService.refreshAccessToken(refreshToken)
+
+        val cookie = Cookie("refreshToken", newRefreshToken).apply {
+            isHttpOnly = true
+            secure = true
+            path = "/api/v1/refresh_token"
+            maxAge = 60 * 60 * 24 * 7
+            // TODO("domain 설정하기")
+        }
+        response.addCookie(cookie)
+
+        return ResponseEntity.ok(TokenResponse(newAccessToken))
     }
 }
 
@@ -74,7 +101,6 @@ data class SignInRequest(
 
 data class TokenResponse(
     val accessToken: String,
-    val refreshToken: String,
 )
 
 data class SignOutRequest(val refreshToken: String)
