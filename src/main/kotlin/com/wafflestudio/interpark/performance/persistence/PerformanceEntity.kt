@@ -17,7 +17,7 @@ class PerformanceEntity(
     @GeneratedValue(strategy = GenerationType.UUID)
     val id: String? = null,
     @ManyToOne
-    @JoinColumn(name = "hall_id", nullable = false)
+    @JoinColumn(name = "hall_id")
     var hall: PerformanceHallEntity,
     @Column(nullable = false)
     var title: String,

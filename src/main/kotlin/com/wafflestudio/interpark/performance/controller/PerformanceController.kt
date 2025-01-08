@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import java.time.LocalDate
 
 @RestController
 class PerformanceController(
@@ -13,13 +12,14 @@ class PerformanceController(
 ) {
     @GetMapping("v1/performance/search")
     fun searchPerformance(
-        @RequestParam keyword: String,
-        @RequestParam sortType: Int,
-        @RequestParam(required = false) date: LocalDate?,
-        @RequestParam(required = false) region: String?,
-        @RequestParam(required = false) genre: String?,
-    ): ResponseEntity<List<Performance>> {
-        val queriedPerformances = performanceService.searchPerformance(keyword, sortType, date, region, genre)
-        return ResponseEntity.ok(queriedPerformances)
+        @RequestParam title: String?,
+        @RequestParam genre: String?,
+    ): ResponseEntity<SearchPerformanceResponse> {
+        val queriedPerformances = performanceService.searchPerformance(title, genre)
+        return ResponseEntity.ok(SearchPerformanceResponse(performances = queriedPerformances))
     }
 }
+
+data class SearchPerformanceResponse(
+    val performances: List<Performance>
+)

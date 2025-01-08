@@ -9,18 +9,13 @@ object PerformanceSpecifications {
      * 키워드(검색어) 필수: PerformanceEntity.title 또는 detail 에 매칭되는지
      * - 정확도 순이라는 것이 '키워드 매칭'을 의미한다고 가정
      */
-    fun withKeyword(keyword: String): Specification<PerformanceEntity> {
-        return Specification { root, query, cb ->
-            if (keyword.isBlank()) {
-                // 검색어가 비어있다면 전체 반환(조건 없음)
-                cb.conjunction()
-            } else {
-                val likeKeyword = "%$keyword%"
-                cb.or(
-                    cb.like(root.get("title"), likeKeyword),
-                    cb.like(root.get("detail"), likeKeyword),
-                )
-            }
+    fun withTitle(title: String?): Specification<PerformanceEntity>? {
+        if (title.isNullOrBlank()) {
+            // title이 없으면 조건없이(conjunction) 반환
+            return null
+        }
+        return Specification { root, _, cb ->
+            cb.like(root.get("title"), "%$title%")
         }
     }
 
