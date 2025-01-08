@@ -17,7 +17,7 @@ data class Reply(
                 author = entity.author.id!!,
                 content = entity.content,
                 createdAt = entity.createdAt,
-                updatedAt = entity.modifiedAt,
+                updatedAt = entity.updatedAt,
             )
         }
     }
