@@ -82,7 +82,7 @@ class ReplyService(
         val replyEntity = replyRepository.findByIdOrNull(replyId) ?: throw ReplyNotFoundException()
         val authorEntity = userRepository.findByIdOrNull(author.id) ?: throw AuthenticateException()
         if (replyEntity.author.id != authorEntity.id) {
-            throw ReviewPermissionDeniedException()
+            throw ReplyPermissionDeniedException()
         }
         replyRepository.delete(replyEntity)
     }

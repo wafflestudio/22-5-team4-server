@@ -8,6 +8,7 @@ import java.time.Instant
 @Table(name = "reply")
 data class ReplyEntity(
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     val id: String,
 
     @ManyToOne(fetch = FetchType.LAZY)
