@@ -17,12 +17,13 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
 
 @Service
-class ReviewService(
+class ReplyService(
     private val entityManager: EntityManager,
     private val reviewRepository: ReviewRepository,
     private val replyRepository: ReplyRepository,
     private val userRepository: UserRepository,
 ) {
+
     // TODO: 검색기능 구현해야 함
     fun getReplies(reviewId: String): List<Reply> {
         val replies: List<Reply> =
@@ -37,69 +38,62 @@ class ReviewService(
         author: User,
         reviewId: String,
         content: String,
-    ): Review {
+    ): Reply {
         validateContent(content)
-        val performanceIdString = performanceId
         val authorEntity = userRepository.findByIdOrNull(author.id) ?: throw AuthenticateException()
-        val reviewEntity =
-            ReviewEntity(
+        val reviewEntity = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException()
+        val replyEntity =
+            ReplyEntity(
                 id = "",
                 author = authorEntity,
-                performanceId = performanceId,
-                // performance = performanceEntity,
-                title = title,
+                review = reviewEntity,
                 content = content,
-                rating = rating,
                 createdAt = Instant.now(),
                 updatedAt = Instant.now(),
             ).let {
-                reviewRepository.save(it)
+                replyRepository.save(it)
             }
-        return Review.fromEntity(reviewEntity)
+        return Reply.fromEntity(replyEntity)
     }
 
     @Transactional
-    fun editReview(
+    fun editReply(
         author: User,
-        reviewId: String,
-        rating: Int?,
-        title: String?,
-        content: String?,
-    ): Review {
+        replyId: String,
+        content: String,
+    ): Reply {
         content?.let { validateContent(it) }
-        rating?.let { validateRating(it) }
-        val reviewEntity = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException()
+        val replyEntity = replyRepository.findByIdOrNull(replyId) ?: throw ReplyNotFoundException()
         val authorEntity = userRepository.findByIdOrNull(author.id) ?: throw AuthenticateException()
-        if (reviewEntity.author.id != authorEntity.id) {
-            throw ReviewPermissionDeniedException()
+        if (replyEntity.author.id != authorEntity.id) {
+            throw ReplyPermissionDeniedException()
         }
-        rating?.let { reviewEntity.rating = it }
-        title?.let { reviewEntity.title = it }
-        content?.let { reviewEntity.content = it }
-        reviewEntity.updatedAt = Instant.now()
-        reviewRepository.save(reviewEntity)
-        return Review.fromEntity(reviewEntity)
+        content?.let { replyEntity.content = it }
+        replyEntity.updatedAt = Instant.now()
+        replyRepository.save(replyEntity)
+        return Reply.fromEntity(replyEntity)
     }
 
     @Transactional
-    fun deleteReview(
+    fun deleteReply(
         author: User,
-        reviewId: String,
+        replyId: String,
     ) {
-        val reviewEntity = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException()
+        val replyEntity = replyRepository.findByIdOrNull(replyId) ?: throw ReplyNotFoundException()
         val authorEntity = userRepository.findByIdOrNull(author.id) ?: throw AuthenticateException()
-        if (reviewEntity.author.id != authorEntity.id) {
+        if (replyEntity.author.id != authorEntity.id) {
             throw ReviewPermissionDeniedException()
         }
-        reviewRepository.delete(reviewEntity)
+        replyRepository.delete(replyEntity)
     }
 
     private fun validateContent(content: String) {
         if (content.isBlank()) {
-            throw ReviewContentLengthOutOfRangeException()
+            throw ReplyContentLengthOutOfRangeException()
         }
-        if (content.length > 3000) {
-            throw ReviewContentLengthOutOfRangeException()
+        // 임의 길이제한
+        if (content.length > 500) {
+            throw ReplyContentLengthOutOfRangeException()
         }
     }
 
