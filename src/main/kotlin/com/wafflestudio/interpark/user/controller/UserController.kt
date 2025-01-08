@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*
 class UserController(
     private val userService: UserService,
 ) {
+    @GetMapping("/api/v1/ping")
+    fun ping() : ResponseEntity<Map<String, String>> {
+        return ResponseEntity.ok(mapOf("message" to "pong"))
+    }
     @PostMapping("/api/v1/signup")
     fun signup(
         @RequestBody request: SignUpRequest,
@@ -32,14 +36,14 @@ class UserController(
         response: HttpServletResponse,
     ): ResponseEntity<TokenResponse> {
         val (accessToken, refreshToken) = userService.signIn(request.username, request.password)
-
-        val cookie = Cookie("refreshToken", refreshToken).apply {
-            isHttpOnly = true
-            secure = true
-            path = "/api/v1/refresh_token"
-            maxAge = 60 * 60 * 24 * 7
-            // TODO("domain 설정하기")
-        }
+        val cookie =
+            Cookie("refreshToken", refreshToken).apply {
+                isHttpOnly = true
+                secure = true
+                path = "/api/v1/refresh_token"
+                maxAge = 60 * 60 * 24 * 7
+                // TODO("domain 설정하기")
+            }
         response.addCookie(cookie)
 
         return ResponseEntity.ok(TokenResponse(accessToken))
@@ -68,19 +72,20 @@ class UserController(
         @CookieValue(value = "refreshToken", required = false) refreshToken: String?,
         response: HttpServletResponse,
     ): ResponseEntity<TokenResponse> {
-        if(refreshToken == null) {
+        if (refreshToken == null) {
             throw TokenNotFoundException()
         }
 
         val (newAccessToken, newRefreshToken) = userService.refreshAccessToken(refreshToken)
 
-        val cookie = Cookie("refreshToken", newRefreshToken).apply {
-            isHttpOnly = true
-            secure = true
-            path = "/api/v1/refresh_token"
-            maxAge = 60 * 60 * 24 * 7
-            // TODO("domain 설정하기")
-        }
+        val cookie =
+            Cookie("refreshToken", newRefreshToken).apply {
+                isHttpOnly = true
+                secure = true
+                path = "/api/v1/refresh_token"
+                maxAge = 60 * 60 * 24 * 7
+                // TODO("domain 설정하기")
+            }
         response.addCookie(cookie)
 
         return ResponseEntity.ok(TokenResponse(newAccessToken))
