@@ -180,7 +180,7 @@ class ReviewIntegrationTest
                     .content(
                         mapper.writeValueAsString(
                             mapOf(
-                                "username" to "hacker",
+                                "username" to "hacker2",
                                 "password" to "badPassword",
                                 "nickname" to "h4x0r",
                                 "phoneNumber" to "010-1111-2222",
@@ -198,7 +198,7 @@ class ReviewIntegrationTest
                         .content(
                             mapper.writeValueAsString(
                                 mapOf(
-                                    "username" to "hacker",
+                                    "username" to "hacker2",
                                     "password" to "badPassword",
                                 ),
                             ),
