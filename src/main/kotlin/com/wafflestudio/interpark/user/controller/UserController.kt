@@ -36,7 +36,6 @@ class UserController(
         response: HttpServletResponse,
     ): ResponseEntity<TokenResponse> {
         val (accessToken, refreshToken) = userService.signIn(request.username, request.password)
-
         val cookie =
             Cookie("refreshToken", refreshToken).apply {
                 isHttpOnly = true
