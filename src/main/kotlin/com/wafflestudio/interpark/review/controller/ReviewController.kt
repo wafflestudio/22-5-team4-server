@@ -17,8 +17,8 @@ class ReviewController(
         @PathVariable performanceId: String,
         @AuthUser user: User,
     ): ResponseEntity<GetReviewResponse>{
-        val replies = reviewService.getReviews(performanceId)
-        return ResponseEntity.ok(replies)
+        val reveiws = reviewService.getReviews(performanceId)
+        return ResponseEntity.ok(reveiws)
     }
 
     @PostMapping("/api/v1/performance/{performanceId}/review")
@@ -45,7 +45,7 @@ class ReviewController(
     fun deleteReview(
         @PathVariable reviewId: String,
         @AuthUser user: User,
-    ): ResponseEntity<EditReviewResponse> {
+    ): ResponseEntity<String> {
         val review = reviewService.deleteReview(user, reviewId)
         return ResponseEntity.noContent().build()
     }
