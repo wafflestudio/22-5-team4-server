@@ -13,9 +13,6 @@ data class ReplyEntity(
     @Column(name = "review_id", nullable = false)
     val reviewId: String,
 
-    @Column(name = "performance_id", nullable = false)
-    val performanceId: String, // 공연장 ID
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     val author: UserEntity,
