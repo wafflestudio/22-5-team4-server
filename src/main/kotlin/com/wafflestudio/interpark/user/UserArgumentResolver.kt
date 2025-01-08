@@ -1,7 +1,6 @@
 package com.wafflestudio.interpark.user
 
 import com.wafflestudio.interpark.user.controller.User
-import com.wafflestudio.interpark.user.persistence.UserRepository
 import com.wafflestudio.interpark.user.service.UserService
 import org.springframework.core.MethodParameter
 import org.springframework.stereotype.Component
@@ -22,7 +21,7 @@ class UserArgumentResolver(
         parameter: MethodParameter,
         mavContainer: ModelAndViewContainer?,
         webRequest: NativeWebRequest,
-        binderFactory: WebDataBinderFactory?
+        binderFactory: WebDataBinderFactory?,
     ): User? {
         return runCatching {
             val accessToken =
