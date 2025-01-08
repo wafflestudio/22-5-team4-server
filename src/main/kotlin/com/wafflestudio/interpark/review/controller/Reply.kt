@@ -5,8 +5,7 @@ import java.time.Instant
 
 data class Reply(
     val id: String,
-    val reviewId: String,
-    val performance: String,
+    // val reviewId: String,
     val author: String,
     val content: String,
     val createdAt: Instant,
