@@ -7,26 +7,23 @@ import java.time.LocalDate
 data class Performance(
     val id: String,
     val title: String,
-    val hallName: String,
-    val dates: List<LocalDate>,
-    val category: PerformanceCategory,
     val detail: String,
-    val sales: Int,
-    val posterUrl: String,
-    val backdropUrl: String,
+    val category: PerformanceCategory,
+    val posterUri: String,
+    val backdropImageUri: String,
+    // 추후 제공 예정
+    // val performanceHallList: List<PerformanceHall>,
+    // val performanceEventList: List<PerformanceEvent>,
 ) {
     companion object {
         fun fromEntity(entity: PerformanceEntity): Performance {
             return Performance(
-                id = entity.id ?: "",
+                id = entity.id!!,
                 title = entity.title,
-                hallName = entity.hall.name,
-                dates = entity.dates,
+                detail = entity.detail,
                 category = entity.category,
-                detail = entity.detail ?: "",
-                sales = entity.sales,
-                posterUrl = entity.posterUrl,
-                backdropUrl = entity.backdropUrl,
+                posterUri = entity.posterUri,
+                backdropImageUri = entity.backdropImageUri
             )
         }
     }

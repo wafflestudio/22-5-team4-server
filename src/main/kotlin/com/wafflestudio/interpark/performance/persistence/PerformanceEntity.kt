@@ -1,60 +1,31 @@
 package com.wafflestudio.interpark.performance.persistence
 
-import jakarta.persistence.CollectionTable
-import jakarta.persistence.Column
-import jakarta.persistence.ElementCollection
-import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
+import jakarta.persistence.*
+import java.time.Instant
 import java.time.LocalDate
 
-@Entity(name = "performances")
+@Entity
+@Table(name = "performance")
 class PerformanceEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    val id: String? = null,
+    val id: String,
 
-    @ManyToOne
-    @JoinColumn(name = "hall_id")
-    var hall: PerformanceHallEntity,
+    @Column(name = "title", nullable = false)
+    val title: String,
 
-    @Column(nullable = false)
-    var title: String,
-    @Column(columnDefinition = "TEXT")
-    var detail: String? = null,
-
+    @Column(name = "detail", nullable = false)
+    val detail: String,
+  
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     var category: PerformanceCategory,
 
-    @Column(nullable = false)
-    var sales: Int = 0,
+    @Column(name = "poster_uri", nullable = false)
+    val posterUri: String,
 
-    @ElementCollection
-    @CollectionTable(name = "performance_dates", joinColumns = [JoinColumn(name = "performance_id")])
-    @Column(name = "date", nullable = false)
-    var dates: List<LocalDate> = mutableListOf(),
-
-    @Column(name = "poster_url", nullable = false)
-    var posterUrl: String,
-
-    @Column(name = "backdrop_url", nullable = false)
-    var backdropUrl: String,
-
-    @ElementCollection
-    @CollectionTable(name = "performance_seats", joinColumns = [JoinColumn(name = "performance_id")])
-    @Column(name = "seat_id", nullable = false)
-    var seatIds: List<String> = mutableListOf(),
-
-    @ElementCollection
-    @CollectionTable(name = "performance_reviews", joinColumns = [JoinColumn(name = "performance_id")])
-    @Column(name = "review_id", nullable = false)
-    var reviewIds: List<String> = mutableListOf(),
+    @Column(name = "backdrop_image_uri", nullable = false)
+    val backdropImageUri: String,
 )
 
 enum class PerformanceCategory {

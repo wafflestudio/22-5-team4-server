@@ -24,6 +24,15 @@ class ReplyService(
     private val userRepository: UserRepository,
 ) {
 
+    fun getRepliesByUser(user: User): List<Reply> {
+        val authorId = user.id
+        val replies: List<Reply> = 
+            replyRepository
+                .findByAuthorId(authorId)
+                .map { Reply.fromEntity(it) }
+        return replies
+    }
+
     // TODO: 검색기능 구현해야 함
     fun getReplies(reviewId: String): List<Reply> {
         val replies: List<Reply> =
