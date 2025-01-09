@@ -1,5 +1,6 @@
 package com.wafflestudio.interpark.user.service
 
+import com.wafflestudio.interpark.user.*
 import com.wafflestudio.interpark.user.controller.User
 import com.wafflestudio.interpark.user.persistence.UserEntity
 import com.wafflestudio.interpark.user.persistence.UserIdentityEntity
