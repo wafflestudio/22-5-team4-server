@@ -2,10 +2,11 @@ package com.wafflestudio.interpark.performance.persistence
 
 import jakarta.persistence.*
 import java.time.Instant
+import java.time.LocalDate
 
 @Entity
 @Table(name = "performance")
-data class PerformanceEntity(
+class PerformanceEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     val id: String,
@@ -15,6 +16,10 @@ data class PerformanceEntity(
 
     @Column(name = "detail", nullable = false)
     val detail: String,
+  
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    var category: PerformanceCategory,
 
     @Column(name = "poster_uri", nullable = false)
     val posterUri: String,
@@ -22,3 +27,10 @@ data class PerformanceEntity(
     @Column(name = "backdrop_image_uri", nullable = false)
     val backdropImageUri: String,
 )
+
+enum class PerformanceCategory {
+    MUSICAL,
+    CONCERT,
+    CLASSIC,
+    PLAY,
+}
