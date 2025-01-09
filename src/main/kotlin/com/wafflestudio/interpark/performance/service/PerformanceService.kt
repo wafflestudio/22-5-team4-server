@@ -1,11 +1,10 @@
 package com.wafflestudio.interpark.performance.service
 
 import com.wafflestudio.interpark.performance.controller.Performance
-import com.wafflestudio.interpark.performance.persistence.PerformanceEntity
-import com.wafflestudio.interpark.performance.persistence.PerformanceRepository
-import com.wafflestudio.interpark.performance.persistence.PerformanceSpecifications
+import com.wafflestudio.interpark.performance.persistence.*
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
+import org.springframework.data.repository.findByIdOrNull
 
 @Service
 class PerformanceService(
@@ -13,7 +12,7 @@ class PerformanceService(
 ) {
     fun searchPerformance(
         title: String?,
-        genre: String?,
+        category: PerformanceCategory?,
     ): List<Performance> {
         // 시작점: 아무 조건이 없는 스펙
         var spec: Specification<PerformanceEntity> = Specification.where(null)
@@ -23,8 +22,8 @@ class PerformanceService(
             spec = spec.and(it)
         }
 
-        // genre 조건이 있다면 스펙에 and로 연결
-        PerformanceSpecifications.withGenre(genre)?.let {
+        // category 조건이 있다면 스펙에 and로 연결
+        PerformanceSpecifications.withCategory(category)?.let {
             spec = spec.and(it)
         }
 
@@ -35,15 +34,32 @@ class PerformanceService(
         return performanceEntities.map { Performance.fromEntity(it) }
     }
 
-    fun createPerformance(performance: Performance): Performance {
-        TODO()
+    fun getAllPerformance(): List<Performance> {
+        return performanceRepository
+            .findAll()
+            .map { Performance.fromEntity(it) };
     }
-
-    fun editPerformance(performance: Performance): Performance {
-        TODO()
+    
+    fun createPerformance(
+        title: String,
+        detail: String,
+        posterUri: String,
+        backdropImageUri: String,
+    ): Performance {
+        val newPerformanceEntity: PerformanceEntity = PerformanceEntity(
+            id = "",
+            title = title,
+            detail = detail,
+            posterUri = posterUri,
+            backdropImageUri = backdropImageUri,
+        ).let{
+            performanceRepository.save(it)
+        }
+        return Performance.fromEntity(newPerformanceEntity)
     }
-
-    fun deletePerformance(performance: Performance) {
-        TODO()
+    fun deletePerformance(performanceId: String) {
+        val deletePerformanceEntity: PerformanceEntity =
+            performanceRepository.findByIdOrNull(performanceId) ?: throw PerformanceNotFoundException()
+        performanceRepository.delete(deletePerformanceEntity)
     }
 }
