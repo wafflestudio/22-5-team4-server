@@ -1,5 +1,6 @@
 package com.wafflestudio.interpark.performance.controller
 
+import com.wafflestudio.interpark.performance.persistence.PerformanceCategory
 import com.wafflestudio.interpark.performance.persistence.PerformanceEntity
 import java.time.LocalDate
 
@@ -8,7 +9,7 @@ data class Performance(
     val title: String,
     val hallName: String,
     val dates: List<LocalDate>,
-    val category: String,
+    val category: PerformanceCategory,
     val detail: String,
     val sales: Int,
     val posterUrl: String,

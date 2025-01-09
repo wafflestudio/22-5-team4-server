@@ -1,6 +1,7 @@
 package com.wafflestudio.interpark.performance.service
 
 import com.wafflestudio.interpark.performance.controller.Performance
+import com.wafflestudio.interpark.performance.persistence.PerformanceCategory
 import com.wafflestudio.interpark.performance.persistence.PerformanceEntity
 import com.wafflestudio.interpark.performance.persistence.PerformanceRepository
 import com.wafflestudio.interpark.performance.persistence.PerformanceSpecifications
@@ -13,7 +14,7 @@ class PerformanceService(
 ) {
     fun searchPerformance(
         title: String?,
-        category: String?,
+        category: PerformanceCategory?,
     ): List<Performance> {
         // 시작점: 아무 조건이 없는 스펙
         var spec: Specification<PerformanceEntity> = Specification.where(null)
@@ -23,8 +24,9 @@ class PerformanceService(
             spec = spec.and(it)
         }
 
-        // genre 조건이 있다면 스펙에 and로 연결
-        PerformanceSpecifications.withGenre(category)?.let {
+        // category 조건이 있다면 스펙에 and로 연결
+
+        PerformanceSpecifications.withCategory(category)?.let {
             spec = spec.and(it)
         }
 

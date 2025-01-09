@@ -1,5 +1,6 @@
 package com.wafflestudio.interpark.performance.controller
 
+import com.wafflestudio.interpark.performance.persistence.PerformanceCategory
 import com.wafflestudio.interpark.performance.service.PerformanceService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -13,9 +14,9 @@ class PerformanceController(
     @GetMapping("v1/performance/search")
     fun searchPerformance(
         @RequestParam title: String?,
-        @RequestParam genre: String?,
+        @RequestParam category: PerformanceCategory?,
     ): ResponseEntity<SearchPerformanceResponse> {
-        val queriedPerformances = performanceService.searchPerformance(title, genre)
+        val queriedPerformances = performanceService.searchPerformance(title, category)
         return ResponseEntity.ok(SearchPerformanceResponse(performances = queriedPerformances))
     }
 }

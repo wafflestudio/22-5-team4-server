@@ -1,5 +1,6 @@
 package com.wafflestudio.interpark.config
 
+import com.wafflestudio.interpark.performance.persistence.PerformanceCategory
 import com.wafflestudio.interpark.performance.persistence.PerformanceEntity
 import com.wafflestudio.interpark.performance.persistence.PerformanceHallEntity
 import com.wafflestudio.interpark.performance.persistence.PerformanceRepository
@@ -15,64 +16,63 @@ class DataInitializer(
 ) : CommandLineRunner {
     override fun run(vararg args: String?) {
         // 1) 공연장(Hall) 데이터 넣기
-        val hallA = performanceHallRepository.save(
+        val BlueSquare_ShinHanCardHall = performanceHallRepository.save(
             PerformanceHallEntity(
-                name = "명동예술극장",
-                address = "서울 중구 명동"
+                name = "블루스퀘어 신한카드홀",
+                address = "서울 용산구 한남동 이태원로"
             )
         )
-        val hallB = performanceHallRepository.save(
+        val SeoulArtsCenter_OperaHouse = performanceHallRepository.save(
             PerformanceHallEntity(
-                name = "대학로아트홀",
-                address = "서울 종로구 대학로"
+                name = "예술의전당 오페라극장",
+                address = "서울 서초구 남부순환로"
             )
         )
-        val hallC = performanceHallRepository.save(
+        val LGArtCenterSeoul_SIGNATUREHAll = performanceHallRepository.save(
             PerformanceHallEntity(
-                name = "LG아트센터 서울",
-                address = "서울 강서구 마곡중앙로"
+                name = "LG아트센터 서울 SIGNATURE홀",
+                address = "서울 강서구 마곡동 마곡중앙로"
             )
         )
 
         // 2) PerformanceEntity 여러개 생성
         val performanceList = listOf(
             PerformanceEntity(
-                hall = hallA,
+                hall = BlueSquare_ShinHanCardHall,
                 title = "뮤지컬 지킬앤하이드",
-                detail = "지킬과 하이드의 이중인격 이야기",
-                category = "뮤지컬",
+                detail = "지금 이 순간, 끝나지 않는 신화",
+                category = PerformanceCategory.MUSICAL,
                 sales = 1000,
-                dates = listOf(LocalDate.of(2025, 12, 25), LocalDate.of(2025, 12, 26)),
+                dates = listOf(LocalDate.of(2024, 11, 29), LocalDate.of(2025, 5, 18)),
                 posterUrl = "http://example.com/poster/jekyll.jpg",
                 backdropUrl = "http://example.com/backdrop/jekyll.jpg",
                 seatIds = listOf("A1", "A2", "A3"),
                 reviewIds = listOf("review1", "review2")
             ),
             PerformanceEntity(
-                hall = hallA,
-                title = "오페라의 유령",
-                detail = "파리 오페라 극장에서 벌어지는 미스터리",
-                category = "뮤지컬",
+                hall = LGArtCenterSeoul_SIGNATUREHAll,
+                title = "마타하리",
+                detail = "She's BACK!",
+                category = PerformanceCategory.MUSICAL,
                 sales = 2000,
-                dates = listOf(LocalDate.of(2025, 11, 5), LocalDate.of(2025, 11, 6)),
+                dates = listOf(LocalDate.of(2024, 12, 5), LocalDate.of(2025, 3, 2)),
                 posterUrl = "http://example.com/poster/phantom.jpg",
                 backdropUrl = "http://example.com/backdrop/phantom.jpg",
                 seatIds = listOf("B1", "B2", "B3"),
                 reviewIds = listOf("review3", "review4")
             ),
             PerformanceEntity(
-                hall = hallB,
-                title = "친정엄마",
-                detail = "연극으로 만나는 엄마와 딸의 이야기",
-                category = "연극",
+                hall = SeoulArtsCenter_OperaHouse,
+                title = "웃는남자",
+                detail = "부자들의 낙원은 가난한 자들의 지옥으로 세워진 것이다",
+                category = PerformanceCategory.MUSICAL,
                 sales = 500,
-                dates = listOf(LocalDate.of(2026, 1, 10)),
+                dates = listOf(LocalDate.of(2025, 1, 9), LocalDate.of(2025, 3, 9)),
                 posterUrl = "http://example.com/poster/mom.jpg",
                 backdropUrl = "http://example.com/backdrop/mom.jpg",
                 seatIds = listOf("C1", "C2", "C3"),
                 reviewIds = listOf("review5")
-            )
-            // 필요한 만큼 추가...
+            ),
         )
 
         // 3) 한번에 저장
