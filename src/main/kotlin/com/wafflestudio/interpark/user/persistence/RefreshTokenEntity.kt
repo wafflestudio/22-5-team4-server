@@ -1,12 +1,13 @@
 package com.wafflestudio.interpark.user.persistence
 
 import jakarta.persistence.Column
+import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import java.time.Instant
 import java.util.*
 
+@Entity
 class RefreshTokenEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

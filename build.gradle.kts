@@ -6,7 +6,7 @@ plugins {
     kotlin("jvm") version "2.0.20"
     kotlin("plugin.spring") version "2.0.20"
     kotlin("plugin.jpa") version "2.0.20"
-    //id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
+    // id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
 }
 
 group = "com.wafflestudio.interpark"
@@ -30,6 +30,7 @@ dependencies {
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    runtimeOnly("com.h2database:h2")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

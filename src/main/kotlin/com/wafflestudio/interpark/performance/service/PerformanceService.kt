@@ -5,7 +5,9 @@ import com.wafflestudio.interpark.performance.persistence.PerformanceEntity
 import com.wafflestudio.interpark.performance.persistence.PerformanceRepository
 import com.wafflestudio.interpark.performance.persistence.PerformanceSpecifications
 import org.springframework.data.jpa.domain.Specification
+import org.springframework.stereotype.Service
 
+@Service
 class PerformanceService(
     private val performanceRepository: PerformanceRepository,
 ) {

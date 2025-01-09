@@ -1,5 +1,6 @@
 package com.wafflestudio.interpark.user
 
+import com.wafflestudio.interpark.DomainException
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
 
@@ -8,7 +9,7 @@ sealed class UserException(
     httpStatusCode: HttpStatusCode,
     msg: String,
     cause: Throwable? = null,
-) : RuntimeException(msg, cause)
+) : DomainException(errorCode, httpStatusCode, msg, cause)
 
 class SignUpBadUsernameException : UserException(
     errorCode = 0,
@@ -30,7 +31,7 @@ class SignUpUsernameConflictException : UserException(
 
 class SignInUserNotFoundException : UserException(
     errorCode = 0,
-    httpStatusCode = HttpStatus.NOT_FOUND,
+    httpStatusCode = HttpStatus.UNAUTHORIZED,
     msg = "User not found",
 )
 
@@ -50,4 +51,10 @@ class TokenExpiredException : UserException(
     errorCode = 0,
     httpStatusCode = HttpStatus.UNAUTHORIZED,
     msg = "Token Expired",
+)
+
+class TokenNotFoundException : UserException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.UNAUTHORIZED,
+    msg = "Token not found",
 )
