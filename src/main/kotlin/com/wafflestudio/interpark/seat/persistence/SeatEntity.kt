@@ -13,12 +13,8 @@ class SeatEntity(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "performance_hall_id", nullable = false)
     val performanceHall: PerformanceHallEntity?,
-    @Column(name = "performance_date", nullable = false)
-    val performanceDate: LocalDate,
     @Column(name = "seat_number", nullable = false)
-    val seatNumber: Pair<Int, Int>,
-    @Column(name = "reserved", nullable = false)
-    var reserved: Boolean = false,
+    val seatNumber: Pair<Char, Int>,
     @Column(name = "price")
     var price: Int,
 )

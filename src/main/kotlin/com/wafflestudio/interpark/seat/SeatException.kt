@@ -11,8 +11,14 @@ sealed class SeatException(
     cause: Throwable? = null,
 ) : DomainException(errorCode, httpStatusCode, msg, cause)
 
-class PerformanceNotFoundException : SeatException(
+class PerformanceEventNotFoundException : SeatException(
     errorCode = 0,
     httpStatusCode = HttpStatus.NOT_FOUND,
-    msg = "Performance not found",
+    msg = "Performance Event not found",
+)
+
+class ConflictingHallException : SeatException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.CONFLICT,
+    msg = "Halls found or no Hall found",
 )
