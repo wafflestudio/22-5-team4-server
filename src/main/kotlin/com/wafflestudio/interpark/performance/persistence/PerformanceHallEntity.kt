@@ -1,6 +1,7 @@
 package com.wafflestudio.interpark.performance.persistence
 
 import jakarta.persistence.*
+import java.time.Instant
 
 @Entity
 @Table(name = "performance_hall")

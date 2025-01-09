@@ -3,6 +3,8 @@ package com.wafflestudio.interpark.performance.controller
 import com.wafflestudio.interpark.performance.persistence.PerformanceCategory
 import io.swagger.v3.oas.annotations.Operation
 import com.wafflestudio.interpark.performance.service.PerformanceService
+import com.wafflestudio.interpark.user.controller.User
+import com.wafflestudio.interpark.user.AuthUser
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
