@@ -16,7 +16,7 @@ class PerformanceHallService(
             .findAll()
             .map { PerformanceHall.fromEntity(it) };
     }
-    
+
     fun createPerformanceHall(
         name: String,
         address: String,
@@ -32,6 +32,7 @@ class PerformanceHallService(
         }
         return PerformanceHall.fromEntity(newPerformanceHallEntity)
     }
+
     fun deletePerformanceHall(performanceHallId: String) {
         val deletePerformanceHallEntity: PerformanceHallEntity =
             performanceHallRepository.findByIdOrNull(performanceHallId) ?: throw PerformanceHallNotFoundException()
