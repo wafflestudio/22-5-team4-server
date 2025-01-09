@@ -11,6 +11,13 @@ import org.springframework.web.bind.annotation.*
 class ReplyController(
     private val replyService: ReplyService,
 ) {
+    @GetMapping("/api/v1/user/me/reply")
+    fun getRepliesByUser(
+        @AuthUser user: User
+    ): ResponseEntity<GetReplyResponse>{
+        val replies = replyService.getRepliesByUser(user)
+        return ResponseEntity.ok(replies)
+    }
 
     @GetMapping("/api/v1/review/{reviewId}/reply")
     fun getReplies(

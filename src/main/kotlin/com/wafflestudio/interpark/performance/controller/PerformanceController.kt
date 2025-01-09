@@ -1,12 +1,10 @@
 package com.wafflestudio.interpark.performance.controller
 
 import com.wafflestudio.interpark.performance.persistence.PerformanceCategory
-import com.wafflestudio.interpark.performance.service.PerformanceService
 import io.swagger.v3.oas.annotations.Operation
+import com.wafflestudio.interpark.performance.service.PerformanceService
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 class PerformanceController(
@@ -21,8 +19,35 @@ class PerformanceController(
         @RequestBody request: SearchPerformanceRequest
     ): ResponseEntity<SearchPerformanceResponse> {
         val queriedPerformances = performanceService.searchPerformance(request.title, request.category)
-        return ResponseEntity.ok(SearchPerformanceResponse(performances = queriedPerformances))
+        return ResponseEntity.ok(queriedPerformances)
     }
+    
+    // WARN: THIS IS FOR ADMIN.
+    // TODO: SEPERATE THIS TO OTHER APPLICATION
+    @PostMapping("/admin/v1/performance")
+    fun createPerformance(
+        @RequestBody request: CreatePerformanceRequest,
+    ): ResponseEntity<CreatePerformanceResponse> {
+        val newPerformance: Performance =
+            performanceService
+                .createPerformance(
+                    request.title,
+                    request.detail,
+                    request.category,
+                    request.posterUri,
+                    request.backdropImageUri
+                );
+        return ResponseEntity.ok(newPerformance)
+    }
+
+    @DeleteMapping("/admin/v1/performance/{performanceId}")
+    fun deletePerformance(
+        @PathVariable performanceId: String
+    ): ResponseEntity<String> {
+        performanceService.deletePerformance(performanceId)
+        return ResponseEntity.noContent().build()
+    }
+
 }
 
 data class SearchPerformanceRequest(
@@ -30,6 +55,14 @@ data class SearchPerformanceRequest(
     val category: PerformanceCategory?,
 )
 
-data class SearchPerformanceResponse(
-    val performances: List<Performance>
+typealias SearchPerformanceResponse = List<Performance>
+
+data class CreatePerformanceRequest(
+    val title: String,
+    val detail: String,
+    val category: PerformanceCategory,
+    val posterUri: String,
+    val backdropImageUri: String,
 )
+
+typealias CreatePerformanceResponse = Performance

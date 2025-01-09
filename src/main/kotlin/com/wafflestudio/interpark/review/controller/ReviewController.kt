@@ -12,6 +12,14 @@ class ReviewController(
     private val reviewService: ReviewService,
 ) {
 
+    @GetMapping("/api/v1/me/review")
+    fun getMyReviews(
+        @AuthUser user: User,
+    ): ResponseEntity<GetReviewResponse>{
+        val reviews = reviewService.getReviewsByUser(user);
+        return ResponseEntity.ok(reviews);
+    }
+
     @GetMapping("/api/v1/performance/{performanceId}/review")
     fun getReviews(
         @PathVariable performanceId: String,
