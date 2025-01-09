@@ -24,7 +24,7 @@ class PerformanceEntity(
     @Column(columnDefinition = "TEXT")
     var detail: String? = null,
     @Column(nullable = false)
-    var genre: String,
+    var category: String,
     @Column(nullable = false)
     var sales: Int = 0,
     @ElementCollection

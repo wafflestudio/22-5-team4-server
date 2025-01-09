@@ -49,11 +49,11 @@ object PerformanceSpecifications {
      * 장르 필터(선택): 이제 PerformanceEntity의 genre 컬럼을 직접 비교
      *  (예: 부분 매칭으로 하려면 cb.like(root.get("genre"), "%$genre%") 로 수정)
      */
-    fun withGenre(genre: String?): Specification<PerformanceEntity>? {
-        if (genre.isNullOrBlank()) return null
+    fun withCategory(category: String?): Specification<PerformanceEntity>? {
+        if (category.isNullOrBlank()) return null
 
         return Specification { root, _, cb ->
-            cb.equal(root.get<String>("genre"), genre)
+            cb.equal(root.get<String>("category"), category)
         }
     }
 }

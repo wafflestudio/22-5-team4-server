@@ -13,7 +13,7 @@ class PerformanceService(
 ) {
     fun searchPerformance(
         title: String?,
-        genre: String?,
+        category: String?,
     ): List<Performance> {
         // 시작점: 아무 조건이 없는 스펙
         var spec: Specification<PerformanceEntity> = Specification.where(null)
@@ -24,7 +24,7 @@ class PerformanceService(
         }
 
         // genre 조건이 있다면 스펙에 and로 연결
-        PerformanceSpecifications.withGenre(genre)?.let {
+        PerformanceSpecifications.withGenre(category)?.let {
             spec = spec.and(it)
         }
 
