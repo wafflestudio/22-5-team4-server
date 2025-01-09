@@ -87,7 +87,7 @@ class DataInitializer(
                 category = PerformanceCategory.MUSICAL,
                 sales = 1000,
                 dates = listOf(LocalDate.of(2024, 11, 29), LocalDate.of(2025, 5, 18)),
-                posterUrl = "http://example.com/poster/jekyll.jpg",
+                posterUrl = "https://ticketimage.interpark.com/Play/image/large/24/24013928_p.gif",
                 backdropUrl = "http://example.com/backdrop/jekyll.jpg",
                 seatIds = listOf("A1", "A2", "A3"),
                 reviewIds = listOf("review1", "review2")
@@ -99,7 +99,7 @@ class DataInitializer(
                 category = PerformanceCategory.MUSICAL,
                 sales = 2000,
                 dates = listOf(LocalDate.of(2024, 12, 5), LocalDate.of(2025, 3, 2)),
-                posterUrl = "http://example.com/poster/phantom.jpg",
+                posterUrl = "https://ticketimage.interpark.com/Play/image/large/L0/L0000106_p.gif",
                 backdropUrl = "http://example.com/backdrop/phantom.jpg",
                 seatIds = listOf("B1", "B2", "B3"),
                 reviewIds = listOf("review3", "review4")
@@ -111,7 +111,7 @@ class DataInitializer(
                 category = PerformanceCategory.MUSICAL,
                 sales = 500,
                 dates = listOf(LocalDate.of(2025, 1, 9), LocalDate.of(2025, 3, 9)),
-                posterUrl = "http://example.com/poster/mom.jpg",
+                posterUrl = "https://ticketimage.interpark.com/Play/image/large/24/24016737_p.gif",
                 backdropUrl = "http://example.com/backdrop/mom.jpg",
                 seatIds = listOf("C1", "C2", "C3"),
                 reviewIds = listOf("review5")
@@ -125,7 +125,7 @@ class DataInitializer(
                 category = PerformanceCategory.CONCERT,
                 sales = 0,
                 dates = listOf(LocalDate.of(2025, 2, 1), LocalDate.of(2025, 2, 2)),
-                posterUrl = "http://example.com/poster/mom.jpg",
+                posterUrl = "https://ticketimage.interpark.com/Play/image/large/24/24018543_p.gif",
                 backdropUrl = "http://example.com/backdrop/mom.jpg",
                 seatIds = emptyList(),
                 reviewIds = emptyList()
@@ -137,7 +137,7 @@ class DataInitializer(
                 category = PerformanceCategory.CONCERT,
                 sales = 0,
                 dates = listOf(LocalDate.of(2025, 2, 1), LocalDate.of(2025, 2, 2)),
-                posterUrl = "http://example.com/poster/mom.jpg",
+                posterUrl = "https://ticketimage.interpark.com/Play/image/large/25/25000084_p.gif",
                 backdropUrl = "http://example.com/backdrop/mom.jpg",
                 seatIds = emptyList(),
                 reviewIds = emptyList()
@@ -149,7 +149,7 @@ class DataInitializer(
                 category = PerformanceCategory.CONCERT,
                 sales = 0,
                 dates = listOf(LocalDate.of(2025, 4, 16), LocalDate.of(2025, 4, 25)),
-                posterUrl = "http://example.com/poster/mom.jpg",
+                posterUrl = "https://ticketimage.interpark.com/Play/image/large/24/24013437_p.gif",
                 backdropUrl = "http://example.com/backdrop/mom.jpg",
                 seatIds = emptyList(),
                 reviewIds = emptyList()
@@ -163,7 +163,7 @@ class DataInitializer(
                 category = PerformanceCategory.CLASSIC,
                 sales = 0,
                 dates = listOf(LocalDate.of(2025, 5, 11)),
-                posterUrl = "http://example.com/poster/mom.jpg",
+                posterUrl = "https://ticketimage.interpark.com/Play/image/large/24/24016119_p.gif",
                 backdropUrl = "http://example.com/backdrop/mom.jpg",
                 seatIds = emptyList(),
                 reviewIds = emptyList()
@@ -175,7 +175,7 @@ class DataInitializer(
                 category = PerformanceCategory.CLASSIC,
                 sales = 0,
                 dates = listOf(LocalDate.of(2025, 5, 1)),
-                posterUrl = "http://example.com/poster/mom.jpg",
+                posterUrl = "https://ticketimage.interpark.com/Play/image/large/24/24015137_p.gif",
                 backdropUrl = "http://example.com/backdrop/mom.jpg",
                 seatIds = emptyList(),
                 reviewIds = emptyList()
@@ -187,7 +187,7 @@ class DataInitializer(
                 category = PerformanceCategory.CLASSIC,
                 sales = 0,
                 dates = listOf(LocalDate.of(2025, 1, 11), LocalDate.of(2025, 1, 12)),
-                posterUrl = "http://example.com/poster/mom.jpg",
+                posterUrl = "https://ticketimage.interpark.com/Play/image/large/P0/P0004046_p.gif",
                 backdropUrl = "http://example.com/backdrop/mom.jpg",
                 seatIds = emptyList(),
                 reviewIds = emptyList()
@@ -201,7 +201,7 @@ class DataInitializer(
                 category = PerformanceCategory.PLAY,
                 sales = 0,
                 dates = listOf(LocalDate.of(2025, 1, 28), LocalDate.of(2025, 3, 16)),
-                posterUrl = "http://example.com/poster/mom.jpg",
+                posterUrl = "https://ticketimage.interpark.com/Play/image/large/L0/L0000107_p.gif",
                 backdropUrl = "http://example.com/backdrop/mom.jpg",
                 seatIds = emptyList(),
                 reviewIds = emptyList()
@@ -213,7 +213,7 @@ class DataInitializer(
                 category = PerformanceCategory.PLAY,
                 sales = 0,
                 dates = listOf(LocalDate.of(2025, 1, 28), LocalDate.of(2025, 3, 16)),
-                posterUrl = "http://example.com/poster/mom.jpg",
+                posterUrl = "https://ticketimage.interpark.com/Play/image/large/L0/L0000104_p.gif",
                 backdropUrl = "http://example.com/backdrop/mom.jpg",
                 seatIds = emptyList(),
                 reviewIds = emptyList()
@@ -225,7 +225,7 @@ class DataInitializer(
                 category = PerformanceCategory.PLAY,
                 sales = 0,
                 dates = listOf(LocalDate.of(2025, 1, 7), LocalDate.of(2025, 3, 3)),
-                posterUrl = "http://example.com/poster/mom.jpg",
+                posterUrl = "https://ticketimage.interpark.com/Play/image/large/24/24017573_p.gif",
                 backdropUrl = "http://example.com/backdrop/mom.jpg",
                 seatIds = emptyList(),
                 reviewIds = emptyList()
