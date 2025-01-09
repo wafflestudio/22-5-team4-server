@@ -11,14 +11,25 @@ sealed class SeatException(
     cause: Throwable? = null,
 ) : DomainException(errorCode, httpStatusCode, msg, cause)
 
-class PerformanceEventNotFoundException : SeatException(
+class ReservationNotFoundException : SeatException(
     errorCode = 0,
     httpStatusCode = HttpStatus.NOT_FOUND,
-    msg = "Performance Event not found",
+    msg = "Reservation not found",
 )
 
-class ConflictingHallException : SeatException(
+class ReservedAlreadyException : SeatException(
     errorCode = 0,
     httpStatusCode = HttpStatus.CONFLICT,
-    msg = "Halls found or no Hall found",
+    msg = "Reserved already exists",
+)
+
+class ReservedYetException : SeatException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.CONFLICT,
+    msg = "Not Reserved Yet",
+)
+class ReservationPermissionDeniedException : SeatException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.FORBIDDEN,
+    msg = "Reservation Permission denied",
 )

@@ -1,5 +1,6 @@
 package com.wafflestudio.interpark.seat.persistence
 
+import com.wafflestudio.interpark.performance.persistence.PerformanceEventEntity
 import com.wafflestudio.interpark.user.persistence.UserEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -21,7 +22,7 @@ class ReservationEntity(
     val id: String,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    val user: UserEntity?,
+    var user: UserEntity?,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seat_id", nullable = false)
     val seat: SeatEntity,
@@ -29,7 +30,7 @@ class ReservationEntity(
     @JoinColumn(name = "performance_event_id")
     val performanceEvent: PerformanceEventEntity,
     @Column(name = "reservation_date")
-    val reservationDate: LocalDate,
+    var reservationDate: LocalDate?,
     @Column(name = "reserved")
-    val reserved: Boolean = false,
+    var reserved: Boolean = false,
 )

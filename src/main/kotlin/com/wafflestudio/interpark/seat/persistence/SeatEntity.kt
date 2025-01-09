@@ -12,9 +12,9 @@ class SeatEntity(
     val id: String,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "performance_hall_id", nullable = false)
-    val performanceHall: PerformanceHallEntity?,
+    val performanceHall: PerformanceHallEntity,
     @Column(name = "seat_number", nullable = false)
     val seatNumber: Pair<Char, Int>,
     @Column(name = "price")
-    var price: Int,
+    var price: Int = 10000,
 )
