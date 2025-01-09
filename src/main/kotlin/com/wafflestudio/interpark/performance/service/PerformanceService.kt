@@ -25,7 +25,6 @@ class PerformanceService(
         }
 
         // category 조건이 있다면 스펙에 and로 연결
-
         PerformanceSpecifications.withCategory(category)?.let {
             spec = spec.and(it)
         }

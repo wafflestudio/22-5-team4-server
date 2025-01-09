@@ -4,6 +4,8 @@ import jakarta.persistence.CollectionTable
 import jakarta.persistence.Column
 import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
@@ -26,6 +28,7 @@ class PerformanceEntity(
     @Column(columnDefinition = "TEXT")
     var detail: String? = null,
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     var category: PerformanceCategory,
 
