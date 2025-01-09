@@ -18,9 +18,10 @@ class PerformanceController(
         description = "제목과 카테고리에 해당하는 공연들의 리스트를 반환합니다."
     )
     fun searchPerformance(
-        @RequestBody request: SearchPerformanceRequest
+        @RequestParam title: String?,
+        @RequestParam category: PerformanceCategory?,
     ): ResponseEntity<SearchPerformanceResponse> {
-        val queriedPerformances = performanceService.searchPerformance(request.title, request.category)
+        val queriedPerformances = performanceService.searchPerformance(title, category)
         return ResponseEntity.ok(queriedPerformances)
     }
     
@@ -51,11 +52,6 @@ class PerformanceController(
     }
 
 }
-
-data class SearchPerformanceRequest(
-    val title: String?,
-    val category: PerformanceCategory?,
-)
 
 typealias SearchPerformanceResponse = List<Performance>
 
