@@ -11,11 +11,13 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
 import java.util.UUID
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Transactional
 class SeatIntegrationTest
 @Autowired
 constructor(
@@ -242,7 +244,7 @@ constructor(
                 .content(
                     mapper.writeValueAsString(
                         mapOf(
-                            "username" to "correct99",
+                            "username" to "correct2",
                             "password" to "12345678",
                             "nickname" to "examplename",
                             "phoneNumber" to "010-0000-0000",
@@ -259,7 +261,7 @@ constructor(
                     .content(
                         mapper.writeValueAsString(
                             mapOf(
-                                "username" to "correct99",
+                                "username" to "correct2",
                                 "password" to "12345678",
                             ),
                         ),
