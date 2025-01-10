@@ -33,3 +33,9 @@ class ReservationPermissionDeniedException : SeatException(
     httpStatusCode = HttpStatus.FORBIDDEN,
     msg = "Reservation Permission denied",
 )
+
+class InValidHallTypeException : SeatException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.BAD_REQUEST,
+    msg = "Invalid Hall Type",
+)

@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.Query
 import java.time.LocalDate
 
 interface SeatRepository : JpaRepository<SeatEntity, String> {
+    fun findByPerformanceHall(performanceHall: PerformanceHallEntity): List<SeatEntity>
 }

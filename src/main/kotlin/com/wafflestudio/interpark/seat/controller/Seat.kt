@@ -4,7 +4,7 @@ import com.wafflestudio.interpark.seat.persistence.SeatEntity
 
 data class Seat(
     val id: String,
-    val seatNumber: Pair<Char, Int>,
+    val seatNumber: Pair<Int, Int>,
     val price: Int
 ) {
     companion object {

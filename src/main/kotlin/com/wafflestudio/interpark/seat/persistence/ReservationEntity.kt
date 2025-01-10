@@ -19,10 +19,10 @@ import java.time.LocalDate
 class ReservationEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    val id: String,
+    val id: String? = null,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    var user: UserEntity?,
+    var user: UserEntity? = null,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seat_id", nullable = false)
     val seat: SeatEntity,
