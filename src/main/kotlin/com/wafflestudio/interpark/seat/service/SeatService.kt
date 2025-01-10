@@ -74,7 +74,7 @@ class SeatService(
         val userEntity = userRepository.findByIdOrNull(user.id) ?: throw AuthenticateException()
         val reservationUser = reservationEntity.user ?: throw ReservedYetException()
         if (reservationUser.id != userEntity.id) {
-            throw ReservationPermissionDeniedException()
+            throw AuthenticateException()
         }
 
         reservationEntity.user = null

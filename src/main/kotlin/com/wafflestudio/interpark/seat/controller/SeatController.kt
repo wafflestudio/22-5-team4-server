@@ -28,7 +28,7 @@ class SeatController(
         @AuthUser user: User,
     ): ResponseEntity<ReserveSeatResponse> {
         val reservation = seatService.reserveSeat(user, request.reservationId)
-        return ResponseEntity.status(201).body(ReserveSeatResponse(reservation))
+        return ResponseEntity.status(200).body(ReserveSeatResponse(reservation))
     }
 
     @PostMapping("/api/v1/reservation/cancel")

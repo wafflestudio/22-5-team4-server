@@ -24,7 +24,7 @@ data class Reservation(
                        seatEntity: SeatEntity,
                        performanceEventEntity: PerformanceEventEntity): Reservation {
             return Reservation(
-                id = reservationEntity.id,
+                id = reservationEntity.id!!,
                 performanceTitle = performanceEntity.title,
                 performanceHallName = performanceHallEntity.name,
                 seat = Seat.fromEntity(seatEntity),
