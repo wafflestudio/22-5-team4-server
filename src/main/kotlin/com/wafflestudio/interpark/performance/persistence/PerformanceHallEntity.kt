@@ -1,13 +1,14 @@
 package com.wafflestudio.interpark.performance.persistence
 
 import jakarta.persistence.*
+import java.time.Instant
 
 @Entity
 @Table(name = "performance_hall")
 class PerformanceHallEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    val id: String,
+    val id: String? = null,
 
     @Column(name = "name", nullable = false)
     val name: String,

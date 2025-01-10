@@ -18,10 +18,11 @@ class PerformanceController(
         description = "제목과 카테고리에 해당하는 공연들의 리스트를 반환합니다."
     )
     fun searchPerformance(
-        @RequestBody request: SearchPerformanceRequest
+        @RequestParam title: String?,
+        @RequestParam category: PerformanceCategory?,
     ): ResponseEntity<SearchPerformanceResponse> {
-        val queriedPerformances = performanceService.searchPerformance(request.title, request.category)
-        return ResponseEntity.ok(SearchPerformanceResponse(performances = queriedPerformances))
+        val queriedPerformances = performanceService.searchPerformance(title, category)
+        return ResponseEntity.ok(queriedPerformances)
     }
     
     // WARN: THIS IS FOR ADMIN.
@@ -35,6 +36,7 @@ class PerformanceController(
                 .createPerformance(
                     request.title,
                     request.detail,
+                    request.category,
                     request.posterUri,
                     request.backdropImageUri
                 );
@@ -51,16 +53,12 @@ class PerformanceController(
 
 }
 
-data class SearchPerformanceRequest(
-    val title: String?,
-    val category: PerformanceCategory?,
-)
-
 typealias SearchPerformanceResponse = List<Performance>
 
 data class CreatePerformanceRequest(
     val title: String,
     val detail: String,
+    val category: PerformanceCategory,
     val posterUri: String,
     val backdropImageUri: String,
 )

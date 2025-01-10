@@ -23,6 +23,7 @@ class UserController(
     fun ping() : ResponseEntity<Map<String, String>> {
         return ResponseEntity.ok(mapOf("message" to "pong"))
     }
+
     @PostMapping("/api/v1/signup")
     @Operation(
         summary = "사용자 회원가입",
