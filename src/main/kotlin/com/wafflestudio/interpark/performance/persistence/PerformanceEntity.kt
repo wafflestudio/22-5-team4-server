@@ -9,7 +9,7 @@ import java.time.LocalDate
 class PerformanceEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    val id: String,
+    val id: String? = null,
 
     @Column(name = "title", nullable = false)
     val title: String,

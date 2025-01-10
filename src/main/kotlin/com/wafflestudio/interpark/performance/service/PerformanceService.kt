@@ -1,5 +1,6 @@
 package com.wafflestudio.interpark.performance.service
 
+import com.wafflestudio.interpark.performance.PerformanceNotFoundException
 import com.wafflestudio.interpark.performance.controller.Performance
 import com.wafflestudio.interpark.performance.persistence.*
 import org.springframework.data.jpa.domain.Specification
@@ -43,6 +44,7 @@ class PerformanceService(
     fun createPerformance(
         title: String,
         detail: String,
+        category: PerformanceCategory,
         posterUri: String,
         backdropImageUri: String,
     ): Performance {
@@ -50,6 +52,7 @@ class PerformanceService(
             id = "",
             title = title,
             detail = detail,
+            category = category,
             posterUri = posterUri,
             backdropImageUri = backdropImageUri,
         ).let{
@@ -57,6 +60,7 @@ class PerformanceService(
         }
         return Performance.fromEntity(newPerformanceEntity)
     }
+
     fun deletePerformance(performanceId: String) {
         val deletePerformanceEntity: PerformanceEntity =
             performanceRepository.findByIdOrNull(performanceId) ?: throw PerformanceNotFoundException()
