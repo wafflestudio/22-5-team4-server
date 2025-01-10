@@ -10,7 +10,7 @@ data class Seat(
     companion object {
         fun fromEntity(entity: SeatEntity): Seat {
             return Seat(
-                id = entity.id,
+                id = entity.id!!,
                 seatNumber = entity.seatNumber,
                 price = entity.price,
             )
