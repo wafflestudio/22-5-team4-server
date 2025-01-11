@@ -27,7 +27,7 @@ jobs:
       - name: Build with Gradle
         run: |
           chmod +x gradlew
-          ./gradlew build
+          SPRING_PROFILES_ACTIVE=test ./gradlew build
 
       # 4. AWS EC2에 SSH 접속하여 NGINX 설치 및 실행
       - name: Install & Start NGINX
@@ -95,6 +95,21 @@ jobs:
             }
             EOF'
             sudo nginx -t && sudo systemctl restart nginx
+
+      - name: Find the latest JAR file
+        run: |
+          LATEST_JAR=$(ls -t /home/${{ secrets.EC2_USER }}/app/*-SNAPSHOT-*.jar | head -n 1)
+          echo "LATEST_JAR=$LATEST_JAR" >> $GITHUB_ENV
+
+      - name: Build Docker Image
+        run: |
+          docker build --build-arg JAR_FILE=$LATEST_JAR -t my-app:latest -f /home/${{ secrets.EC2_USER }}/app/deploy-Dockerfile /home/${{ secrets.EC2_USER }}/app/
+
+      - name: Run Docker Container
+        run: |
+          docker stop my-app || true
+          docker rm my-app || true
+          docker run -d -p 8080:8080 --name my-app my-app:latest
 
       # 8. EC2에서 애플리케이션 실행
       - name: Start application on EC2
