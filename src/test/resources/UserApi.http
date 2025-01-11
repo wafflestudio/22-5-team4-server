@@ -19,6 +19,10 @@ Content-Type: application/json
   "password": "12345678"
 }
 
+### 로그아웃
+POST http://localhost:8080/api/v1/signout
+Content-Type: application/json
+
 ### pingpong
 GET http://localhost:8080/api/v1/ping
 Accept: application/json
