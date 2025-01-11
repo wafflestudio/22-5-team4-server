@@ -29,28 +29,66 @@ jobs:
           chmod +x gradlew
           SPRING_PROFILES_ACTIVE=test ./gradlew build
 
-      # 4. AWS EC2에 SSH 접속하여 NGINX 설치 및 실행
-      - name: Install & Start NGINX
+      # AWS EC2에 SSH 접속하여 NGINX 설치 및 실행
+      # - name: Install & Start NGINX
+      #   uses: appleboy/ssh-action@v0.1.10
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ${{ secrets.EC2_USER }}
+      #     key: ${{ secrets.EC2_SSH_KEY }}
+      #     script: |
+      #       echo "Checking if NGINX is installed..."
+      #       if ! command -v nginx &> /dev/null
+      #       then
+      #         echo "NGINX not found. Installing..."
+      #         sudo apt update && sudo apt install -y nginx
+      #       else
+      #         echo "NGINX is already installed."
+      #       fi
+      #       echo "Starting NGINX..."
+      #       sudo systemctl enable nginx
+      #       sudo systemctl start nginx
+      #       sudo systemctl status nginx
+
+      # NGINX 리버스 프록시 설정
+      # - name: Configure NGINX Reverse Proxy
+      #   uses: appleboy/ssh-action@v0.1.10
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ${{ secrets.EC2_USER }}
+      #     key: ${{ secrets.EC2_SSH_KEY }}
+      #     script: |
+      #       echo "Setting up NGINX reverse proxy..."
+      #       sudo bash -c 'cat > /etc/nginx/sites-available/default <<EOF
+      #       server {
+      #           listen 80;
+      #           server_name _;
+                
+      #           location / {
+      #               proxy_pass http://localhost:8080/;
+      #               proxy_set_header Host \$host;
+      #               proxy_set_header X-Real-IP \$remote_addr;
+      #               proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+      #               proxy_set_header X-Forwarded-Proto \$scheme;
+      #           }
+      #       }
+      #       EOF'
+      #       sudo nginx -t && sudo systemctl restart nginx
+
+      - name: Create .env file on EC2
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            echo "Checking if NGINX is installed..."
-            if ! command -v nginx &> /dev/null
-            then
-              echo "NGINX not found. Installing..."
-              sudo apt update && sudo apt install -y nginx
-            else
-              echo "NGINX is already installed."
-            fi
-            echo "Starting NGINX..."
-            sudo systemctl enable nginx
-            sudo systemctl start nginx
-            sudo systemctl status nginx
+            echo "SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }}" > ~/app/.env
+            echo "SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }}" >> ~/app/.env
+            echo "SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }}" >> ~/app/.env
+            echo "SPRING_PROFILES_ACTIVE=prod" >> ~/app/.env
+            chmod 600 ~/app/.env
 
-      # 5. 기존 애플리케이션 종료
+      # 기존 애플리케이션 종료
       - name: Stop running application on EC2
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -59,7 +97,13 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             echo "Stopping existing application..."
-            pkill -f myapp.jar || echo "No running process found."
+            LATEST_JAR=$(ls -t ~/app/*.jar | head -n 1)
+            JAR_NAME=$(basename "$LATEST_JAR")
+            PID=$(pgrep -f "java -jar ~/app/$JAR_NAME") || echo "No running process found."
+            if [ -n "$PID" ]; then
+              echo "Killing process $PID..."
+              kill -9 $PID
+            fi"
 
       # 6. 빌드된 JAR 파일을 EC2로 업로드
       - name: Upload JAR to EC2
@@ -69,49 +113,13 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "build/libs/*-SNAPSHOT.jar"
-          target: "/home/${{ secrets.EC2_USER }}/app/"
-
-      # 7. NGINX 리버스 프록시 설정
-      - name: Configure NGINX Reverse Proxy
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            echo "Setting up NGINX reverse proxy..."
-            sudo bash -c 'cat > /etc/nginx/sites-available/default <<EOF
-            server {
-                listen 80;
-                server_name _;
-                
-                location / {
-                    proxy_pass http://localhost:8080/;
-                    proxy_set_header Host \$host;
-                    proxy_set_header X-Real-IP \$remote_addr;
-                    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-                    proxy_set_header X-Forwarded-Proto \$scheme;
-                }
-            }
-            EOF'
-            sudo nginx -t && sudo systemctl restart nginx
+          target: "~/app/"
 
       - name: Find the latest JAR file
         run: |
-          LATEST_JAR=$(ls -t /home/${{ secrets.EC2_USER }}/app/*-SNAPSHOT-*.jar | head -n 1)
+          LATEST_JAR=$(ls -t ~/app/*-SNAPSHOT-*.jar | head -n 1)
           echo "LATEST_JAR=$LATEST_JAR" >> $GITHUB_ENV
 
-      - name: Build Docker Image
-        run: |
-          docker build --build-arg JAR_FILE=$LATEST_JAR -t my-app:latest -f /home/${{ secrets.EC2_USER }}/app/deploy-Dockerfile /home/${{ secrets.EC2_USER }}/app/
-
-      - name: Run Docker Container
-        run: |
-          docker stop my-app || true
-          docker rm my-app || true
-          docker run -d -p 8080:8080 --name my-app my-app:latest
-
-      # 8. EC2에서 애플리케이션 실행
       - name: Start application on EC2
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -120,4 +128,5 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             echo "Starting new application..."
-            nohup java -jar /home/ubuntu/app/*.jar > /home/ubuntu/app/app.log 2>&1 &
+            export $(grep -v '^#' ~/app/.env | xargs)  # 환경 변수 로드
+            nohup java -jar ~/app/*.jar > ~/app/app.log 2>&1 &
