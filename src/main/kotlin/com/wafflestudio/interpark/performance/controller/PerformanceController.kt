@@ -3,8 +3,6 @@ package com.wafflestudio.interpark.performance.controller
 import com.wafflestudio.interpark.performance.persistence.PerformanceCategory
 import io.swagger.v3.oas.annotations.Operation
 import com.wafflestudio.interpark.performance.service.PerformanceService
-import com.wafflestudio.interpark.user.controller.User
-import com.wafflestudio.interpark.user.AuthUser
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -12,7 +10,7 @@ import org.springframework.web.bind.annotation.*
 class PerformanceController(
     private val performanceService: PerformanceService,
 ) {
-    @GetMapping("v1/performance/search")
+    @GetMapping("/api/v1/performance/search")
     @Operation(
         summary = "공연 조회",
         description = "제목과 카테고리에 해당하는 공연들의 리스트를 반환합니다."
