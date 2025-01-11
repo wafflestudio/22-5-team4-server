@@ -27,7 +27,12 @@ jobs:
       - name: Build with Gradle
         run: |
           chmod +x gradlew
-          SPRING_PROFILES_ACTIVE=test ./gradlew build
+          ./gradlew build
+        env:
+          SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+          SPRING_PROFILES_ACTIVE: "prod"
 
       # AWS EC2에 SSH 접속하여 NGINX 설치 및 실행
       # - name: Install & Start NGINX
