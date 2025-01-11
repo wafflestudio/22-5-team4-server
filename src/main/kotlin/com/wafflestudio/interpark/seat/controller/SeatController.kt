@@ -19,7 +19,7 @@ class SeatController(
         @PathVariable performanceEventId: String,
     ): ResponseEntity<GetAvailableSeatsResponse> {
         val seats = seatService.getAvailableSeats(performanceEventId)
-        return ResponseEntity.ok(GetAvailableSeatsResponse(seats.map{ AvailableSeat(it.first, it.second) }))
+        return ResponseEntity.ok(GetAvailableSeatsResponse(seats.map { AvailableSeat(it.first, it.second) }))
     }
 
     @PostMapping("/api/v1/reservation/reserve")
@@ -27,16 +27,25 @@ class SeatController(
         @RequestBody request: ReserveSeatRequest,
         @AuthUser user: User,
     ): ResponseEntity<ReserveSeatResponse> {
-        val reservation = seatService.reserveSeat(user, request.reservationId)
-        return ResponseEntity.status(200).body(ReserveSeatResponse(reservation))
+        val reservationId = seatService.reserveSeat(user, request.reservationId)
+        return ResponseEntity.status(200).body(ReserveSeatResponse(reservationId))
+    }
+
+    @GetMapping("/api/v1/reservation/detail/{reservationId}")
+    fun getReservedSeatDetail(
+        @PathVariable reservationId: String,
+        @AuthUser user: User,
+    ): ResponseEntity<GetReservedSeatDetailResponse> {
+        val reservationDetail = seatService.getReservedSeatDetail(user, reservationId)
+        return ResponseEntity.status(200).body(GetReservedSeatDetailResponse(reservationDetail))
     }
 
     @PostMapping("/api/v1/reservation/cancel")
-    fun cancelReserveSeat(
+    fun cancelReservedSeat(
         @RequestBody request: CancelReserveSeatRequest,
         @AuthUser user: User,
     ): ResponseEntity<Void> {
-        seatService.cancelReserveSeat(user, request.reservationId)
+        seatService.cancelReservedSeat(user, request.reservationId)
         return ResponseEntity.noContent().build()
     }
 }
@@ -45,15 +54,23 @@ data class AvailableSeat(
     val reservationId: String,
     val seat: Seat,
 )
+
 data class GetAvailableSeatsResponse(
-    val availableSeats: List<AvailableSeat>
+    val availableSeats: List<AvailableSeat>,
 )
+
 data class ReserveSeatRequest(
     val reservationId: String,
 )
+
 data class ReserveSeatResponse(
-    val reservation: Reservation,
+    val reservationId: String,
 )
+
+data class GetReservedSeatDetailResponse(
+    val reservedSeat: Reservation
+)
+
 data class CancelReserveSeatRequest(
     val reservationId: String,
 )

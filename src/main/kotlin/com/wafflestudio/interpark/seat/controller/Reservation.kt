@@ -18,11 +18,13 @@ data class Reservation(
     val reservationDate: LocalDate,
 ) {
     companion object {
-        fun fromEntity(reservationEntity: ReservationEntity,
-                       performanceEntity: PerformanceEntity,
-                       performanceHallEntity: PerformanceHallEntity,
-                       seatEntity: SeatEntity,
-                       performanceEventEntity: PerformanceEventEntity): Reservation {
+        fun fromEntity(
+            reservationEntity: ReservationEntity,
+            performanceEntity: PerformanceEntity,
+            performanceHallEntity: PerformanceHallEntity,
+            seatEntity: SeatEntity,
+            performanceEventEntity: PerformanceEventEntity,
+        ): Reservation {
             return Reservation(
                 id = reservationEntity.id!!,
                 performanceTitle = performanceEntity.title,
