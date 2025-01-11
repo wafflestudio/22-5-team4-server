@@ -10,6 +10,21 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: testdb
+          MYSQL_USER: user
+          MYSQL_PASSWORD: somepassword
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
 
     steps:
       # 1. GitHub 저장소에서 코드 가져오기
@@ -28,10 +43,12 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew build
+        # Just for build test, not for prod!
         env:
-          SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
-          SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
-          SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/testdb
+          SPRING_DATASOURCE_USERNAME: user
+          SPRING_DATASOURCE_PASSWORD: somepassword
+          SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
           SPRING_PROFILES_ACTIVE: "prod"
 
       # AWS EC2에 SSH 접속하여 NGINX 설치 및 실행
