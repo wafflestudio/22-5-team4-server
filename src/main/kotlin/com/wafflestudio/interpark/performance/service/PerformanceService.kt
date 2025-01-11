@@ -3,6 +3,7 @@ package com.wafflestudio.interpark.performance.service
 import com.wafflestudio.interpark.performance.PerformanceNotFoundException
 import com.wafflestudio.interpark.performance.controller.Performance
 import com.wafflestudio.interpark.performance.persistence.*
+import com.wafflestudio.interpark.user.persistence.UserRepository
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
 import org.springframework.data.repository.findByIdOrNull
@@ -10,6 +11,8 @@ import org.springframework.data.repository.findByIdOrNull
 @Service
 class PerformanceService(
     private val performanceRepository: PerformanceRepository,
+    private val performanceEventRepository: PerformanceEventRepository,
+    private val performanceHallRepository: PerformanceHallRepository,
 ) {
     fun searchPerformance(
         title: String?,
@@ -32,13 +35,31 @@ class PerformanceService(
         val performanceEntities = performanceRepository.findAll(spec)
 
         // DTO 변환
-        return performanceEntities.map { Performance.fromEntity(it) }
+        return performanceEntities.map { performanceEntity ->
+            val performanceEventEntities = performanceEventRepository.findAllByPerformanceId(performanceEntity.id!!) // 관련 이벤트들
+            val performanceHallEntity = performanceEventEntities.first().performanceHall // 관련 공연장
+
+            Performance.fromEntity(
+                performanceEntity = performanceEntity,
+                performanceHallEntity = performanceHallEntity,
+                performanceEventEntities = performanceEventEntities
+            )
+        }
     }
 
     fun getAllPerformance(): List<Performance> {
         return performanceRepository
             .findAll()
-            .map { Performance.fromEntity(it) };
+            .map { performanceEntity ->
+                val performanceEventEntities = performanceEventRepository.findAllByPerformanceId(performanceEntity.id!!)
+                val performanceHallEntity = performanceEventEntities.first().performanceHall
+
+                Performance.fromEntity(
+                    performanceEntity = performanceEntity,
+                    performanceHallEntity = performanceHallEntity,
+                    performanceEventEntities = performanceEventEntities
+                )
+            };
     }
     
     fun createPerformance(
