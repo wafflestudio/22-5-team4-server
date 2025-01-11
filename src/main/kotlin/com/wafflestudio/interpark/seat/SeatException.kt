@@ -28,6 +28,7 @@ class ReservedYetException : SeatException(
     httpStatusCode = HttpStatus.CONFLICT,
     msg = "Not Reserved Yet",
 )
+
 class ReservationPermissionDeniedException : SeatException(
     errorCode = 0,
     httpStatusCode = HttpStatus.FORBIDDEN,

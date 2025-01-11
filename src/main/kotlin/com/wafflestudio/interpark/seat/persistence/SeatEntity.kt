@@ -2,7 +2,6 @@ package com.wafflestudio.interpark.seat.persistence
 
 import com.wafflestudio.interpark.performance.persistence.PerformanceHallEntity
 import jakarta.persistence.*
-import java.time.LocalDate
 
 @Entity
 @Table(name = "seats")
