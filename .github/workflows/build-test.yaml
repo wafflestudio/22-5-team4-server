@@ -57,7 +57,7 @@ jobs:
       #   with:
       #     host: ${{ secrets.EC2_HOST }}
       #     username: ${{ secrets.EC2_USER }}
-      #     key: ${{ secrets.EC2_SSH_KEY }}
+      #     key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
       #     script: |
       #       echo "Checking if NGINX is installed..."
       #       if ! command -v nginx &> /dev/null
@@ -78,7 +78,7 @@ jobs:
       #   with:
       #     host: ${{ secrets.EC2_HOST }}
       #     username: ${{ secrets.EC2_USER }}
-      #     key: ${{ secrets.EC2_SSH_KEY }}
+      #     key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
       #     script: |
       #       echo "Setting up NGINX reverse proxy..."
       #       sudo bash -c 'cat > /etc/nginx/sites-available/default <<EOF
@@ -102,7 +102,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
             echo "SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }}" > ~/app/.env
             echo "SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }}" >> ~/app/.env
@@ -116,7 +116,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
             echo "Stopping existing application..."
             LATEST_JAR=$(ls -t ~/app/*.jar | head -n 1)
@@ -133,7 +133,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           source: "build/libs/*-SNAPSHOT.jar"
           target: "~/app/"
 
@@ -147,7 +147,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
             echo "Starting new application..."
             export $(grep -v '^#' ~/app/.env | xargs)  # 환경 변수 로드
