@@ -2,8 +2,9 @@ package com.wafflestudio.interpark.performance.service
 
 import com.wafflestudio.interpark.performance.PerformanceNotFoundException
 import com.wafflestudio.interpark.performance.controller.Performance
+import com.wafflestudio.interpark.performance.controller.PerformanceEvent
+import com.wafflestudio.interpark.performance.controller.PerformanceHall
 import com.wafflestudio.interpark.performance.persistence.*
-import com.wafflestudio.interpark.user.persistence.UserRepository
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
 import org.springframework.data.repository.findByIdOrNull
@@ -12,7 +13,6 @@ import org.springframework.data.repository.findByIdOrNull
 class PerformanceService(
     private val performanceRepository: PerformanceRepository,
     private val performanceEventRepository: PerformanceEventRepository,
-    private val performanceHallRepository: PerformanceHallRepository,
 ) {
     fun searchPerformance(
         title: String?,
@@ -36,13 +36,14 @@ class PerformanceService(
 
         // DTO 변환
         return performanceEntities.map { performanceEntity ->
-            val performanceEventEntities = performanceEventRepository.findAllByPerformanceId(performanceEntity.id!!) // 관련 이벤트들
-            val performanceHallEntity = performanceEventEntities.first().performanceHall // 관련 공연장
+            val performanceEventEntities = performanceEventRepository.findAllByPerformanceId(performanceEntity.id!!)
+            val performanceEvents = performanceEventEntities.map{ PerformanceEvent.fromEntity(it) }
+            val performanceHall = PerformanceHall.fromEntity(performanceEventEntities.first().performanceHall)
 
             Performance.fromEntity(
                 performanceEntity = performanceEntity,
-                performanceHallEntity = performanceHallEntity,
-                performanceEventEntities = performanceEventEntities
+                performanceHall = performanceHall,
+                performanceEvents = performanceEvents
             )
         }
     }
@@ -52,12 +53,13 @@ class PerformanceService(
             .findAll()
             .map { performanceEntity ->
                 val performanceEventEntities = performanceEventRepository.findAllByPerformanceId(performanceEntity.id!!)
-                val performanceHallEntity = performanceEventEntities.first().performanceHall
+                val performanceEvents = performanceEventEntities.map{ PerformanceEvent.fromEntity(it) }
+                val performanceHall = PerformanceHall.fromEntity(performanceEventEntities.first().performanceHall)
 
                 Performance.fromEntity(
                     performanceEntity = performanceEntity,
-                    performanceHallEntity = performanceHallEntity,
-                    performanceEventEntities = performanceEventEntities
+                    performanceHall = performanceHall,
+                    performanceEvents = performanceEvents
                 )
             };
     }
@@ -79,7 +81,7 @@ class PerformanceService(
         ).let{
             performanceRepository.save(it)
         }
-        return Performance.fromEntity(newPerformanceEntity)
+        return Performance.fromEntity(newPerformanceEntity, null, null)
     }
 
     fun deletePerformance(performanceId: String) {

@@ -2,8 +2,6 @@ package com.wafflestudio.interpark.performance.controller
 
 import com.wafflestudio.interpark.performance.persistence.PerformanceCategory
 import com.wafflestudio.interpark.performance.persistence.PerformanceEntity
-import com.wafflestudio.interpark.performance.persistence.PerformanceEventEntity
-import com.wafflestudio.interpark.performance.persistence.PerformanceHallEntity
 import java.time.LocalDate
 
 data class Performance(
@@ -22,16 +20,16 @@ data class Performance(
     companion object {
         fun fromEntity(
             performanceEntity: PerformanceEntity,
-            performanceEventEntities: List<PerformanceEventEntity>,
-            performanceHallEntity: PerformanceHallEntity,
+            performanceEvents: List<PerformanceEvent>?,
+            performanceHall: PerformanceHall?,
         ): Performance {
             return Performance(
                 id = performanceEntity.id!!,
                 title = performanceEntity.title,
-                hallName = performanceHallEntity.name,
-                performanceDates = performanceEventEntities.map {
+                hallName = performanceHall?.name ?: "",
+                performanceDates = performanceEvents?.map {
                     it.startAt.atZone(java.time.ZoneId.of("Asia/Seoul")).toLocalDate()
-                }.distinct(),
+                }?.distinct() ?: emptyList(),
                 detail = performanceEntity.detail,
                 category = performanceEntity.category,
                 posterUri = performanceEntity.posterUri,
