@@ -54,8 +54,8 @@ typealias GetPerformanceEventResponse = List<PerformanceEvent>
 data class CreatePerformanceEventRequest(
     val performanceId: String,
     val performanceHallId: String,
-    val startAt: Instant,
-    val endAt: Instant,
+    val startAt: String,
+    val endAt: String,
 )
 
 typealias CreatePerformanceEventResponse = PerformanceEvent
