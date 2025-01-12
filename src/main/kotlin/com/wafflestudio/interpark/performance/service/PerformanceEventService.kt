@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service
 import org.springframework.data.repository.findByIdOrNull
 
 import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 @Service
 class PerformanceEventService(
@@ -20,21 +22,28 @@ class PerformanceEventService(
             .findAll()
             .map { PerformanceEvent.fromEntity(it) };
     }
-    
+
+    fun parseKoreanTimeToInstant(koreanTime: String): Instant {
+        val koreanZone = ZoneId.of("Asia/Seoul")
+        return LocalDateTime.parse(koreanTime).atZone(koreanZone).toInstant()
+    }
+
     fun createPerformanceEvent(
         performanceId: String,
         performanceHallId: String,
-        startAt: Instant,
-        endAt: Instant,
+        startAt: String,
+        endAt: String,
     ): PerformanceEvent {
-        val performanceEntity: PerformanceEntity = performanceRepository.findByIdOrNull(performanceId) ?: throw PerformanceNotFoundException()
-        val performanceHallEntity: PerformanceHallEntity = performanceHallRepository.findByIdOrNull(performanceHallId) ?: throw PerformanceHallNotFoundException()
+        val performanceEntity: PerformanceEntity = performanceRepository.findByIdOrNull(performanceId)
+                                                                        ?: throw PerformanceNotFoundException()
+        val performanceHallEntity: PerformanceHallEntity = performanceHallRepository.findByIdOrNull(performanceHallId)
+                                                                        ?: throw PerformanceHallNotFoundException()
         val newPerformanceEventEntity: PerformanceEventEntity = PerformanceEventEntity(
             id = "",
             performance = performanceEntity,
             performanceHall = performanceHallEntity,
-            startAt = startAt,
-            endAt = endAt,
+            startAt = parseKoreanTimeToInstant(startAt),
+            endAt = parseKoreanTimeToInstant(endAt),
         ).let{
             performanceEventRepository.save(it)
         }

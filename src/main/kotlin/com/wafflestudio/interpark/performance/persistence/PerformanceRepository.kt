@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 interface PerformanceRepository :
     JpaRepository<PerformanceEntity, String>,
     JpaSpecificationExecutor<PerformanceEntity> {
-      
+      fun findByTitle(title: String): PerformanceEntity?
     }
