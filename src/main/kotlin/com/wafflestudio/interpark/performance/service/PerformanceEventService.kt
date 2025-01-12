@@ -40,6 +40,7 @@ class PerformanceEventService(
         }
         return PerformanceEvent.fromEntity(newPerformanceEventEntity)
     }
+
     fun deletePerformanceEvent(performanceEventId: String) {
         val deletePerformanceEventEntity: PerformanceEventEntity =
             performanceEventRepository.findByIdOrNull(performanceEventId) ?: throw PerformanceEventNotFoundException()

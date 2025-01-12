@@ -71,8 +71,7 @@ class PerformanceService(
     }
 
     fun getPerformanceDetail(performanceId: String): Performance {
-        val performanceEntity: PerformanceEntity = performanceRepository.findById(performanceId)
-                                                                        .orElseThrow{ PerformanceNotFoundException() }
+        val performanceEntity: PerformanceEntity = performanceRepository.findByIdOrNull(performanceId) ?: throw PerformanceNotFoundException()
         val performanceEventEntities = performanceEventRepository.findAllByPerformanceId(performanceEntity.id!!)
         val performanceEvents = performanceEventEntities.map{ PerformanceEvent.fromEntity(it) }
         val performanceHall = PerformanceHall.fromEntity(performanceEventEntities.first().performanceHall)
