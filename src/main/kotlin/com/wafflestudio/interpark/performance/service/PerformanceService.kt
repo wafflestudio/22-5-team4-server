@@ -37,8 +37,14 @@ class PerformanceService(
         // DTO 변환
         return performanceEntities.map { performanceEntity ->
             val performanceEventEntities = performanceEventRepository.findAllByPerformanceId(performanceEntity.id!!)
-            val performanceEvents = performanceEventEntities.map{ PerformanceEvent.fromEntity(it) }
-            val performanceHall = PerformanceHall.fromEntity(performanceEventEntities.first().performanceHall)
+            val performanceEvents = if (performanceEventEntities.isEmpty()) {
+                null
+            } else {
+                performanceEventEntities.map { PerformanceEvent.fromEntity(it) }
+            }
+            val performanceHall = performanceEventEntities.firstOrNull()?.let {
+                PerformanceHall.fromEntity(it.performanceHall)
+            }
 
             Performance.fromEntity(
                 performanceEntity = performanceEntity,
@@ -62,6 +68,16 @@ class PerformanceService(
                     performanceEvents = performanceEvents
                 )
             };
+    }
+
+    fun getPerformanceDetail(performanceId: String): Performance {
+        val performanceEntity: PerformanceEntity = performanceRepository.findById(performanceId)
+                                                                        .orElseThrow{ PerformanceNotFoundException() }
+        val performanceEventEntities = performanceEventRepository.findAllByPerformanceId(performanceEntity.id!!)
+        val performanceEvents = performanceEventEntities.map{ PerformanceEvent.fromEntity(it) }
+        val performanceHall = PerformanceHall.fromEntity(performanceEventEntities.first().performanceHall)
+
+        return Performance.fromEntity(performanceEntity, performanceEvents, performanceHall)
     }
     
     fun createPerformance(

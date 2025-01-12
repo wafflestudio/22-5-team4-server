@@ -37,8 +37,20 @@ class PerformanceController(
                     request.category,
                     request.posterUri,
                     request.backdropImageUri
-                );
+                )
         return ResponseEntity.ok(newPerformance)
+    }
+
+    @GetMapping("/api/v1/performance/{performanceId}")
+    @Operation(
+        summary = "공연 상세정보 반환",
+        description = "공연을 선택했을 때 화면에 보여지는 상세 정보를 반환합니다."
+    )
+    fun getPerformanceDetail(
+        @PathVariable performanceId: String,
+    ) : ResponseEntity<GetPerformanceDetailResponse> {
+        val queriedPerformance = performanceService.getPerformanceDetail(performanceId)
+        return ResponseEntity.ok(queriedPerformance)
     }
 
     @DeleteMapping("/admin/v1/performance/{performanceId}")
@@ -62,3 +74,5 @@ data class CreatePerformanceRequest(
 )
 
 typealias CreatePerformanceResponse = Performance
+
+typealias GetPerformanceDetailResponse = Performance
