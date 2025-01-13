@@ -127,16 +127,16 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-        run: |
-          cd ~/app
-          LATEST_JAR=$(ls -t *.jar | head -n 1) || true
-          echo "Latest JAR file: $LATEST_JAR"
-          for file in *.jar; do
-            if [[ "$file" != "$LATEST_JAR" ]]; then
-              echo "Deleting $file..."
-              rm -f "$file"
-            fi
-          done
+          script: |
+            cd ~/app
+            LATEST_JAR=$(ls -t *.jar | head -n 1) || true
+            echo "Latest JAR file: $LATEST_JAR"
+            for file in *.jar; do
+              if [[ "$file" != "$LATEST_JAR" ]]; then
+                echo "Deleting $file..."
+                rm -f "$file"
+              fi
+            done
         continue-on-error: true
 
       - name: Upload Dockerfile and Compose file
