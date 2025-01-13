@@ -127,6 +127,7 @@ jobs:
               echo "Killing process $PID..."
               kill -9 $PID
             fi"
+        continue-on-error: true
 
       # 6. 빌드된 JAR 파일을 EC2로 업로드
       - name: Upload JAR to EC2
