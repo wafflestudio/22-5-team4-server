@@ -74,7 +74,9 @@ class PerformanceService(
         val performanceEntity: PerformanceEntity = performanceRepository.findByIdOrNull(performanceId) ?: throw PerformanceNotFoundException()
         val performanceEventEntities = performanceEventRepository.findAllByPerformanceId(performanceEntity.id!!)
         val performanceEvents = performanceEventEntities.map{ PerformanceEvent.fromEntity(it) }
-        val performanceHall = PerformanceHall.fromEntity(performanceEventEntities.first().performanceHall)
+        val performanceHall = performanceEventEntities.firstOrNull()?.let {
+            PerformanceHall.fromEntity(it.performanceHall)
+        }
 
         return Performance.fromEntity(performanceEntity, performanceEvents, performanceHall)
     }

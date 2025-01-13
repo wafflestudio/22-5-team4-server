@@ -3,6 +3,7 @@ package com.wafflestudio.interpark.performance.controller
 import com.wafflestudio.interpark.performance.service.PerformanceHallService
 import com.wafflestudio.interpark.user.controller.User
 import com.wafflestudio.interpark.user.AuthUser
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -11,7 +12,7 @@ class PerformanceHallController(
     private val performanceHallService: PerformanceHallService,
 ) {
     @GetMapping("/api/v1/performance-hall")
-    fun getPerformance(
+    fun getPerformanceHall(
         @AuthUser user: User,
     ): ResponseEntity<GetPerformanceHallResponse> {
         // Currently, no search
@@ -23,7 +24,7 @@ class PerformanceHallController(
     // WARN: THIS IS FOR ADMIN.
     // TODO: SEPERATE THIS TO OTHER APPLICATION
     @PostMapping("/admin/v1/performance-hall")
-    fun createPerformance(
+    fun createPerformanceHall(
         @RequestBody request: CreatePerformanceHallRequest,
     ): ResponseEntity<CreatePerformanceHallResponse> {
         val newPerformanceHall: PerformanceHall =
@@ -33,7 +34,7 @@ class PerformanceHallController(
                     request.address,
                     request.maxAudience,
                 );
-        return ResponseEntity.ok(newPerformanceHall)
+        return ResponseEntity.status(HttpStatus.CREATED).body(newPerformanceHall)
     }
 
     @DeleteMapping("/admin/v1/performance-hall/{performanceHallId}")

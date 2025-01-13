@@ -3,6 +3,10 @@ package com.wafflestudio.interpark.performance.controller
 import com.wafflestudio.interpark.performance.persistence.PerformanceCategory
 import io.swagger.v3.oas.annotations.Operation
 import com.wafflestudio.interpark.performance.service.PerformanceService
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -22,12 +26,12 @@ class PerformanceController(
         val queriedPerformances = performanceService.searchPerformance(title, category)
         return ResponseEntity.ok(queriedPerformances)
     }
-    
+
     // WARN: THIS IS FOR ADMIN.
     // TODO: SEPERATE THIS TO OTHER APPLICATION
     @PostMapping("/admin/v1/performance")
     fun createPerformance(
-        @RequestBody request: CreatePerformanceRequest,
+        @Valid @RequestBody request: CreatePerformanceRequest,
     ): ResponseEntity<CreatePerformanceResponse> {
         val newPerformance: Performance =
             performanceService
@@ -38,7 +42,7 @@ class PerformanceController(
                     request.posterUri,
                     request.backdropImageUri
                 )
-        return ResponseEntity.ok(newPerformance)
+        return ResponseEntity.status(HttpStatus.CREATED).body(newPerformance)
     }
 
     @GetMapping("/api/v1/performance/{performanceId}")
@@ -66,11 +70,16 @@ class PerformanceController(
 typealias SearchPerformanceResponse = List<Performance>
 
 data class CreatePerformanceRequest(
+    @field:NotBlank(message = "Title must not be blank")
     val title: String,
+    @field:NotBlank(message = "Detail must not be blank")
     val detail: String,
+    @field:NotNull(message = "Category must not be null")
     val category: PerformanceCategory,
+    @field:NotBlank(message = "Poster URI must not be blank")
     val posterUri: String,
-    val backdropImageUri: String,
+    @field:NotBlank(message = "Backdrop Image URI must not be blank")
+    val backdropImageUri: String
 )
 
 typealias CreatePerformanceResponse = Performance

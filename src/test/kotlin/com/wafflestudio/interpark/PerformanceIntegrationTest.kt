@@ -3,7 +3,6 @@ package com.wafflestudio.interpark
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wafflestudio.interpark.performance.persistence.PerformanceCategory
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -15,7 +14,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
 
-@Disabled("Temporarily disabled for build process")
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
@@ -117,6 +115,7 @@ constructor(
     @Test
     fun `공연 상세 조회 테스트`() {
         // 6️⃣ 공연 상세 조회
+        println("Generated performanceId: $performanceId")
         mvc.perform(
             get("/api/v1/performance/$performanceId")
                 .header("Authorization", "Bearer $accessToken"),
@@ -159,6 +158,6 @@ constructor(
                 )
                 .contentType(MediaType.APPLICATION_JSON),
         ).andExpect(status().`is`(400))
-            .andExpect(jsonPath("$.error").value("Invalid Performance Data"))
+            .andExpect(jsonPath("$.error").value("Method Argument Validation failed"))
     }
 }

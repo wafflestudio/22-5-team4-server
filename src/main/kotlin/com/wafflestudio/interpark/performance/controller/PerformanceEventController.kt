@@ -3,10 +3,9 @@ package com.wafflestudio.interpark.performance.controller
 import com.wafflestudio.interpark.performance.service.PerformanceEventService
 import com.wafflestudio.interpark.user.controller.User
 import com.wafflestudio.interpark.user.AuthUser
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-
-import java.time.Instant
 
 @RestController
 class PerformanceEventController(
@@ -25,7 +24,7 @@ class PerformanceEventController(
     // WARN: THIS IS FOR ADMIN.
     // TODO: SEPERATE THIS TO OTHER APPLICATION
     @PostMapping("/admin/v1/performance-event")
-    fun createPerformance(
+    fun createPerformanceEvent(
         @RequestBody request: CreatePerformanceEventRequest,
     ): ResponseEntity<CreatePerformanceEventResponse> {
         val newPerformanceEvent: PerformanceEvent =
@@ -36,7 +35,7 @@ class PerformanceEventController(
                     request.startAt,
                     request.endAt
                 );
-        return ResponseEntity.ok(newPerformanceEvent)
+        return ResponseEntity.status(HttpStatus.CREATED).body(newPerformanceEvent)
     }
 
     @DeleteMapping("/admin/v1/performance-event/{performanceEventId}")

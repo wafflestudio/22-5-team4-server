@@ -13,6 +13,6 @@ sealed class PerformanceEventException(
 
 class PerformanceEventNotFoundException : PerformanceEventException(
     errorCode = 0,
-    httpStatusCode = HttpStatus.BAD_REQUEST,
+    httpStatusCode = HttpStatus.NOT_FOUND,
     msg = "PerformanceEvent Not Found",
 )
