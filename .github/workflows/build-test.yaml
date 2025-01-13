@@ -97,20 +97,6 @@ jobs:
       #       EOF'
       #       sudo nginx -t && sudo systemctl restart nginx
 
-      - name: Create .env file on EC2
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-          script: |
-            mkdir ~/app
-            echo "SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }}" > ~/app/.env
-            echo "SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }}" >> ~/app/.env
-            echo "SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }}" >> ~/app/.env
-            echo "SPRING_PROFILES_ACTIVE=prod" >> ~/app/.env
-            chmod 600 ~/app/.env
-
       # 빌드된 JAR 파일을 EC2로 업로드
       - name: Upload JAR to EC2
         uses: appleboy/scp-action@v0.1.4
@@ -158,5 +144,5 @@ jobs:
             echo "Starting containers..."
             docker compose up -d myapp \
               --env SPRING_DATASOURCE_URL="${{ secrets.SPRING_DATASOURCE_URL }}" \
-              --env SPRING_DATASOURCE_USERNAME="${{ SPRING_DATASOURCE_USERNAME }}" \
-              --env SPRING_DATASOURCE_PASSWORD="${{ SPRING_DATASOURCE_PASSWORD }}"
+              --env SPRING_DATASOURCE_USERNAME="${{ secrets.SPRING_DATASOURCE_USERNAME }}" \
+              --env SPRING_DATASOURCE_PASSWORD="${{ secrets.SPRING_DATASOURCE_PASSWORD }}"
