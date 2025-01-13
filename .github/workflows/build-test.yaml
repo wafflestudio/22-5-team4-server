@@ -142,9 +142,9 @@ jobs:
       - name: Upload Dockerfile and Compose file
         uses: appleboy/scp-action@v0.1.3
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           source: "deploy-dockerfile, docker-compose.yml"
           target: "~/deploy"
 
