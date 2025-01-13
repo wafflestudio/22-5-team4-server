@@ -76,84 +76,84 @@ class DataInitializer(
         // 2) Performance 데이터 넣기
         performanceService.createPerformance(
             title = "뮤지컬 지킬앤하이드",
-            detail = "지금 이 순간, 끝나지 않는 신화",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/24013928-21.jpg",
             category = PerformanceCategory.MUSICAL,
             posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24013928_p.gif",
             backdropImageUri = "http://example.com/backdrop/jekyll.jpg"
         )
         performanceService.createPerformance(
             title = "마타하리",
-            detail = "She's BACK!",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/L0000106-08.jpg",
             category = PerformanceCategory.MUSICAL,
             posterUri = "https://ticketimage.interpark.com/Play/image/large/L0/L0000106_p.gif",
             backdropImageUri = "http://example.com/backdrop/phantom.jpg"
         )
         performanceService.createPerformance(
             title = "웃는남자",
-            detail = "부자들의 낙원은 가난한 자들의 지옥으로 세워진 것이다",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/24016737-04.jpg",
             category = PerformanceCategory.MUSICAL,
             posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24016737_p.gif",
             backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
         performanceService.createPerformance(
             title = "2025 기리보이 콘서트",
-            detail = "2252:2522",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/24018543-01.jpg",
             category = PerformanceCategory.CONCERT,
             posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24018543_p.gif",
             backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
         performanceService.createPerformance(
             title = "2025 검정치마 단독공연",
-            detail = "SONGS TO BRING YOU HOME",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/25000084-01.jpg",
             category = PerformanceCategory.CONCERT,
             posterUri = "https://ticketimage.interpark.com/Play/image/large/25/25000084_p.gif",
             backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
         performanceService.createPerformance(
             title = "콜드플레이 내한공연",
-            detail = "MUSIC of the SPHERES",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/24013437-06.jpg",
             category = PerformanceCategory.CONCERT,
             posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24013437_p.gif",
             backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
         performanceService.createPerformance(
             title = "브루스 리우 피아노 리사이틀",
-            detail = "TCHAIKOVSKY | MENDELSSOHN | SCRIABIN | PROKOFIEV",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/24016119-01.jpg",
             category = PerformanceCategory.CLASSIC,
             posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24016119_p.gif",
             backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
         performanceService.createPerformance(
             title = "크리스티안 테츨라프 바이올린 리사이틀",
-            detail = "SUK | BRAHMS | SZYMANOWSKI | FRANCK",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/24015137-01.jpg",
             category = PerformanceCategory.CLASSIC,
             posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24015137_p.gif",
             backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
         performanceService.createPerformance(
             title = "발레의 별빛, 글로벌 발레스타 초청 갈라공연",
-            detail = "전 세계가 먼저 찾는 한국 스타 무용수들의 향연!",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/P0004046-06.jpg",
             category = PerformanceCategory.CLASSIC,
             posterUri = "https://ticketimage.interpark.com/Play/image/large/P0/P0004046_p.gif",
             backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
         performanceService.createPerformance(
             title = "연극 애나엑스",
-            detail = "ANNA X",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/L0000107-02.jpg",
             category = PerformanceCategory.PLAY,
             posterUri = "https://ticketimage.interpark.com/Play/image/large/L0/L0000107_p.gif",
             backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
         performanceService.createPerformance(
             title = "연극 타인의 삶",
-            detail = "영화 타인의 삶 원작",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/L0000104-05.jpg",
             category = PerformanceCategory.PLAY,
             posterUri = "https://ticketimage.interpark.com/Play/image/large/L0/L0000104_p.gif",
             backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
         performanceService.createPerformance(
             title = "세일즈맨의 죽음",
-            detail = "현 희곡의 거장 '아서 밀러'의 대표작 연극<세일즈맨의 죽음>이 돌아왔다!",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/24017573-06.jpg",
             category = PerformanceCategory.PLAY,
             posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24017573_p.gif",
             backdropImageUri = "http://example.com/backdrop/mom.jpg"
