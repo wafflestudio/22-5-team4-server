@@ -146,7 +146,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           source: "deploy-Dockerfile, docker-compose.yaml"
-          target: "~/deploy"
+          target: "~"
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.10
@@ -155,7 +155,6 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
-            cd ~/deploy
             echo "Building Docker image..."
             docker build -t myapp:1.0 -f deploy-dockerfile .
             
