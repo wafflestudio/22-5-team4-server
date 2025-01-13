@@ -159,4 +159,4 @@ jobs:
             docker build -t myapp:1.0 -f deploy-Dockerfile .
             
             echo "Starting containers..."
-            docker-compose up -d myapp
+            docker compose up -d myapp
