@@ -111,25 +111,7 @@ jobs:
             echo "SPRING_PROFILES_ACTIVE=prod" >> ~/app/.env
             chmod 600 ~/app/.env
 
-      # 기존 애플리케이션 종료
-      - name: Stop running application on EC2
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-          script: |
-            echo "Stopping existing application..."
-            LATEST_JAR=$(ls -t ~/app/*.jar | head -n 1)
-            JAR_NAME=$(basename "$LATEST_JAR")
-            PID=$(pgrep -f "java -jar ~/app/$JAR_NAME") || echo "No running process found."
-            if [ -n "$PID" ]; then
-              echo "Killing process $PID..."
-              kill -9 $PID
-            fi"
-        continue-on-error: true
-
-      # 6. 빌드된 JAR 파일을 EC2로 업로드
+      # 빌드된 JAR 파일을 EC2로 업로드
       - name: Upload JAR to EC2
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -139,18 +121,43 @@ jobs:
           source: "build/libs/*-SNAPSHOT.jar"
           target: "~/app/"
 
-      - name: Find the latest JAR file
-        run: |
-          LATEST_JAR=$(ls -t ~/app/*-SNAPSHOT-*.jar | head -n 1)
-          echo "LATEST_JAR=$LATEST_JAR" >> $GITHUB_ENV
-
-      - name: Start application on EC2
+      - name: Delete latest JAR file
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+        run: |
+          cd ~/app
+          LATEST_JAR=$(ls -t *.jar | head -n 1) || true
+          echo "Latest JAR file: $LATEST_JAR"
+          for file in *.jar; do
+            if [[ "$file" != "$LATEST_JAR" ]]; then
+              echo "Deleting $file..."
+              rm -f "$file"
+            fi
+          done
+        continue-on-error: true
+
+      - name: Upload Dockerfile and Compose file
+        uses: appleboy/scp-action@v0.1.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "deploy-dockerfile, docker-compose.yml"
+          target: "~/deploy"
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
           script: |
-            echo "Starting new application..."
-            export $(grep -v '^#' ~/app/.env | xargs)  # 환경 변수 로드
-            nohup java -jar ~/app/*.jar > ~/app/app.log 2>&1 &
+            cd ~/deploy
+            echo "Building Docker image..."
+            docker build -t myapp:1.0 -f deploy-dockerfile .
+            
+            echo "Starting containers..."
+            docker-compose up -d myapp
