@@ -12,6 +12,9 @@ services:
     networks:
       - my-network
   myapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: myapp:1.0
     restart: on-failure
     container_name: myapp-container

@@ -155,8 +155,8 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
-            echo "Building Docker image..."
-            docker build -t myapp:1.0 -f deploy-Dockerfile .
-            
             echo "Starting containers..."
-            docker compose up -d myapp
+            docker compose up -d myapp \
+              --env SPRING_DATASOURCE_URL="${{ secrets.SPRING_DATASOURCE_URL }}" \
+              --env SPRING_DATASOURCE_USERNAME="${{ SPRING_DATASOURCE_USERNAME }}" \
+              --env SPRING_DATASOURCE_PASSWORD="${{ SPRING_DATASOURCE_PASSWORD }}"
