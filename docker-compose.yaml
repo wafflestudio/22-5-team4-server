@@ -14,7 +14,7 @@ services:
   myapp:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: deploy-Dockerfile
     image: myapp:1.0
     restart: on-failure
     container_name: myapp-container
