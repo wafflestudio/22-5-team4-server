@@ -135,7 +135,7 @@ constructor(
     }
 
     @Test
-    fun `좌석을 예매할 수 있다`() {
+    fun `좌석을 예매할 수 있고 예매되면 더 이상 예매되지 못한다`() {
         val reservationId = mvc.perform(
             get("/api/v1/seat/$performanceEventId/available")
         ).andExpect(status().`is`(200))
@@ -297,6 +297,6 @@ constructor(
                 )
                 .header("Authorization", "Bearer $otherAccessToken")
                 .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().`is`(401))
+        ).andExpect(status().`is`(403))
     }
 }
