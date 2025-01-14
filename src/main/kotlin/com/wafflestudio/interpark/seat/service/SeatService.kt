@@ -48,6 +48,14 @@ class SeatService(
     }
 
     @Transactional
+    fun getMyReservations(user: User): List<String> {
+        userRepository.findByIdOrNull(user.id) ?: throw AuthenticateException()
+        val myReservations = reservationRepository.findByUserId(user.id)
+
+        return myReservations.map { it.id!! }
+    }
+
+    @Transactional
     fun getReservedSeatDetail(
         user: User,
         reservationId: String,
