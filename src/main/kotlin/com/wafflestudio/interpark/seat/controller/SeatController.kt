@@ -31,12 +31,12 @@ class SeatController(
         return ResponseEntity.status(200).body(ReserveSeatResponse(reservationId))
     }
 
-    @GetMapping("/api/v1/reservation/me")
+    @GetMapping("/api/v1/me/reservation")
     fun getMyReservations(
         @AuthUser user: User,
     ): ResponseEntity<GetMyReservationsResponse> {
-        val reservationIds = seatService.getMyReservations(user)
-        return ResponseEntity.ok(GetMyReservationsResponse(reservationIds))
+        val myReservationIds = seatService.getMyReservations(user)
+        return ResponseEntity.ok(GetMyReservationsResponse(myReservationIds))
     }
 
     @GetMapping("/api/v1/reservation/detail/{reservationId}")
@@ -76,7 +76,7 @@ data class ReserveSeatResponse(
 )
 
 data class GetMyReservationsResponse(
-    val reservationIds: List<String>,
+    val myReservationIds: List<String>,
 )
 
 data class GetReservedSeatDetailResponse(
