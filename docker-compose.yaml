@@ -16,7 +16,8 @@ services:
       context: .
       dockerfile: deploy-Dockerfile
     image: myapp:1.0
-    env_file: .env
+    env_file:
+    - .env
     restart: on-failure
     container_name: myapp-container
     ports:
