@@ -22,10 +22,6 @@ services:
       - "8080:8080"
     depends_on:
       - mysql
-    environment:
-      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql-db:3306/testdb"
-      SPRING_DATASOURCE_USERNAME: "user"
-      SPRING_DATASOURCE_PASSWORD: "somepassword"
     networks:
       - my-network
 networks:
