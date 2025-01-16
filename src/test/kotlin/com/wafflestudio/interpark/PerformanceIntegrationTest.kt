@@ -2,15 +2,12 @@ package com.wafflestudio.interpark
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wafflestudio.interpark.performance.persistence.PerformanceCategory
-import com.wafflestudio.interpark.performance.persistence.PerformanceRepository
 import com.wafflestudio.interpark.user.persistence.UserRole
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
