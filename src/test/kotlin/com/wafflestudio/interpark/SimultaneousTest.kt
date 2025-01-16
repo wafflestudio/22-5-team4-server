@@ -38,7 +38,7 @@ constructor(
 
         // 1️⃣ 회원가입
         mvc.perform(
-            post("/api/v1/signup")
+            post("/api/v1/local/signup")
                 .content(
                     mapper.writeValueAsString(
                         mapOf(
@@ -56,7 +56,7 @@ constructor(
         // 2️⃣ 로그인 → 토큰 획득
         val accessToken =
             mvc.perform(
-                post("/api/v1/signin")
+                post("/api/v1/local/signin")
                     .content(
                         mapper.writeValueAsString(
                             mapOf(

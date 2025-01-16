@@ -53,7 +53,7 @@ class TokenExpiredException : UserException(
     msg = "Token Expired",
 )
 
-class TokenNotFoundException : UserException(
+class NoRefreshTokenException : UserException(
     errorCode = 0,
     httpStatusCode = HttpStatus.UNAUTHORIZED,
     msg = "Token not found",

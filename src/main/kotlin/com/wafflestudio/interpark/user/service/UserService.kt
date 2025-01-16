@@ -67,7 +67,7 @@ class UserService(
             throw SignInInvalidPasswordException()
         }
         val accessToken = userAccessTokenUtil.generateAccessToken(targetUser.id!!)
-        val refreshToken = userAccessTokenUtil.generateRefreshToken(targetIdentity.id!!)
+        val refreshToken = userAccessTokenUtil.generateRefreshToken(targetUser.id!!)
         return Triple(user, accessToken, refreshToken)
     }
 
