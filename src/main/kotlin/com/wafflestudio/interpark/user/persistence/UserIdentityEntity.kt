@@ -17,7 +17,7 @@ class UserIdentityEntity(
     @JoinColumn(name = "user_id")
     var user: UserEntity,
     @Column(name = "role", nullable = false)
-    var role: String,
+    var role: UserRole = UserRole.USER,
     @Column(name = "hashed_password", nullable = false)
     val hashedPassword: String,
     @Column(name = "provider", nullable = false)
@@ -25,3 +25,7 @@ class UserIdentityEntity(
     @Column(name = "social_id", nullable = true)
     val socialId: String? = null,
 )
+
+enum class UserRole {
+    USER, ADMIN
+}

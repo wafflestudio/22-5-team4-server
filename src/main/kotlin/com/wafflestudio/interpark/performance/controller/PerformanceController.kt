@@ -3,6 +3,10 @@ package com.wafflestudio.interpark.performance.controller
 import com.wafflestudio.interpark.performance.persistence.PerformanceCategory
 import io.swagger.v3.oas.annotations.Operation
 import com.wafflestudio.interpark.performance.service.PerformanceService
+import com.wafflestudio.interpark.user.AuthUser
+import com.wafflestudio.interpark.user.controller.User
+import com.wafflestudio.interpark.user.persistence.UserRole
+import com.wafflestudio.interpark.user.service.UserService
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
@@ -14,6 +18,7 @@ import java.time.LocalDate
 @RestController
 class PerformanceController(
     private val performanceService: PerformanceService,
+    private val userService: UserService,
 ) {
     @GetMapping("/api/v1/performance/search")
     @Operation(
@@ -33,7 +38,16 @@ class PerformanceController(
     @PostMapping("/admin/v1/performance")
     fun createPerformance(
         @Valid @RequestBody request: CreatePerformanceRequest,
+        @AuthUser user: User,
     ): ResponseEntity<CreatePerformanceResponse> {
+        // UserIdentity를 통해 역할(Role) 확인
+        val userIdentity = userService.getUserIdentityByUserId(user.id) // user.id를 통해 UserIdentity 조회
+            ?: return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null) // UserIdentity가 없으면 FORBIDDEN 반환
+
+        if (userIdentity.role != UserRole.ADMIN) { // 역할(Role)이 ADMIN이 아니면 FORBIDDEN 반환
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null)
+        }
+
         val newPerformance: Performance =
             performanceService
                 .createPerformance(
@@ -60,8 +74,17 @@ class PerformanceController(
 
     @DeleteMapping("/admin/v1/performance/{performanceId}")
     fun deletePerformance(
-        @PathVariable performanceId: String
+        @PathVariable performanceId: String,
+        @AuthUser user: User,
     ): ResponseEntity<String> {
+        // UserIdentity를 통해 역할(Role) 확인
+        val userIdentity = userService.getUserIdentityByUserId(user.id) // user.id를 통해 UserIdentity 조회
+            ?: return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null) // UserIdentity가 없으면 FORBIDDEN 반환
+
+        if (userIdentity.role != UserRole.ADMIN) { // 역할(Role)이 ADMIN이 아니면 FORBIDDEN 반환
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null)
+        }
+
         performanceService.deletePerformance(performanceId)
         return ResponseEntity.noContent().build()
     }
