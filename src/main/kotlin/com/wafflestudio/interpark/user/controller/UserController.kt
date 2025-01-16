@@ -101,8 +101,8 @@ class UserController(
     fun signin(
         @RequestBody request: SignInRequest,
         response: HttpServletResponse,
-    ): ResponseEntity<TokenResponse> {
-        val (accessToken, refreshToken) = userService.signIn(request.username, request.password)
+    ): ResponseEntity<SignInResponse> {
+        val (user, accessToken, refreshToken) = userService.signIn(request.username, request.password)
         val cookie =
             Cookie("refreshToken", refreshToken).apply {
                 isHttpOnly = true
@@ -113,7 +113,7 @@ class UserController(
             }
         response.addCookie(cookie)
 
-        return ResponseEntity.ok(TokenResponse(accessToken))
+        return ResponseEntity.ok(SignInResponse(user, accessToken))
     }
 
     @GetMapping("/api/v1/users/me")
@@ -172,6 +172,11 @@ data class SignUpResponse(val user: User)
 data class SignInRequest(
     val username: String,
     val password: String,
+)
+
+data class SignInResponse(
+    val user: User,
+    val accessToken: String,
 )
 
 data class TokenResponse(

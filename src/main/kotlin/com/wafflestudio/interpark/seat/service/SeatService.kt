@@ -4,6 +4,7 @@ import com.wafflestudio.interpark.seat.ReservationNotFoundException
 import com.wafflestudio.interpark.seat.ReservationPermissionDeniedException
 import com.wafflestudio.interpark.seat.ReservedAlreadyException
 import com.wafflestudio.interpark.seat.ReservedYetException
+import com.wafflestudio.interpark.seat.controller.BriefReservation
 import com.wafflestudio.interpark.seat.controller.Reservation
 import com.wafflestudio.interpark.seat.controller.Seat
 import com.wafflestudio.interpark.seat.persistence.ReservationRepository
@@ -48,11 +49,20 @@ class SeatService(
     }
 
     @Transactional
-    fun getMyReservations(user: User): List<String> {
+    fun getMyReservations(user: User): List<BriefReservation> {
         userRepository.findByIdOrNull(user.id) ?: throw AuthenticateException()
         val myReservations = reservationRepository.findByUserId(user.id)
 
-        return myReservations.map { it.id!! }
+        return myReservations.map { reservationEntity ->
+            val performanceEventEntity = reservationEntity.performanceEvent
+            val performanceEntity = performanceEventEntity.performance
+
+            Reservation.fromEntityToBriefDetails(
+                reservationEntity = reservationEntity,
+                performanceEntity = performanceEntity,
+                performanceEventEntity = performanceEventEntity
+            )
+        }
     }
 
     @Transactional

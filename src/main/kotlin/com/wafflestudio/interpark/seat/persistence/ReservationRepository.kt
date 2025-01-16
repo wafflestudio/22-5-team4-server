@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Lock
 import org.springframework.data.jpa.repository.Query
 
 interface ReservationRepository : JpaRepository<ReservationEntity, String> {
+    @Query("SELECT r FROM ReservationEntity r WHERE r.user.id = :userId ORDER BY r.reservationDate DESC")
     fun findByUserId(userId: String): List<ReservationEntity>
 
     fun findByPerformanceEventIdAndReservedIsFalse(performanceEventId: String): List<ReservationEntity>

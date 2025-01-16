@@ -198,7 +198,7 @@ constructor(
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().`is`(200))
 
-        val myReservationIds = mvc.perform(
+        val myReservations = mvc.perform(
                 get("/api/v1/me/reservation")
                     .header("Authorization", "Bearer $accessToken")
         ).andExpect(status().`is`(200))
@@ -206,10 +206,10 @@ constructor(
             .response
             .getContentAsString(Charsets.UTF_8)
             .let {
-                mapper.readTree(it).get("myReservationIds")
+                mapper.readTree(it).get("myReservations")
             }
-        assert(myReservationIds.size() == 1) {"Expected size 1 but ${myReservationIds.size()}"}
-        assert(myReservationIds[0].asText() == reservationId) {"Expected $reservationId but ${myReservationIds[0].asText()}"}
+        assert(myReservations.size() == 1) {"Expected size 1 but ${myReservations.size()}"}
+        assert(myReservations[0].get("id").asText() == reservationId) {"Expected $reservationId but ${myReservations[0].get("id").asText()}"}
     }
 
     @Test
