@@ -3,6 +3,7 @@ package com.wafflestudio.interpark.performance.controller
 import com.wafflestudio.interpark.performance.persistence.PerformanceCategory
 import com.wafflestudio.interpark.performance.persistence.PerformanceEntity
 import java.time.LocalDate
+import java.time.ZoneId
 
 data class Performance(
     val id: String,
@@ -28,12 +29,34 @@ data class Performance(
                 title = performanceEntity.title,
                 hallName = performanceHall?.name ?: "",
                 performanceDates = performanceEvents?.map {
-                    it.startAt.atZone(java.time.ZoneId.of("Asia/Seoul")).toLocalDate()
+                    it.startAt.atZone(ZoneId.of("Asia/Seoul")).toLocalDate()
                 }?.distinct() ?: emptyList(),
                 detail = performanceEntity.detail,
                 category = performanceEntity.category,
                 posterUri = performanceEntity.posterUri,
                 backdropImageUri = performanceEntity.backdropImageUri
+            )
+        }
+
+        fun fromEntityToBriefDetails(
+            performanceEntity: PerformanceEntity,
+            performanceEvents: List<PerformanceEvent>?,
+            performanceHall: PerformanceHall?,
+        ): BriefPerformanceDetail {
+            return BriefPerformanceDetail(
+                id = performanceEntity.id!!,
+                title = performanceEntity.title,
+                hallName = performanceHall?.name ?: "",
+                performanceDuration = if (!performanceEvents.isNullOrEmpty()) {
+                    val seoulZone = ZoneId.of("Asia/Seoul")
+
+                    val minDate = performanceEvents.minOf { it.startAt }.atZone(seoulZone).toLocalDate()
+                    val maxDate = performanceEvents.maxOf { it.startAt }.atZone(seoulZone).toLocalDate()
+
+                    Pair(minDate, maxDate)
+                } else {
+                    null
+                }
             )
         }
     }

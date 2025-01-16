@@ -1,6 +1,7 @@
 package com.wafflestudio.interpark.performance.service
 
 import com.wafflestudio.interpark.performance.PerformanceNotFoundException
+import com.wafflestudio.interpark.performance.controller.BriefPerformanceDetail
 import com.wafflestudio.interpark.performance.controller.Performance
 import com.wafflestudio.interpark.performance.controller.PerformanceEvent
 import com.wafflestudio.interpark.performance.controller.PerformanceHall
@@ -17,7 +18,7 @@ class PerformanceService(
     fun searchPerformance(
         title: String?,
         category: PerformanceCategory?,
-    ): List<Performance> {
+    ): List<BriefPerformanceDetail> {
         // 시작점: 아무 조건이 없는 스펙
         var spec: Specification<PerformanceEntity> = Specification.where(null)
 
@@ -34,7 +35,7 @@ class PerformanceService(
         // 스펙이 결국 아무 조건도 없으면 -> 전체 검색
         val performanceEntities = performanceRepository.findAll(spec)
 
-        // DTO 변환
+        // BriefDetail DTO 변환
         return performanceEntities.map { performanceEntity ->
             val performanceEventEntities = performanceEventRepository.findAllByPerformanceId(performanceEntity.id!!)
             val performanceEvents = if (performanceEventEntities.isEmpty()) {
@@ -46,7 +47,7 @@ class PerformanceService(
                 PerformanceHall.fromEntity(it.performanceHall)
             }
 
-            Performance.fromEntity(
+            Performance.fromEntityToBriefDetails(
                 performanceEntity = performanceEntity,
                 performanceHall = performanceHall,
                 performanceEvents = performanceEvents
@@ -67,7 +68,7 @@ class PerformanceService(
                     performanceHall = performanceHall,
                     performanceEvents = performanceEvents
                 )
-            };
+            }
     }
 
     fun getPerformanceDetail(performanceId: String): Performance {

@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
 
 @RestController
 class PerformanceController(
@@ -67,7 +68,17 @@ class PerformanceController(
 
 }
 
-typealias SearchPerformanceResponse = List<Performance>
+typealias SearchPerformanceResponse = List<BriefPerformanceDetail>
+
+data class BriefPerformanceDetail(
+    val id: String,
+    val title: String,
+    val hallName: String,
+    val performanceDuration: Pair<LocalDate, LocalDate>?,
+    // 추후 제공 예정
+    // val ratingAvg: Double,
+    // val reviewCount: Int,
+)
 
 data class CreatePerformanceRequest(
     @field:NotBlank(message = "Title must not be blank")

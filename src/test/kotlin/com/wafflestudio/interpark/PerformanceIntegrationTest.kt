@@ -2,11 +2,14 @@ package com.wafflestudio.interpark
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wafflestudio.interpark.performance.persistence.PerformanceCategory
+import com.wafflestudio.interpark.performance.persistence.PerformanceRepository
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
@@ -17,7 +20,7 @@ import java.util.UUID
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
-class PerformanceServiceTest
+class PerformanceIntegrationTest
 @Autowired
 constructor(
     private val mvc: MockMvc,
@@ -67,28 +70,24 @@ constructor(
                 .getContentAsString(Charsets.UTF_8)
                 .let { mapper.readTree(it).get("accessToken").asText() }
 
-        // 3️⃣ 공연 생성
+        // 3️⃣ 테스트용 공연 ID 반환
         performanceId =
             mvc.perform(
-                post("/admin/v1/performance")
+                get("/api/v1/performance/search")
                     .header("Authorization", "Bearer $accessToken")
-                    .content(
-                        mapper.writeValueAsString(
-                            mapOf(
-                                "title" to "뮤지컬 지킬앤하이드",
-                                "detail" to "지금 이 순간, 끝나지 않는 신화",
-                                "category" to PerformanceCategory.MUSICAL.name,
-                                "posterUri" to "https://example.com/poster.jpg",
-                                "backdropImageUri" to "https://example.com/backdrop.jpg",
-                            ),
-                        ),
-                    )
+                    .param("title", "지킬앤하이드")
                     .contentType(MediaType.APPLICATION_JSON),
-            ).andExpect(status().`is`(201))
+            ).andExpect(status().`is`(200))
                 .andReturn()
                 .response
                 .getContentAsString(Charsets.UTF_8)
-                .let { mapper.readTree(it).get("id").asText() }
+                .let {
+                    val node = mapper.readTree(it)
+                    val firstItem = node.firstOrNull() ?: error("Response array is empty")
+                    val idNode = firstItem.get("id")
+                    requireNotNull(idNode) { "ID not found in response item: $firstItem" }
+                    idNode.asText()
+                }
     }
 
     @Test
@@ -101,15 +100,17 @@ constructor(
                 .contentType(MediaType.APPLICATION_JSON),
         ).andExpect(status().`is`(200))
             .andExpect(jsonPath("$[0].title").value("뮤지컬 지킬앤하이드"))
+            .andExpect(jsonPath("$.length()").value(1))
 
         // 5️⃣ 공연 검색 (category 조건)
         mvc.perform(
             get("/api/v1/performance/search")
                 .header("Authorization", "Bearer $accessToken")
-                .param("category", PerformanceCategory.MUSICAL.name)
+                .param("category", PerformanceCategory.CONCERT.name)
                 .contentType(MediaType.APPLICATION_JSON),
         ).andExpect(status().`is`(200))
-            .andExpect(jsonPath("$[0].category").value(PerformanceCategory.MUSICAL.name))
+            .andExpect(jsonPath("$").isArray) // 응답이 배열인지 확인
+            .andExpect(jsonPath("$.length()").value(3)) // 배열의 길이가 0인지 확인
     }
 
     @Test
@@ -141,6 +142,33 @@ constructor(
     }
 
     @Test
+    fun `공연 생성 테스트`() {
+        // 1️⃣ 공연 생성 요청 데이터
+        val createPerformanceRequest = mapOf(
+            "title" to "뮤지컬 캣츠",
+            "detail" to "https://example.com/cats-detail.jpg",
+            "category" to PerformanceCategory.MUSICAL.name,
+            "posterUri" to "https://example.com/cats-poster.jpg",
+            "backdropImageUri" to "https://example.com/cats-backdrop.jpg"
+        )
+
+        // 2️⃣ 공연 생성 요청 및 응답 확인
+        val result = mvc.perform(
+            post("/admin/v1/performance")
+                .header("Authorization", "Bearer $accessToken")
+                .content(mapper.writeValueAsString(createPerformanceRequest))
+                .contentType(MediaType.APPLICATION_JSON),
+        )
+            .andExpect(status().`is`(201)) // HTTP 201 Created 확인
+            .andExpect(jsonPath("$.title").value("뮤지컬 캣츠"))
+            .andExpect(jsonPath("$.detail").value("https://example.com/cats-detail.jpg"))
+            .andExpect(jsonPath("$.category").value(PerformanceCategory.MUSICAL.name))
+            .andExpect(jsonPath("$.posterUri").value("https://example.com/cats-poster.jpg"))
+            .andExpect(jsonPath("$.backdropImageUri").value("https://example.com/cats-backdrop.jpg"))
+            .andReturn()
+    }
+
+    @Test
     fun `공연 생성 실패 - 필수 정보 누락`() {
         mvc.perform(
             post("/admin/v1/performance")
@@ -161,3 +189,4 @@ constructor(
             .andExpect(jsonPath("$.error").value("Method Argument Validation failed"))
     }
 }
+ 
