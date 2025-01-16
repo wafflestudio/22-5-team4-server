@@ -98,6 +98,7 @@ data class BriefPerformanceDetail(
     val title: String,
     val hallName: String,
     val performanceDuration: Pair<LocalDate, LocalDate>?,
+    val posterUri: String,
     // 추후 제공 예정
     // val ratingAvg: Double,
     // val reviewCount: Int,

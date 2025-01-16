@@ -20,7 +20,6 @@ class DataInitializer(
     private val performanceHallRepository: PerformanceHallRepository,
 ) : CommandLineRunner {
     override fun run(vararg args: String?) {
-
         // 1) 공연장 데이터 넣기
         performanceHallService.createPerformanceHall(
             name = "블루스퀘어 신한카드홀",

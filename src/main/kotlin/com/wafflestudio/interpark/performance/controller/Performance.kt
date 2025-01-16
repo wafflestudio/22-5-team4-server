@@ -56,7 +56,8 @@ data class Performance(
                     Pair(minDate, maxDate)
                 } else {
                     null
-                }
+                },
+                posterUri = performanceEntity.posterUri,
             )
         }
     }
