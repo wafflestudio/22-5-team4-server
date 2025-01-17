@@ -4,6 +4,7 @@ import com.wafflestudio.interpark.performance.persistence.PerformanceCategory
 import io.swagger.v3.oas.annotations.Operation
 import com.wafflestudio.interpark.performance.service.PerformanceService
 import com.wafflestudio.interpark.user.AuthUser
+import com.wafflestudio.interpark.user.UserIdentityNotFoundException
 import com.wafflestudio.interpark.user.controller.User
 import com.wafflestudio.interpark.user.persistence.UserRole
 import com.wafflestudio.interpark.user.service.UserService
@@ -42,7 +43,7 @@ class PerformanceController(
     ): ResponseEntity<CreatePerformanceResponse> {
         // UserIdentity를 통해 역할(Role) 확인
         val userIdentity = userService.getUserIdentityByUserId(user.id) // user.id를 통해 UserIdentity 조회
-            ?: return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null) // UserIdentity가 없으면 FORBIDDEN 반환
+            ?: throw UserIdentityNotFoundException()
 
         if (userIdentity.role != UserRole.ADMIN) { // 역할(Role)이 ADMIN이 아니면 FORBIDDEN 반환
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null)
@@ -79,7 +80,7 @@ class PerformanceController(
     ): ResponseEntity<String> {
         // UserIdentity를 통해 역할(Role) 확인
         val userIdentity = userService.getUserIdentityByUserId(user.id) // user.id를 통해 UserIdentity 조회
-            ?: return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null) // UserIdentity가 없으면 FORBIDDEN 반환
+            ?: throw UserIdentityNotFoundException()
 
         if (userIdentity.role != UserRole.ADMIN) { // 역할(Role)이 ADMIN이 아니면 FORBIDDEN 반환
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null)
