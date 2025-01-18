@@ -37,7 +37,7 @@ constructor(
 
         // 1️⃣ 회원가입
         mvc.perform(
-            post("/api/v1/signup")
+            post("/api/v1/local/signup")
                 .content(
                     mapper.writeValueAsString(
                         mapOf(
@@ -55,7 +55,7 @@ constructor(
         // 2️⃣ 로그인 → 토큰 획득
         accessToken =
             mvc.perform(
-                post("/api/v1/signin")
+                post("/api/v1/local/signin")
                     .content(
                         mapper.writeValueAsString(
                             mapOf(
@@ -136,7 +136,7 @@ constructor(
     }
 
     @Test
-    fun `좌석을 예매할 수 있다`() {
+    fun `좌석을 예매할 수 있고 예매되면 더 이상 예매되지 못한다`() {
         val reservationId = mvc.perform(
             get("/api/v1/seat/$performanceEventId/available")
         ).andExpect(status().`is`(200))
@@ -172,6 +172,76 @@ constructor(
                 .header("Authorization", "Bearer $accessToken")
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().`is`(409))
+    }
+
+    @Test
+    fun `본인의 예매내역을 확인할 수 있다`() {
+        val reservationId = mvc.perform(
+            get("/api/v1/seat/$performanceEventId/available")
+        ).andExpect(status().`is`(200))
+            .andReturn()
+            .response
+            .getContentAsString(Charsets.UTF_8)
+            .let {
+                val availableSeats = mapper.readTree(it).get("availableSeats")
+                availableSeats[0].get("reservationId").asText()
+            }
+        mvc.perform(
+            post("/api/v1/reservation/reserve")
+                .content(
+                    mapper.writeValueAsString(
+                        mapOf(
+                            "reservationId" to reservationId,
+                        ),
+                    ),
+                )
+                .header("Authorization", "Bearer $accessToken")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().`is`(200))
+
+        val myReservations = mvc.perform(
+                get("/api/v1/me/reservation")
+                    .header("Authorization", "Bearer $accessToken")
+        ).andExpect(status().`is`(200))
+            .andReturn()
+            .response
+            .getContentAsString(Charsets.UTF_8)
+            .let {
+                mapper.readTree(it).get("myReservations")
+            }
+        assert(myReservations.size() == 1) {"Expected size 1 but ${myReservations.size()}"}
+        assert(myReservations[0].get("id").asText() == reservationId) {"Expected $reservationId but ${myReservations[0].get("id").asText()}"}
+    }
+
+    @Test
+    fun `본인의 예매를 자세히 볼 수 있다`() {
+        val reservationId = mvc.perform(
+            get("/api/v1/seat/$performanceEventId/available")
+        ).andExpect(status().`is`(200))
+            .andReturn()
+            .response
+            .getContentAsString(Charsets.UTF_8)
+            .let {
+                val availableSeats = mapper.readTree(it).get("availableSeats")
+                availableSeats[0].get("reservationId").asText()
+            }
+        mvc.perform(
+            post("/api/v1/reservation/reserve")
+                .content(
+                    mapper.writeValueAsString(
+                        mapOf(
+                            "reservationId" to reservationId,
+                        ),
+                    ),
+                )
+                .header("Authorization", "Bearer $accessToken")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().`is`(200))
+
+        val myReservationIds = mvc.perform(
+            get("/api/v1/reservation/detail/$reservationId")
+                .header("Authorization", "Bearer $accessToken")
+        ).andExpect(status().`is`(200))
     }
 
     @Test
@@ -241,7 +311,7 @@ constructor(
             }
 
         mvc.perform(
-            post("/api/v1/signup")
+            post("/api/v1/local/signup")
                 .content(
                     mapper.writeValueAsString(
                         mapOf(
@@ -258,7 +328,7 @@ constructor(
             .andExpect(status().`is`(200))
         val otherAccessToken =
             mvc.perform(
-                post("/api/v1/signin")
+                post("/api/v1/local/signin")
                     .content(
                         mapper.writeValueAsString(
                             mapOf(
@@ -298,6 +368,6 @@ constructor(
                 )
                 .header("Authorization", "Bearer $otherAccessToken")
                 .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().`is`(401))
+        ).andExpect(status().`is`(403))
     }
 }

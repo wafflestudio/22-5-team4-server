@@ -1,8 +1,10 @@
 package com.wafflestudio.interpark.seat.service
 
 import com.wafflestudio.interpark.seat.ReservationNotFoundException
+import com.wafflestudio.interpark.seat.ReservationPermissionDeniedException
 import com.wafflestudio.interpark.seat.ReservedAlreadyException
 import com.wafflestudio.interpark.seat.ReservedYetException
+import com.wafflestudio.interpark.seat.controller.BriefReservation
 import com.wafflestudio.interpark.seat.controller.Reservation
 import com.wafflestudio.interpark.seat.controller.Seat
 import com.wafflestudio.interpark.seat.persistence.ReservationRepository
@@ -33,9 +35,8 @@ class SeatService(
         user: User,
         reservationId: String,
     ): String {
-        // TODO: 동시성 처리하기
         val targetUser = userRepository.findByIdOrNull(user.id) ?: throw AuthenticateException()
-        val targetReservation = reservationRepository.findByIdOrNull(reservationId) ?: throw ReservationNotFoundException()
+        val targetReservation = reservationRepository.findByIdWithWriteLock(reservationId) ?: throw ReservationNotFoundException()
 
         if (targetReservation.reserved) throw ReservedAlreadyException()
 
@@ -48,6 +49,23 @@ class SeatService(
     }
 
     @Transactional
+    fun getMyReservations(user: User): List<BriefReservation> {
+        userRepository.findByIdOrNull(user.id) ?: throw AuthenticateException()
+        val myReservations = reservationRepository.findByUserId(user.id)
+
+        return myReservations.map { reservationEntity ->
+            val performanceEventEntity = reservationEntity.performanceEvent
+            val performanceEntity = performanceEventEntity.performance
+
+            Reservation.fromEntityToBriefDetails(
+                reservationEntity = reservationEntity,
+                performanceEntity = performanceEntity,
+                performanceEventEntity = performanceEventEntity
+            )
+        }
+    }
+
+    @Transactional
     fun getReservedSeatDetail(
         user: User,
         reservationId: String,
@@ -56,7 +74,7 @@ class SeatService(
         val userEntity = userRepository.findByIdOrNull(user.id) ?: throw AuthenticateException()
         val reservationUser = reservationEntity.user ?: throw ReservedYetException()
         if (reservationUser.id != userEntity.id) {
-            throw AuthenticateException()
+            throw ReservationPermissionDeniedException()
         }
 
         val seatEntity = reservationEntity.seat
@@ -84,7 +102,7 @@ class SeatService(
         val userEntity = userRepository.findByIdOrNull(user.id) ?: throw AuthenticateException()
         val reservationUser = reservationEntity.user ?: throw ReservedYetException()
         if (reservationUser.id != userEntity.id) {
-            throw AuthenticateException()
+            throw ReservationPermissionDeniedException()
         }
 
         reservationEntity.user = null

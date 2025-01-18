@@ -34,7 +34,7 @@ class ReplyIntegrationTest
 
             // 1️⃣ 회원가입
             mvc.perform(
-                post("/api/v1/signup")
+                post("/api/v1/local/signup")
                     .content(
                         mapper.writeValueAsString(
                             mapOf(
@@ -52,7 +52,7 @@ class ReplyIntegrationTest
             // 2️⃣ 로그인 → 토큰 획득
             accessToken =
                 mvc.perform(
-                    post("/api/v1/signin")
+                    post("/api/v1/local/signin")
                         .content(
                             mapper.writeValueAsString(
                                 mapOf(
@@ -217,7 +217,7 @@ class ReplyIntegrationTest
             // 다른 사용자 로그인
             val otherAccessToken =
                 mvc.perform(
-                    post("/api/v1/signin")
+                    post("/api/v1/local/signin")
                         .content(
                             mapper.writeValueAsString(
                                 mapOf(

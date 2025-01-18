@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
+import java.time.Instant
+import java.time.LocalDate
 
 @RestController
 class SeatController(
@@ -31,6 +33,14 @@ class SeatController(
         return ResponseEntity.status(200).body(ReserveSeatResponse(reservationId))
     }
 
+    @GetMapping("/api/v1/me/reservation")
+    fun getMyReservations(
+        @AuthUser user: User,
+    ): ResponseEntity<GetMyReservationsResponse> {
+        val myReservations = seatService.getMyReservations(user)
+        return ResponseEntity.ok(GetMyReservationsResponse(myReservations))
+    }
+
     @GetMapping("/api/v1/reservation/detail/{reservationId}")
     fun getReservedSeatDetail(
         @PathVariable reservationId: String,
@@ -50,6 +60,13 @@ class SeatController(
     }
 }
 
+data class BriefReservation(
+    val id: String,
+    val performanceTitle: String,
+    val posterUri: String,
+    val performanceDate: LocalDate,
+    val reservationDate: LocalDate,
+)
 data class AvailableSeat(
     val reservationId: String,
     val seat: Seat,
@@ -65,6 +82,10 @@ data class ReserveSeatRequest(
 
 data class ReserveSeatResponse(
     val reservationId: String,
+)
+
+data class GetMyReservationsResponse(
+    val myReservations: List<BriefReservation>,
 )
 
 data class GetReservedSeatDetailResponse(
