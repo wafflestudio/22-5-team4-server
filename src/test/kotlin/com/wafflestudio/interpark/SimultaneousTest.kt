@@ -87,7 +87,7 @@ constructor(
                 }
         val performanceId =
             mvc.perform(
-                get("/v1/performance/search")
+                get("/api/v1/performance/search")
             ).andExpect(status().`is`(200))
                 .andReturn()
                 .response

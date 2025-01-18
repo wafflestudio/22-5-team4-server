@@ -199,7 +199,7 @@ class ReplyIntegrationTest
 
             // 다른 사용자 생성
             mvc.perform(
-                post("/api/v1/signup")
+                post("/api/v1/local/signup")
                     .content(
                         mapper.writeValueAsString(
                             mapOf(
