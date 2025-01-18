@@ -199,7 +199,7 @@ class ReplyIntegrationTest
 
             // 다른 사용자 생성
             mvc.perform(
-                post("/api/v1/signup")
+                post("/api/v1/local/signup")
                     .content(
                         mapper.writeValueAsString(
                             mapOf(
@@ -217,7 +217,7 @@ class ReplyIntegrationTest
             // 다른 사용자 로그인
             val otherAccessToken =
                 mvc.perform(
-                    post("/api/v1/signin")
+                    post("/api/v1/local/signin")
                         .content(
                             mapper.writeValueAsString(
                                 mapOf(

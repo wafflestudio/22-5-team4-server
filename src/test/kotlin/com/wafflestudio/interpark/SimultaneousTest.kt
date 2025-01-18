@@ -72,46 +72,6 @@ constructor(
                 .getContentAsString(Charsets.UTF_8)
                 .let { mapper.readTree(it).get("accessToken").asText() }
 
-        //Seat와 Reservation 만들기 위한 EventId 만들기
-        val performanceHallId =
-            mvc.perform(
-                get("/api/v1/performance-hall")
-                    .header("Authorization", "Bearer $accessToken"),
-            ).andExpect(status().`is`(200))
-                .andReturn()
-                .response
-                .getContentAsString(Charsets.UTF_8)
-                .let {
-                    val performanceHalls = mapper.readTree(it)
-                    performanceHalls[0].get("id").asText()
-                }
-        val performanceId =
-            mvc.perform(
-                get("/v1/performance/search")
-            ).andExpect(status().`is`(200))
-                .andReturn()
-                .response
-                .getContentAsString(Charsets.UTF_8)
-                .let {
-                    val performances = mapper.readTree(it)
-                    performances[0].get("id").asText()
-                }
-
-        mvc.perform(
-            post("/admin/v1/performance-event")
-                .content(
-                    mapper.writeValueAsString(
-                        mapOf(
-                            "performanceId" to performanceId,
-                            "performanceHallId" to performanceHallId,
-                            "startAt" to Instant.now(),
-                            "endAt" to Instant.now(),
-                        ),
-                    ),
-                )
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-
         val performanceEventId =
             mvc.perform(
                 get("/api/v1/performance-event")
@@ -124,9 +84,6 @@ constructor(
                     val performanceEvents = mapper.readTree(it)
                     performanceEvents[0].get("id").asText()
                 }
-        //Seat와 Reservation만들기
-        seatCreationService.createSeats(performanceHallId, "DEFAULT")
-        seatCreationService.createEmptyReservations(performanceEventId)
 
         val reservationId = mvc.perform(
             get("/api/v1/seat/$performanceEventId/available")

@@ -37,7 +37,7 @@ constructor(
         // 1️⃣ 회원가입
         // 일반 유저
         mvc.perform(
-            post("/api/v1/signup")
+            post("/api/v1/local/signup")
                 .content(
                     mapper.writeValueAsString(
                         mapOf(
@@ -54,7 +54,7 @@ constructor(
 
         // 관리자
         mvc.perform(
-            post("/api/v1/signup")
+            post("/api/v1/local/signup")
                 .content(
                     mapper.writeValueAsString(
                         mapOf(
@@ -74,7 +74,7 @@ constructor(
         // 일반 유저
         userAccessToken =
             mvc.perform(
-                post("/api/v1/signin")
+                post("/api/v1/local/signin")
                     .content(
                         mapper.writeValueAsString(
                             mapOf(
@@ -93,7 +93,7 @@ constructor(
         // 관리자
         adminAccessToken =
             mvc.perform(
-                post("/api/v1/signin")
+                post("/api/v1/local/signin")
                     .content(
                         mapper.writeValueAsString(
                             mapOf(
