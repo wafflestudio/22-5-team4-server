@@ -16,7 +16,7 @@ import java.util.UUID
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
-class ReplyControllerTest
+class ReplyIntegrationTest
     @Autowired
     constructor(
         private val mvc: MockMvc,
@@ -199,7 +199,7 @@ class ReplyControllerTest
 
             // 다른 사용자 생성
             mvc.perform(
-                post("/api/v1/local/signup")
+                post("/api/v1/signup")
                     .content(
                         mapper.writeValueAsString(
                             mapOf(
@@ -217,7 +217,7 @@ class ReplyControllerTest
             // 다른 사용자 로그인
             val otherAccessToken =
                 mvc.perform(
-                    post("/api/v1/local/signin")
+                    post("/api/v1/signin")
                         .content(
                             mapper.writeValueAsString(
                                 mapOf(

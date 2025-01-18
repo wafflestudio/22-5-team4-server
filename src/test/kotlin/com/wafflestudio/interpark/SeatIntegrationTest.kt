@@ -12,7 +12,8 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.springframework.transaction.annotation.Transactional
-import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.UUID
 
 @AutoConfigureMockMvc
@@ -85,7 +86,7 @@ constructor(
                 }
         performanceId =
             mvc.perform(
-                get("/v1/performance/search")
+                get("/api/v1/performance/search")
             ).andExpect(status().`is`(200))
                 .andReturn()
                 .response
@@ -102,8 +103,8 @@ constructor(
                         mapOf(
                             "performanceId" to performanceId,
                             "performanceHallId" to performanceHallId,
-                            "startAt" to Instant.now(),
-                            "endAt" to Instant.now(),
+                            "startAt" to LocalDateTime.now(ZoneId.of("Asia/Seoul")),
+                            "endAt" to LocalDateTime.now(ZoneId.of("Asia/Seoul"))
                         ),
                     ),
                 )

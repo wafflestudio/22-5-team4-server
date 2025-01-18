@@ -1,6 +1,7 @@
 package com.wafflestudio.interpark.user.controller
 
 import com.wafflestudio.interpark.user.*
+import com.wafflestudio.interpark.user.persistence.UserRole
 import com.wafflestudio.interpark.user.service.UserService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
@@ -88,11 +89,12 @@ class UserController(
     ): ResponseEntity<SignUpResponse> {
         val user =
             userService.signUp(
-                request.username,
-                request.password,
-                request.nickname,
-                request.email,
-                request.phoneNumber,
+                username = request.username,
+                password = request.password,
+                nickname = request.nickname,
+                email = request.email,
+                phoneNumber = request.phoneNumber,
+                role = request.role,
             )
         return ResponseEntity.ok(SignUpResponse(user))
     }
@@ -165,6 +167,7 @@ data class SignUpRequest(
     val nickname: String,
     val phoneNumber: String,
     val email: String,
+    val role: UserRole = UserRole.USER,
 )
 
 data class SignUpResponse(val user: User)
