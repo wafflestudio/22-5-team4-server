@@ -16,7 +16,7 @@ import java.util.UUID
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
-class ReplyControllerTest
+class ReplyIntegrationTest
     @Autowired
     constructor(
         private val mvc: MockMvc,

@@ -6,6 +6,7 @@ import com.wafflestudio.interpark.user.persistence.UserEntity
 import com.wafflestudio.interpark.user.persistence.UserIdentityEntity
 import com.wafflestudio.interpark.user.persistence.UserIdentityRepository
 import com.wafflestudio.interpark.user.persistence.UserRepository
+import com.wafflestudio.interpark.user.persistence.UserRole
 import org.mindrot.jbcrypt.BCrypt
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -24,6 +25,7 @@ class UserService(
         nickname: String,
         phoneNumber: String,
         email: String,
+        role: UserRole = UserRole.USER,
     ): User {
         if (username.length < 6 || username.length > 20) {
             throw SignUpBadUsernameException()
@@ -47,7 +49,7 @@ class UserService(
         userIdentityRepository.save(
             UserIdentityEntity(
                 user = user,
-                role = "USER",
+                role = role,
                 hashedPassword = encryptedPassword,
                 provider = "self",
             ),
@@ -85,5 +87,9 @@ class UserService(
     @Transactional
     fun refreshAccessToken(refreshToken: String): Pair<String, String> {
         return userAccessTokenUtil.refreshAccessToken(refreshToken) ?: throw AuthenticateException()
+    }
+
+    fun getUserIdentityByUserId(userId: String): UserIdentityEntity? {
+        return userIdentityRepository.findByUserId(userId)
     }
 }

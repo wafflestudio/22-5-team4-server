@@ -13,6 +13,12 @@ sealed class PerformanceHallException(
 
 class PerformanceHallNotFoundException : PerformanceHallException(
     errorCode = 0,
-    httpStatusCode = HttpStatus.BAD_REQUEST,
+    httpStatusCode = HttpStatus.NOT_FOUND,
     msg = "PerformanceHall Not Found",
+)
+
+class PerformanceHallNameConflictException : PerformanceHallException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.CONFLICT,
+    msg = "PerformanceHallName Conflict",
 )

@@ -22,6 +22,10 @@ class PerformanceHallService(
         address: String,
         maxAudience: Int,
     ): PerformanceHall {
+        if (performanceHallRepository.existsByName(name)) {
+            throw PerformanceHallNameConflictException()
+        }
+
         val newPerformanceHallEntity: PerformanceHallEntity = PerformanceHallEntity(
             id = "",
             name = name,

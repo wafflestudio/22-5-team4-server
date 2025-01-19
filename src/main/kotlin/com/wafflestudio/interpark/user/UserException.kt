@@ -41,6 +41,12 @@ class SignInInvalidPasswordException : UserException(
     msg = "Invalid Password",
 )
 
+class UserIdentityNotFoundException : UserException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.NOT_FOUND,
+    msg = "UserIdentity not found",
+)
+
 class AuthenticateException : UserException(
     errorCode = 0,
     httpStatusCode = HttpStatus.UNAUTHORIZED,
