@@ -25,7 +25,6 @@ class UserController(
         return ResponseEntity.ok(mapOf("message" to "pong"))
     }
 
-    @PostMapping("/api/v1/local/signup")
     @Operation(
         summary = "사용자 회원가입",
         description = """
@@ -84,6 +83,7 @@ class UserController(
             )]
         )
     )
+    @PostMapping("/api/v1/local/signup")
     fun signup(
         @RequestBody request: SignUpRequest,
     ): ResponseEntity<SignUpResponse> {

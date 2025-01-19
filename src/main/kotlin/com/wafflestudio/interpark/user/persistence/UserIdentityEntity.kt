@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToOne
+import org.springframework.security.core.GrantedAuthority
 
 @Entity
 class UserIdentityEntity(
@@ -26,6 +27,10 @@ class UserIdentityEntity(
     val socialId: String? = null,
 )
 
-enum class UserRole {
-    USER, ADMIN
+enum class UserRole : GrantedAuthority {
+    USER, ADMIN;
+
+    override fun getAuthority(): String {
+        return "ROLE_$name" // Spring Security에서 권장하는 ROLE_ 접두사
+    }
 }
