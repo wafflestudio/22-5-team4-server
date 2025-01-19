@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service
 import org.springframework.data.repository.findByIdOrNull
 
 import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 
@@ -24,6 +25,21 @@ class PerformanceEventService(
     fun getAllPerformanceEvent(): List<PerformanceEvent> {
         return performanceEventRepository
             .findAll()
+            .map { PerformanceEvent.fromEntity(it) };
+    }
+
+    fun getPerformanceEventFromDate(
+        performanceId: String,
+        performanceDate: LocalDate,
+    ): List<PerformanceEvent> {
+        val startOfDate = performanceDate.atStartOfDay().atZone(ZoneId.of("Asia/Seoul")).toInstant()
+        val endOfDate = performanceDate.plusDays(1).atStartOfDay().atZone(ZoneId.of("Asia/Seoul")).toInstant()
+        return performanceEventRepository
+            .findByPerformanceIdAndDate(
+                performanceId = performanceId,
+                startTime = startOfDate,
+                endTime = endOfDate,
+            )
             .map { PerformanceEvent.fromEntity(it) };
     }
 

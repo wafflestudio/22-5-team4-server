@@ -1,5 +1,7 @@
 package com.wafflestudio.interpark.seat.service
 
+import com.wafflestudio.interpark.performance.PerformanceEventNotFoundException
+import com.wafflestudio.interpark.performance.persistence.PerformanceEventRepository
 import com.wafflestudio.interpark.seat.ReservationNotFoundException
 import com.wafflestudio.interpark.seat.ReservationPermissionDeniedException
 import com.wafflestudio.interpark.seat.ReservedAlreadyException
@@ -20,11 +22,12 @@ import java.time.LocalDate
 @Service
 class SeatService(
     private val reservationRepository: ReservationRepository,
-    private val seatRepository: SeatRepository,
+    private val performanceEventRepository: PerformanceEventRepository,
     private val userRepository: UserRepository,
 ) {
     @Transactional
     fun getAvailableSeats(performanceEventId: String): List<Pair<String, Seat>> {
+        performanceEventRepository.findByIdOrNull(performanceEventId) ?: throw PerformanceEventNotFoundException()
         val availableReservations = reservationRepository.findByPerformanceEventIdAndReservedIsFalse(performanceEventId)
         val availableSeats = availableReservations.map { Pair(it.id!!, Seat.fromEntity(it.seat)) }
         return availableSeats

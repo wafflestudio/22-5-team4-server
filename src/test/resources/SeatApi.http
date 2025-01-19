@@ -1,0 +1,36 @@
+### 회원가입
+POST http://localhost:8080/api/v1/local/signup
+Content-Type: application/json
+
+{
+  "username": "good_name",
+  "password": "12345678",
+  "nickname": "examplename",
+  "phoneNumber": "010-0000-0000",
+  "email": "test@example.com"
+}
+
+### 로그인
+POST http://localhost:8080/api/v1/local/signin
+Content-Type: application/json
+
+{
+  "username": "good_name",
+  "password": "12345678"
+}
+
+### performance 받기
+GET http://localhost:8080/api/v1/performance/search
+Accept: application/json
+
+### event 찾기
+GET http://localhost:8080/api/v1/performance-event/e1656490-a5be-446e-b119-d8efa393dd05/2025-01-11
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkODUyNjcwMy0zM2Y2LTRmM2ItYTdhMC1mOGZlOGQ3NTcxNDAiLCJpYXQiOjE3MzcyNzcyMjQsImV4cCI6MTczNzI3ODEyNH0.KObDWrRBDRZU-iNyFHHherkbxIjigmjpVn-Iv5Lx3yY
+
+### event 받기
+GET http://localhost:8080/api/v1/performance-event
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkODUyNjcwMy0zM2Y2LTRmM2ItYTdhMC1mOGZlOGQ3NTcxNDAiLCJpYXQiOjE3MzcyNzcyMjQsImV4cCI6MTczNzI3ODEyNH0.KObDWrRBDRZU-iNyFHHherkbxIjigmjpVn-Iv5Lx3yY
+
+### 가능한 좌석 받기
+GET http://localhost:8080/api/v1/seat/eade9900-a141-4532-bd2c-c362ceb7c8c0/available
+Accept: application/json
