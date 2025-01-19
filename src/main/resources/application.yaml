@@ -13,3 +13,4 @@ spring:
           dialect: org.hibernate.dialect.MySQL8Dialect
           format_sql: false
           show_sql: false
+          ddl_auto: create-drop
