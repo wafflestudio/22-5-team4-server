@@ -25,7 +25,7 @@ class UserController(
         return ResponseEntity.ok(mapOf("message" to "pong"))
     }
 
-    @PostMapping("/api/v1/signup")
+    @PostMapping("/api/v1/local/signup")
     @Operation(
         summary = "사용자 회원가입",
         description = """
@@ -99,23 +99,23 @@ class UserController(
         return ResponseEntity.ok(SignUpResponse(user))
     }
 
-    @PostMapping("/api/v1/signin")
+    @PostMapping("/api/v1/local/signin")
     fun signin(
         @RequestBody request: SignInRequest,
         response: HttpServletResponse,
-    ): ResponseEntity<TokenResponse> {
-        val (accessToken, refreshToken) = userService.signIn(request.username, request.password)
+    ): ResponseEntity<SignInResponse> {
+        val (user, accessToken, refreshToken) = userService.signIn(request.username, request.password)
         val cookie =
             Cookie("refreshToken", refreshToken).apply {
                 isHttpOnly = true
                 secure = true
-                path = "/api/v1/refresh_token"
+                path = "/api/v1/auth"
                 maxAge = 60 * 60 * 24 * 7
                 // TODO("domain 설정하기")
             }
         response.addCookie(cookie)
 
-        return ResponseEntity.ok(TokenResponse(accessToken))
+        return ResponseEntity.ok(SignInResponse(user, accessToken))
     }
 
     @GetMapping("/api/v1/users/me")
@@ -125,24 +125,24 @@ class UserController(
         return ResponseEntity.ok(user)
     }
 
-    @PostMapping("/api/v1/signout")
+    @PostMapping("/api/v1/auth/signout")
     fun signout(
-        @CookieValue(value = "refresh_token", required = false) refreshToken: String?,
+        @CookieValue(value = "refreshToken", required = false) refreshToken: String?,
     ): ResponseEntity<Void> {
         if (refreshToken == null) {
-            throw TokenNotFoundException()
+            throw NoRefreshTokenException()
         }
         userService.signOut(refreshToken)
         return ResponseEntity.noContent().build()
     }
 
-    @PostMapping("/api/v1/refresh_token")
+    @PostMapping("/api/v1/auth/refresh_token")
     fun refreshToken(
         @CookieValue(value = "refreshToken", required = false) refreshToken: String?,
         response: HttpServletResponse,
     ): ResponseEntity<TokenResponse> {
         if (refreshToken == null) {
-            throw TokenNotFoundException()
+            throw NoRefreshTokenException()
         }
 
         val (newAccessToken, newRefreshToken) = userService.refreshAccessToken(refreshToken)
@@ -151,7 +151,7 @@ class UserController(
             Cookie("refreshToken", newRefreshToken).apply {
                 isHttpOnly = true
                 secure = true
-                path = "/api/v1/refresh_token"
+                path = "/api/v1/auth"
                 maxAge = 60 * 60 * 24 * 7
                 // TODO("domain 설정하기")
             }
@@ -177,10 +177,11 @@ data class SignInRequest(
     val password: String,
 )
 
-data class TokenResponse(
+data class SignInResponse(
+    val user: User,
     val accessToken: String,
 )
 
-data class SignOutRequest(val refreshToken: String)
-
-data class RefreshTokenRequest(val refreshToken: String)
+data class TokenResponse(
+    val accessToken: String,
+)
