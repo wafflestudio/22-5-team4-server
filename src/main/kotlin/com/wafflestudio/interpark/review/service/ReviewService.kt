@@ -19,11 +19,10 @@ class ReviewService(
     private val reviewRepository: ReviewRepository,
     private val userRepository: UserRepository,
 ) {
-    fun getReviewsByUser(user: User): List<Review> {
-        val authorId = user.id;
+    fun getReviewsByUser(userId: String): List<Review> {
         val reviews: List<Review> =
             reviewRepository
-                .findByAuthorId(authorId)
+                .findByAuthorId(userId)
                 .map { Review.fromEntity(it) }
         return reviews
     }
@@ -39,7 +38,7 @@ class ReviewService(
 
     @Transactional
     fun createReview(
-        author: User,
+        authorId: String,
         performanceId: String,
         rating: Int,
         title: String,
@@ -50,7 +49,7 @@ class ReviewService(
         val performanceIdString = performanceId
         // val performanceEntity = entityManager.getReference(PerformanceEntity::class.java, performanceId)
         // val performanceEntity = performanceRepository.findByIdOrNull(performanceId) ?: throw PerformanceNotFoundException()
-        val authorEntity = userRepository.findByIdOrNull(author.id) ?: throw AuthenticateException()
+        val authorEntity = userRepository.findByIdOrNull(authorId) ?: throw AuthenticateException()
         val reviewEntity =
             ReviewEntity(
                 id = "",
@@ -70,7 +69,7 @@ class ReviewService(
 
     @Transactional
     fun editReview(
-        author: User,
+        authorId: String,
         reviewId: String,
         rating: Int?,
         title: String?,
@@ -79,7 +78,7 @@ class ReviewService(
         content?.let { validateContent(it) }
         rating?.let { validateRating(it) }
         val reviewEntity = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException()
-        val authorEntity = userRepository.findByIdOrNull(author.id) ?: throw AuthenticateException()
+        val authorEntity = userRepository.findByIdOrNull(authorId) ?: throw AuthenticateException()
         if (reviewEntity.author.id != authorEntity.id) {
             throw ReviewPermissionDeniedException()
         }
@@ -93,11 +92,11 @@ class ReviewService(
 
     @Transactional
     fun deleteReview(
-        author: User,
+        authorId: String,
         reviewId: String,
     ) {
         val reviewEntity = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException()
-        val authorEntity = userRepository.findByIdOrNull(author.id) ?: throw AuthenticateException()
+        val authorEntity = userRepository.findByIdOrNull(authorId) ?: throw AuthenticateException()
         if (reviewEntity.author.id != authorEntity.id) {
             throw ReviewPermissionDeniedException()
         }

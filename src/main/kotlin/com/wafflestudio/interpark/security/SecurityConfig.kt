@@ -1,8 +1,8 @@
-package com.wafflestudio.interpark.config
+package com.wafflestudio.interpark.security
 
-import com.wafflestudio.interpark.user.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
@@ -14,7 +14,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 class SecurityConfig (
     private val jwtAuthenticationFilter: JwtAuthenticationFilter,
-    private val customAuthenticationEntryPoint: CustomAuthenticationEntryPoint
 ) {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -26,9 +25,19 @@ class SecurityConfig (
             }
             authorizeHttpRequests {
                 // 사용자 권한
-                authorize("/api/v1/**", permitAll)
+                authorize(HttpMethod.GET, "/api/v1/performance/search", permitAll) // 공연 조회
+                authorize(HttpMethod.GET, "/api/v1/performance/{performanceId}", permitAll) // 공연 상세정보 반환
+                authorize(HttpMethod.GET, "/api/v1/performance-event", permitAll)
+                authorize(HttpMethod.GET, "/api/v1/performance-event/{performanceId}/{performanceDate}", permitAll)
+                authorize(HttpMethod.GET, "/api/v1/performance-hall", permitAll)
+                authorize(HttpMethod.GET, "/api/v1/ping", permitAll)
+                authorize(HttpMethod.POST, "/api/v1/local/signup", permitAll)
+                authorize(HttpMethod.POST, "/api/v1/local/signin", permitAll)
+                authorize(HttpMethod.POST, "/api/v1/auth/signout", permitAll)
+                authorize(HttpMethod.POST, "/api/v1/auth/refresh_token", permitAll)
+                authorize(HttpMethod.GET, "/api/v1/seat/{performanceEventId}/available", permitAll)
+                authorize("/api/v1/**", hasRole("USER")) // 그 외 모두 유저 권한 필요
                 authorize("/admin/v1/**", hasRole("ADMIN"))
-                //authorize("/admin/v1/**").hasRole("ADMIN")
 
                 // Swagger 관련 경로 허용
                 authorize("/swagger-ui/**", permitAll)
@@ -39,7 +48,7 @@ class SecurityConfig (
                 authorize(anyRequest, authenticated)
             }
             exceptionHandling {
-                authenticationEntryPoint = customAuthenticationEntryPoint // 인증 실패 처리
+                accessDeniedHandler = RestAccessDeniedHandler()
             }
             addFilterBefore<UsernamePasswordAuthenticationFilter>(jwtAuthenticationFilter)
         }

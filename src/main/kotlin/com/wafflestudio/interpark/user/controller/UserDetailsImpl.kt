@@ -18,8 +18,7 @@ class UserDetailsImpl (
     }
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        val roleName = "ROLE_${userIdentityEntity.role.name}" // ROLE_USER / ROLE_ADMIN
-        return mutableListOf(SimpleGrantedAuthority(roleName))
+        return mutableListOf(userIdentityEntity.role)
     }
 
     override fun isAccountNonExpired(): Boolean = true
@@ -28,8 +27,9 @@ class UserDetailsImpl (
     override fun isEnabled(): Boolean = true
 
     // 필요하면 convenience 메서드
-    fun getUserId(): String? = userIdentityEntity.user.id
+    fun getUserId(): String = userIdentityEntity.user.id!!
     fun getNickname(): String = userIdentityEntity.user.nickname
     fun getEmail(): String = userIdentityEntity.user.email
     fun getAddress(): String? = userIdentityEntity.user.address
+    fun getPhoneNumber(): String = userIdentityEntity.user.phoneNumber
 }

@@ -1,5 +1,7 @@
-package com.wafflestudio.interpark.user
+package com.wafflestudio.interpark.security
 
+import com.wafflestudio.interpark.user.UserAccessTokenUtil
+import com.wafflestudio.interpark.user.controller.UserDetailsImpl
 import com.wafflestudio.interpark.user.service.UserDetailsServiceImpl
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -33,23 +35,17 @@ class JwtAuthenticationFilter(
             val subject = userAccessTokenUtil.validateAccessToken(accessToken)
 
             if (subject != null) {
-                // 3) subject를 기반으로 DB에서 유저/권한 정보 조회 (UserIdentityEntity)
-                val identity = userDetailsService.getUserIdentityByUserId(subject)
+                // 3) subject(userId)를 기반으로 DB에서 유저/권한 정보 조회 (UserIdentityEntity)
+                val userDetails = userDetailsService.loadUserByUserId(subject)
 
-                if (identity != null) {
-                    // 예: role -> SimpleGrantedAuthority("ROLE_USER"/"ROLE_ADMIN" 등)
-                    val roleName = "ROLE_${identity.role.name}"  // e.g. ROLE_USER
-                    val authorities = listOf(SimpleGrantedAuthority(roleName))
-
-                    // 4) Spring Security에 Authentication 등록
-                    // principal에는 identity(또는 더 확장된 CustomUserDetails)를 넣어도 됨
-                    val authentication = UsernamePasswordAuthenticationToken(
-                        identity, // principal
-                        null,     // credentials
-                        authorities
-                    )
-                    SecurityContextHolder.getContext().authentication = authentication
-                }
+                // 4) Spring Security에 Authentication 등록
+                // principal에는 identity(또는 더 확장된 CustomUserDetails)를 넣어도 됨
+                val authentication = UsernamePasswordAuthenticationToken(
+                    userDetails,
+                    null,
+                    userDetails.authorities
+                )
+                SecurityContextHolder.getContext().authentication = authentication
             }
         }
 

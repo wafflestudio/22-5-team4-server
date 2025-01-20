@@ -4,7 +4,9 @@ import com.wafflestudio.interpark.review.*
 import com.wafflestudio.interpark.review.service.ReplyService
 import com.wafflestudio.interpark.user.AuthUser
 import com.wafflestudio.interpark.user.controller.User
+import com.wafflestudio.interpark.user.controller.UserDetailsImpl
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -13,16 +15,16 @@ class ReplyController(
 ) {
     @GetMapping("/api/v1/user/me/reply")
     fun getRepliesByUser(
-        @AuthUser user: User
+        @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<GetReplyResponse>{
-        val replies = replyService.getRepliesByUser(user)
+        val replies = replyService.getRepliesByUser(userDetails.getUserId())
         return ResponseEntity.ok(replies)
     }
 
     @GetMapping("/api/v1/review/{reviewId}/reply")
     fun getReplies(
         @PathVariable reviewId: String,
-        @AuthUser user: User,
+        @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<GetReplyResponse>{
         val replies = replyService.getReplies(reviewId)
         return ResponseEntity.ok(replies)
@@ -32,9 +34,9 @@ class ReplyController(
     fun createReply(
         @RequestBody request: CreateReplyRequest,
         @PathVariable reviewId: String,
-        @AuthUser user: User,
+        @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<CreateReplyResponse> {
-        val reply = replyService.createReply(user, reviewId, request.content)
+        val reply = replyService.createReply(userDetails.getUserId(), reviewId, request.content)
         return ResponseEntity.status(201).body(reply)
     }
 
@@ -42,18 +44,18 @@ class ReplyController(
     fun editReply(
         @RequestBody request: EditReplyRequest,
         @PathVariable replyId: String,
-        @AuthUser user: User,
+        @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<EditReplyResponse> {
-        val reply = replyService.editReply(user, replyId, request.content)
+        val reply = replyService.editReply(userDetails.getUserId(), replyId, request.content)
         return ResponseEntity.ok(reply)
     }
 
     @DeleteMapping("/api/v1/reply/{replyId}")
     fun deleteReply(
         @PathVariable replyId: String,
-        @AuthUser user: User,
+        @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<String> {
-        replyService.deleteReply(user, replyId)
+        replyService.deleteReply(userDetails.getUserId(), replyId)
         return ResponseEntity.noContent().build()
     }
 

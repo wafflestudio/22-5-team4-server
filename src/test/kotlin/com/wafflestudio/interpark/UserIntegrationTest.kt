@@ -280,7 +280,7 @@ class UserIntegrationTest
                 get("/api/v1/users/me")
                     .header("Authorization", "Bearer bad"),
             )
-                .andExpect(status().`is`(401))
+                .andExpect(status().`is`(403))
 
             mvc.perform(
                 get("/api/v1/users/me")

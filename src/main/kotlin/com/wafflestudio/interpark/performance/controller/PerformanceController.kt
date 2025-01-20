@@ -6,6 +6,7 @@ import com.wafflestudio.interpark.performance.service.PerformanceService
 import com.wafflestudio.interpark.user.AuthUser
 import com.wafflestudio.interpark.user.UserIdentityNotFoundException
 import com.wafflestudio.interpark.user.controller.User
+import com.wafflestudio.interpark.user.controller.UserDetailsImpl
 import com.wafflestudio.interpark.user.persistence.UserRole
 import com.wafflestudio.interpark.user.service.UserService
 import jakarta.validation.Valid
@@ -13,6 +14,7 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 
@@ -39,16 +41,8 @@ class PerformanceController(
     @PostMapping("/admin/v1/performance")
     fun createPerformance(
         @Valid @RequestBody request: CreatePerformanceRequest,
-        @AuthUser user: User,
+        @AuthenticationPrincipal userDetails: UserDetailsImpl,
     ): ResponseEntity<CreatePerformanceResponse> {
-        // UserIdentity를 통해 역할(Role) 확인
-        val userIdentity = userService.getUserIdentityByUserId(user.id) // user.id를 통해 UserIdentity 조회
-            ?: throw UserIdentityNotFoundException()
-
-        if (userIdentity.role != UserRole.ADMIN) { // 역할(Role)이 ADMIN이 아니면 FORBIDDEN 반환
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null)
-        }
-
         val newPerformance: Performance =
             performanceService
                 .createPerformance(
@@ -76,16 +70,8 @@ class PerformanceController(
     @DeleteMapping("/admin/v1/performance/{performanceId}")
     fun deletePerformance(
         @PathVariable performanceId: String,
-        @AuthUser user: User,
+        @AuthenticationPrincipal userDetails: UserDetailsImpl,
     ): ResponseEntity<String> {
-        // UserIdentity를 통해 역할(Role) 확인
-        val userIdentity = userService.getUserIdentityByUserId(user.id) // user.id를 통해 UserIdentity 조회
-            ?: throw UserIdentityNotFoundException()
-
-        if (userIdentity.role != UserRole.ADMIN) { // 역할(Role)이 ADMIN이 아니면 FORBIDDEN 반환
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null)
-        }
-
         performanceService.deletePerformance(performanceId)
         return ResponseEntity.noContent().build()
     }

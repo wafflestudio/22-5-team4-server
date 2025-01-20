@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -120,9 +121,17 @@ class UserController(
 
     @GetMapping("/api/v1/users/me")
     fun me(
-        @AuthUser user: User,
+        @AuthenticationPrincipal userDetails: UserDetailsImpl,
     ): ResponseEntity<User> {
-        return ResponseEntity.ok(user)
+        return ResponseEntity.ok(
+            User(
+                id = userDetails.getUserId(),
+                username = userDetails.username,
+                nickname = userDetails.getNickname(),
+                phoneNumber = userDetails.getPhoneNumber(),
+                email = userDetails.getEmail()
+            )
+        )
     }
 
     @PostMapping("/api/v1/auth/signout")

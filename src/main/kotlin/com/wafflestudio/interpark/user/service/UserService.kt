@@ -78,6 +78,7 @@ class UserService(
         userAccessTokenUtil.removeRefreshToken(refreshToken)
     }
 
+    // spring security로 전가돼서 사실상 호출 안 됨.
     @Transactional
     fun authenticate(accessToken: String): User {
         val userId = userAccessTokenUtil.validateAccessToken(accessToken) ?: throw AuthenticateException()
