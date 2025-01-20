@@ -36,7 +36,7 @@ class SecurityConfig (
                 authorize(HttpMethod.POST, "/api/v1/auth/signout", permitAll)
                 authorize(HttpMethod.POST, "/api/v1/auth/refresh_token", permitAll)
                 authorize(HttpMethod.GET, "/api/v1/seat/{performanceEventId}/available", permitAll)
-                authorize("/api/v1/**", hasRole("USER")) // 그 외 모두 유저 권한 필요
+                authorize("/api/v1/**", hasAnyRole("USER", "ADMIN")) // 그 외 모두 유저 권한 필요
                 authorize("/admin/v1/**", hasRole("ADMIN"))
 
                 // Swagger 관련 경로 허용

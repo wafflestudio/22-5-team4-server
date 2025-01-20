@@ -1,4 +1,4 @@
-### 회원가입
+### 회원가입(USER)
 POST http://localhost:80/api/v1/local/signup
 Content-Type: application/json
 
@@ -8,6 +8,19 @@ Content-Type: application/json
   "nickname": "examplename",
   "phoneNumber": "010-0000-0000",
   "email": "test@example.com"
+}
+
+### 회원가입(ADMIN)
+POST http://localhost:80/api/v1/local/signup
+Content-Type: application/json
+
+{
+  "username": "adminname",
+  "password": "12345678",
+  "nickname": "examplename",
+  "phoneNumber": "010-0000-0000",
+  "email": "test@example.com",
+  "role": "ADMIN"
 }
 
 ### 로그인
