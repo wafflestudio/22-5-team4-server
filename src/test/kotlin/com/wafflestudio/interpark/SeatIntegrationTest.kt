@@ -27,8 +27,6 @@ constructor(
     private val seatCreationService: SeatCreationService,
 ) {
     private lateinit var accessToken: String
-    private lateinit var performanceHallId: String
-    private lateinit var performanceId: String
     private lateinit var performanceEventId: String
     @BeforeEach
     fun setup() {
@@ -71,46 +69,6 @@ constructor(
                 .getContentAsString(Charsets.UTF_8)
                 .let { mapper.readTree(it).get("accessToken").asText() }
 
-        //Seat와 Reservation 만들기 위한 EventId 만들기
-        performanceHallId =
-            mvc.perform(
-                get("/api/v1/performance-hall")
-                    .header("Authorization", "Bearer $accessToken"),
-            ).andExpect(status().`is`(200))
-                .andReturn()
-                .response
-                .getContentAsString(Charsets.UTF_8)
-                .let {
-                    val performanceHalls = mapper.readTree(it)
-                    performanceHalls[0].get("id").asText()
-                }
-        performanceId =
-            mvc.perform(
-                get("/api/v1/performance/search")
-            ).andExpect(status().`is`(200))
-                .andReturn()
-                .response
-                .getContentAsString(Charsets.UTF_8)
-                .let {
-                    val performances = mapper.readTree(it)
-                    performances[0].get("id").asText()
-                }
-
-        mvc.perform(
-            post("/admin/v1/performance-event")
-                .content(
-                    mapper.writeValueAsString(
-                        mapOf(
-                            "performanceId" to performanceId,
-                            "performanceHallId" to performanceHallId,
-                            "startAt" to LocalDateTime.now(ZoneId.of("Asia/Seoul")),
-                            "endAt" to LocalDateTime.now(ZoneId.of("Asia/Seoul"))
-                        ),
-                    ),
-                )
-            .contentType(MediaType.APPLICATION_JSON)
-        )
-
         performanceEventId =
             mvc.perform(
                 get("/api/v1/performance-event")
@@ -123,16 +81,19 @@ constructor(
                     val performanceEvents = mapper.readTree(it)
                     performanceEvents[0].get("id").asText()
                 }
-        //Seat와 Reservation만들기
-        seatCreationService.createSeats(performanceHallId, "DEFAULT")
-        seatCreationService.createEmptyReservations(performanceEventId)
     }
 
     @Test
     fun `가능한 좌석들의 정보를 받을 수 있다`() {
-        mvc.perform(
+        val availableSeats = mvc.perform(
             get("/api/v1/seat/$performanceEventId/available")
         ).andExpect(status().`is`(200))
+            .andReturn()
+            .response
+            .getContentAsString(Charsets.UTF_8)
+            .let { mapper.readTree(it).get("availableSeats")}
+
+        assert(availableSeats.size()==100) {"expected Seats are 100 but found ${availableSeats.size()}"}
     }
 
     @Test

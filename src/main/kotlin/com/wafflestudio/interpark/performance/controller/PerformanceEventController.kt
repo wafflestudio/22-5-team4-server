@@ -9,6 +9,8 @@ import com.wafflestudio.interpark.user.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @RestController
 class PerformanceEventController(
@@ -22,6 +24,21 @@ class PerformanceEventController(
         // Currently, no search
         val performanceEventList: List<PerformanceEvent> = performanceEventService
             .getAllPerformanceEvent()
+        return ResponseEntity.ok(performanceEventList)
+    }
+
+    @GetMapping("/api/v1/performance-event/{performanceId}/{performanceDate}")
+    fun getPerformanceEventFromDate(
+        @AuthUser user: User,
+        @PathVariable performanceId: String,
+        @PathVariable performanceDate: String,
+    ): ResponseEntity<GetPerformanceEventResponse> {
+        val localPerformanceDate = LocalDate.parse(performanceDate)
+        val performanceEventList = performanceEventService.getPerformanceEventFromDate(
+            performanceId = performanceId,
+            performanceDate = localPerformanceDate,
+        )
+
         return ResponseEntity.ok(performanceEventList)
     }
     
