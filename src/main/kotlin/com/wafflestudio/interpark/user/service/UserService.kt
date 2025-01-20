@@ -61,15 +61,16 @@ class UserService(
     fun signIn(
         username: String,
         password: String,
-    ): Pair<String, String> {
+    ): Triple<User, String, String> {
         val targetUser = userRepository.findByUsername(username) ?: throw SignInUserNotFoundException()
+        val user = User.fromEntity(targetUser)
         val targetIdentity = userIdentityRepository.findByUser(targetUser) ?: throw SignInUserNotFoundException()
         if (!BCrypt.checkpw(password, targetIdentity.hashedPassword)) {
             throw SignInInvalidPasswordException()
         }
         val accessToken = userAccessTokenUtil.generateAccessToken(targetUser.id!!)
-        val refreshToken = userAccessTokenUtil.generateRefreshToken(targetIdentity.id!!)
-        return Pair(accessToken, refreshToken)
+        val refreshToken = userAccessTokenUtil.generateRefreshToken(targetUser.id!!)
+        return Triple(user, accessToken, refreshToken)
     }
 
     @Transactional

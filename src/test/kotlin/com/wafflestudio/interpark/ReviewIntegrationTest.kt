@@ -34,7 +34,7 @@ class ReviewIntegrationTest
 
             // 1️⃣ 회원가입
             mvc.perform(
-                post("/api/v1/signup")
+                post("/api/v1/local/signup")
                     .content(
                         mapper.writeValueAsString(
                             mapOf(
@@ -52,7 +52,7 @@ class ReviewIntegrationTest
             // 2️⃣ 로그인 → 토큰 획득
             accessToken =
                 mvc.perform(
-                    post("/api/v1/signin")
+                    post("/api/v1/local/signin")
                         .content(
                             mapper.writeValueAsString(
                                 mapOf(
@@ -178,7 +178,7 @@ class ReviewIntegrationTest
         fun `리뷰 삭제 실패 - 권한 없음`() {
             // 다른 사용자 생성
             mvc.perform(
-                post("/api/v1/signup")
+                post("/api/v1/local/signup")
                     .content(
                         mapper.writeValueAsString(
                             mapOf(
@@ -196,7 +196,7 @@ class ReviewIntegrationTest
             // 다른 사용자로 로그인
             val otherAccessToken =
                 mvc.perform(
-                    post("/api/v1/signin")
+                    post("/api/v1/local/signin")
                         .content(
                             mapper.writeValueAsString(
                                 mapOf(
