@@ -15,7 +15,6 @@ class PerformanceEventController(
 ) {
     @GetMapping("/api/v1/performance-event")
     fun getPerformanceEvent(
-        //@AuthUser user: User,
     ): ResponseEntity<GetPerformanceEventResponse> {
         // Currently, no search
         val performanceEventList: List<PerformanceEvent> = performanceEventService
@@ -25,7 +24,6 @@ class PerformanceEventController(
 
     @GetMapping("/api/v1/performance-event/{performanceId}/{performanceDate}")
     fun getPerformanceEventFromDate(
-        //@AuthUser user: User,
         @PathVariable performanceId: String,
         @PathVariable performanceDate: String,
     ): ResponseEntity<GetPerformanceEventResponse> {

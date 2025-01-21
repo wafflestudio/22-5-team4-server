@@ -1,9 +1,6 @@
 package com.wafflestudio.interpark.review.controller
 
-import com.wafflestudio.interpark.review.*
 import com.wafflestudio.interpark.review.service.ReviewService
-import com.wafflestudio.interpark.user.AuthUser
-import com.wafflestudio.interpark.user.controller.User
 import com.wafflestudio.interpark.user.controller.UserDetailsImpl
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -18,14 +15,13 @@ class ReviewController(
     fun getMyReviews(
         @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<GetReviewResponse>{
-        val reviews = reviewService.getReviewsByUser(userDetails.getUserId());
-        return ResponseEntity.ok(reviews);
+        val reviews = reviewService.getReviewsByUser(userDetails.getUserId())
+        return ResponseEntity.ok(reviews)
     }
 
     @GetMapping("/api/v1/performance/{performanceId}/review")
     fun getReviews(
         @PathVariable performanceId: String,
-        @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<GetReviewResponse>{
         val reviews = reviewService.getReviews(performanceId)
         return ResponseEntity.ok(reviews)

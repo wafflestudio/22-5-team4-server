@@ -2,7 +2,6 @@ package com.wafflestudio.interpark.performance.controller
 
 import com.wafflestudio.interpark.performance.service.PerformanceHallService
 import com.wafflestudio.interpark.user.controller.UserDetailsImpl
-import com.wafflestudio.interpark.user.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -14,7 +13,6 @@ class PerformanceHallController(
 ) {
     @GetMapping("/api/v1/performance-hall")
     fun getPerformanceHall(
-        //@AuthUser user: User,
     ): ResponseEntity<GetPerformanceHallResponse> {
         // Currently, no search
         val performanceHallList: List<PerformanceHall> = performanceHallService

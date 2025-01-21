@@ -1,9 +1,6 @@
 package com.wafflestudio.interpark.review.controller
 
-import com.wafflestudio.interpark.review.*
 import com.wafflestudio.interpark.review.service.ReplyService
-import com.wafflestudio.interpark.user.AuthUser
-import com.wafflestudio.interpark.user.controller.User
 import com.wafflestudio.interpark.user.controller.UserDetailsImpl
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -24,7 +21,6 @@ class ReplyController(
     @GetMapping("/api/v1/review/{reviewId}/reply")
     fun getReplies(
         @PathVariable reviewId: String,
-        @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<GetReplyResponse>{
         val replies = replyService.getReplies(reviewId)
         return ResponseEntity.ok(replies)

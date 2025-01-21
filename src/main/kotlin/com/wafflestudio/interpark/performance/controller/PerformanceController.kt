@@ -3,12 +3,7 @@ package com.wafflestudio.interpark.performance.controller
 import com.wafflestudio.interpark.performance.persistence.PerformanceCategory
 import io.swagger.v3.oas.annotations.Operation
 import com.wafflestudio.interpark.performance.service.PerformanceService
-import com.wafflestudio.interpark.user.AuthUser
-import com.wafflestudio.interpark.user.UserIdentityNotFoundException
-import com.wafflestudio.interpark.user.controller.User
 import com.wafflestudio.interpark.user.controller.UserDetailsImpl
-import com.wafflestudio.interpark.user.persistence.UserRole
-import com.wafflestudio.interpark.user.service.UserService
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
@@ -16,12 +11,10 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
-import java.time.LocalDate
 
 @RestController
 class PerformanceController(
     private val performanceService: PerformanceService,
-    private val userService: UserService,
 ) {
     @GetMapping("/api/v1/performance/search")
     @Operation(
