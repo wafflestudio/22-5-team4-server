@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @RestController
 class PerformanceEventController(
@@ -70,8 +71,8 @@ typealias GetPerformanceEventResponse = List<PerformanceEvent>
 data class CreatePerformanceEventRequest(
     val performanceId: String,
     val performanceHallId: String,
-    val startAt: String,
-    val endAt: String,
+    val startAt: LocalDateTime,
+    val endAt: LocalDateTime,
 )
 
 typealias CreatePerformanceEventResponse = PerformanceEvent
