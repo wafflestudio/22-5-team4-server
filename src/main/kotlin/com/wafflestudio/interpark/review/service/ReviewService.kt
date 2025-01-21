@@ -26,7 +26,7 @@ class ReviewService(
     private val replyService: ReplyService,
 ) {
     fun getReviewsByUser(user: User): List<Review> {
-        val authorId = user.id;
+        val authorId = user.id
         val reviews: List<Review> =
             reviewRepository
                 .findByAuthorId(authorId)
@@ -34,7 +34,6 @@ class ReviewService(
         return reviews
     }
 
-    // TODO: 검색기능 구현해야 함
     fun getReviews(performanceId: String): List<Review> {
         val reviews: List<Review> =
             reviewRepository

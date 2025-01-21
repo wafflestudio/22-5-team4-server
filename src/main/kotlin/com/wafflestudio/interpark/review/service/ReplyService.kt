@@ -33,7 +33,6 @@ class ReplyService(
         return replies
     }
 
-    // TODO: 검색기능 구현해야 함
     fun getReplies(reviewId: String): List<Reply> {
         val replies: List<Reply> =
             replyRepository
