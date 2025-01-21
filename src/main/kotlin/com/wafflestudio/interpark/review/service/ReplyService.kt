@@ -42,6 +42,11 @@ class ReplyService(
         return replies
     }
 
+    fun countReplies(reviewId: String): Int {
+        val replyCount = replyRepository.countByReviewId(reviewId)
+        return replyCount
+    }
+
     @Transactional
     fun createReply(
         author: User,

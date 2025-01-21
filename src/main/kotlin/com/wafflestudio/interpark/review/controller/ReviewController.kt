@@ -1,6 +1,7 @@
 package com.wafflestudio.interpark.review.controller
 
 import com.wafflestudio.interpark.review.*
+import com.wafflestudio.interpark.review.service.ReplyService
 import com.wafflestudio.interpark.review.service.ReviewService
 import com.wafflestudio.interpark.user.AuthUser
 import com.wafflestudio.interpark.user.controller.User
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 class ReviewController(
     private val reviewService: ReviewService,
+    private val replyService: ReplyService,
 ) {
 
     @GetMapping("/api/v1/me/review")
@@ -25,8 +27,8 @@ class ReviewController(
         @PathVariable performanceId: String,
         @AuthUser user: User,
     ): ResponseEntity<GetReviewResponse>{
-        val reveiws = reviewService.getReviews(performanceId)
-        return ResponseEntity.ok(reveiws)
+        val reviews = reviewService.getReviews(performanceId)
+        return ResponseEntity.ok(reviews)
     }
 
     @PostMapping("/api/v1/performance/{performanceId}/review")
@@ -58,23 +60,23 @@ class ReviewController(
         return ResponseEntity.noContent().build()
     }
 
-    // @PostMapping("/api/v1/reviews/{reviewId}/like")
-    // fun likeReview(
-    //     @PathVariable reviewId: String,
-    //     @AuthUser user: User,
-    // ): ResponseEntity<String> {
-    //     reviewService.likeReview(user, reviewId)
-    //     return ResponseEntity.noContent().build()
-    // }
+    @PostMapping("/api/v1/review/{reviewId}/like")
+    fun likeReview(
+        @PathVariable reviewId: String,
+        @AuthUser user: User,
+    ): ResponseEntity<String> {
+        reviewService.likeReview(user, reviewId)
+        return ResponseEntity.noContent().build()
+    }
 
-    // @PostMapping("/api/v1/reviews/{reviewId}/unlike")
-    // fun unlikeReview(
-    //     @PathVariable reviewId: String,
-    //     @AuthUser user: User,
-    // ): ResponseEntity<String> {
-    //     reviewService.unlikeReview(user, reviewId)
-    //     return ResponseEntity.noContent().build()
-    // }
+    @DeleteMapping("/api/v1/review/{reviewId}/like")
+    fun cancelLikeReview(
+        @PathVariable reviewId: String,
+        @AuthUser user: User,
+    ): ResponseEntity<String> {
+        reviewService.cancelLikeReview(user, reviewId)
+        return ResponseEntity.noContent().build()
+    }
 }
 
 

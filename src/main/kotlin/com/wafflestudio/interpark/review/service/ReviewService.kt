@@ -1,8 +1,12 @@
 package com.wafflestudio.interpark.review.service
 
+import com.wafflestudio.interpark.performance.PerformanceNotFoundException
+import com.wafflestudio.interpark.performance.persistence.PerformanceRepository
 import com.wafflestudio.interpark.review.*
 import com.wafflestudio.interpark.review.controller.Review
 import com.wafflestudio.interpark.review.persistence.ReviewEntity
+import com.wafflestudio.interpark.review.persistence.ReviewLikeEntity
+import com.wafflestudio.interpark.review.persistence.ReviewLikeRepository
 import com.wafflestudio.interpark.review.persistence.ReviewRepository
 import com.wafflestudio.interpark.user.AuthenticateException
 import com.wafflestudio.interpark.user.controller.User
@@ -15,16 +19,18 @@ import java.time.Instant
 
 @Service
 class ReviewService(
-    private val entityManager: EntityManager,
+    private val performanceRepository: PerformanceRepository,
     private val reviewRepository: ReviewRepository,
     private val userRepository: UserRepository,
+    private val reviewLikeRepository: ReviewLikeRepository,
+    private val replyService: ReplyService,
 ) {
     fun getReviewsByUser(user: User): List<Review> {
         val authorId = user.id;
         val reviews: List<Review> =
             reviewRepository
                 .findByAuthorId(authorId)
-                .map { Review.fromEntity(it) }
+                .map { Review.fromEntity(it, replyService.countReplies(it.id)) }
         return reviews
     }
 
@@ -33,7 +39,7 @@ class ReviewService(
         val reviews: List<Review> =
             reviewRepository
                 .findByPerformanceId(performanceId)
-                .map { Review.fromEntity(it) }
+                .map { Review.fromEntity(it, replyService.countReplies(it.id)) }
         return reviews
     }
 
@@ -47,16 +53,14 @@ class ReviewService(
     ): Review {
         validateContent(content)
         validateRating(rating)
-        val performanceIdString = performanceId
-        // val performanceEntity = entityManager.getReference(PerformanceEntity::class.java, performanceId)
-        // val performanceEntity = performanceRepository.findByIdOrNull(performanceId) ?: throw PerformanceNotFoundException()
+
+        val performanceEntity = performanceRepository.findByIdOrNull(performanceId) ?: throw PerformanceNotFoundException()
         val authorEntity = userRepository.findByIdOrNull(author.id) ?: throw AuthenticateException()
         val reviewEntity =
             ReviewEntity(
                 id = "",
                 author = authorEntity,
-                performanceId = performanceId,
-                // performance = performanceEntity,
+                performance = performanceEntity,
                 title = title,
                 content = content,
                 rating = rating,
@@ -65,7 +69,7 @@ class ReviewService(
             ).let {
                 reviewRepository.save(it)
             }
-        return Review.fromEntity(reviewEntity)
+        return Review.fromEntity(reviewEntity, replyService.countReplies(reviewEntity.id))
     }
 
     @Transactional
@@ -88,7 +92,7 @@ class ReviewService(
         content?.let { reviewEntity.content = it }
         reviewEntity.updatedAt = Instant.now()
         reviewRepository.save(reviewEntity)
-        return Review.fromEntity(reviewEntity)
+        return Review.fromEntity(reviewEntity, replyService.countReplies(reviewEntity.id))
     }
 
     @Transactional
@@ -119,31 +123,31 @@ class ReviewService(
         }
     }
 
-    // @Transactional
-    // fun likeReview(
-    //     user: User,
-    //     reviewId: String,
-    // ) {
-    //     val reviewEntity = reviewRepository.findByIdWithWriteLock(reviewId) ?: throw ReviewNotFoundException()
-    //     val userEntity = userRepository.findByIdOrNull(user.id) ?: throw AuthenticateException()
-    //     if (reviewEntity.reviewLikes.any { it.user.id == userEntity.id }) {
-    //         return
-    //     }
-    //     val reviewLikeEntity = reviewLikeRepository.save(ReviewLikeEntity(review = reviewEntity, user = userEntity, createdAt = Instant.now(), updatedAt = Instant.now()))
-    //     reviewEntity.reviewLikes += reviewLikeEntity
-    //     reviewRepository.save(reviewEntity)
-    // }
+    @Transactional
+    fun likeReview(
+        user: User,
+        reviewId: String,
+    ) {
+        val reviewEntity = reviewRepository.findByIdWithWriteLock(reviewId) ?: throw ReviewNotFoundException()
+        val userEntity = userRepository.findByIdOrNull(user.id) ?: throw AuthenticateException()
+        if (reviewEntity.reviewLikes.any { it.user.id == userEntity.id }) {
+            return
+        }
+        val reviewLikeEntity = reviewLikeRepository.save(ReviewLikeEntity(review = reviewEntity, user = userEntity))
+        reviewEntity.reviewLikes += reviewLikeEntity
+        reviewRepository.save(reviewEntity)
+    }
 
-    // @Transactional
-    // fun unlikeReview(
-    //     user: User,
-    //     reviewId: String,
-    // ) {
-    //     val reviewEntity = reviewRepository.findByIdWithWriteLock(reviewId) ?: throw ReviewNotFoundException()
-    //     val userEntity = userRepository.findByIdOrNull(user.id) ?: throw AuthenticateException()
-    //     val reviewToDelete = reviewEntity.reviewLikes.find { it.user.id == userEntity.id } ?: return
-    //     reviewEntity.reviewLikes -= reviewToDelete
-    //     reviewLikeRepository.delete(reviewToDelete)
-    //     reviewRepository.save(reviewEntity)
-    // }
+    @Transactional
+    fun cancelLikeReview(
+        user: User,
+        reviewId: String,
+    ) {
+        val reviewEntity = reviewRepository.findByIdWithWriteLock(reviewId) ?: throw ReviewNotFoundException()
+        val userEntity = userRepository.findByIdOrNull(user.id) ?: throw AuthenticateException()
+        val reviewLikeToDelete = reviewEntity.reviewLikes.find { it.user.id == userEntity.id } ?: return
+        reviewEntity.reviewLikes -= reviewLikeToDelete
+        reviewLikeRepository.delete(reviewLikeToDelete)
+        reviewRepository.save(reviewEntity)
+    }
 }
