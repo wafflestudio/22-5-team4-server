@@ -236,7 +236,7 @@ class UserIntegrationTest
         }
 
         @Test
-        fun `잘못된 인증 토큰으로 인증시 401 응답을 내려준다`() {
+        fun `잘못된 인증 토큰으로 접근 시 403 응답을 내려준다`() {
             val (username, password) = "correct4" to "12345678"
             mvc.perform(
                 post("/api/v1/local/signup")
