@@ -30,16 +30,14 @@ class JwtAuthenticationFilter(
             val accessToken = header.split(" ")[1]
 
             // 2) UserAccessTokenUtil로 토큰 유효성 검사
-            //    유효하면 userId가 반환되고,
-            //    유효하지 않으면 null
+            //    유효하면 userId가 반환되고, 유효하지 않으면 null
             val subject = userAccessTokenUtil.validateAccessToken(accessToken)
 
             if (subject != null) {
-                // 3) subject(userId)를 기반으로 DB에서 유저/권한 정보 조회 (UserIdentityEntity)
+                // 3) subject(userId)를 기반으로 DB에서 유저/권한 정보 조회 (UserDetails)
                 val userDetails = userDetailsService.loadUserByUserId(subject)
 
                 // 4) Spring Security에 Authentication 등록
-                // principal에는 identity(또는 더 확장된 CustomUserDetails)를 넣어도 됨
                 val authentication = UsernamePasswordAuthenticationToken(
                     userDetails,
                     null,
