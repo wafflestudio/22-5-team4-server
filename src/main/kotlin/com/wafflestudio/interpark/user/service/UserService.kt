@@ -90,8 +90,4 @@ class UserService(
     fun refreshAccessToken(refreshToken: String): Pair<String, String> {
         return userAccessTokenUtil.refreshAccessToken(refreshToken) ?: throw AuthenticateException()
     }
-
-    fun getUserIdentityByUserId(userId: String): UserIdentityEntity? {
-        return userIdentityRepository.findByUserId(userId)
-    }
 }
