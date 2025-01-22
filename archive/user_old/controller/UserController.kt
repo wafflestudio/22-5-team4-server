@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -26,13 +25,12 @@ class UserController(
         return ResponseEntity.ok(mapOf("message" to "pong"))
     }
 
-    @PostMapping("/api/v1/local/signup")
+    @PostMapping("/api/v1/signup")
     @Operation(
         summary = "사용자 회원가입",
         description = """
         새로운 사용자를 등록합니다. 
         사용자 이름, 비밀번호, 닉네임, 이메일, 전화번호를 입력받아 저장합니다.
-        useraname은 6~20자, password는 8~12자를 만족해야 합니다
         요청이 유효하지 않은 경우 또는 사용자 이름이 중복된 경우 적절한 에러 메시지를 반환합니다.
         """,
         responses = [
@@ -101,58 +99,50 @@ class UserController(
         return ResponseEntity.ok(SignUpResponse(user))
     }
 
-    @PostMapping("/api/v1/local/signin")
+    @PostMapping("/api/v1/signin")
     fun signin(
         @RequestBody request: SignInRequest,
         response: HttpServletResponse,
-    ): ResponseEntity<SignInResponse> {
-        val (user, accessToken, refreshToken) = userService.signIn(request.username, request.password)
+    ): ResponseEntity<TokenResponse> {
+        val (accessToken, refreshToken) = userService.signIn(request.username, request.password)
         val cookie =
             Cookie("refreshToken", refreshToken).apply {
                 isHttpOnly = true
                 secure = true
-                path = "/api/v1/auth"
+                path = "/api/v1/refresh_token"
                 maxAge = 60 * 60 * 24 * 7
                 // TODO("domain 설정하기")
             }
         response.addCookie(cookie)
 
-        return ResponseEntity.ok(SignInResponse(user, accessToken))
+        return ResponseEntity.ok(TokenResponse(accessToken))
     }
 
     @GetMapping("/api/v1/users/me")
     fun me(
-        @AuthenticationPrincipal userDetails: UserDetailsImpl,
+        @AuthUser user: User,
     ): ResponseEntity<User> {
-        return ResponseEntity.ok(
-            User(
-                id = userDetails.getUserId(),
-                username = userDetails.username,
-                nickname = userDetails.getNickname(),
-                phoneNumber = userDetails.getPhoneNumber(),
-                email = userDetails.getEmail()
-            )
-        )
+        return ResponseEntity.ok(user)
     }
 
-    @PostMapping("/api/v1/auth/signout")
+    @PostMapping("/api/v1/signout")
     fun signout(
-        @CookieValue(value = "refreshToken", required = false) refreshToken: String?,
+        @CookieValue(value = "refresh_token", required = false) refreshToken: String?,
     ): ResponseEntity<Void> {
         if (refreshToken == null) {
-            throw NoRefreshTokenException()
+            throw TokenNotFoundException()
         }
         userService.signOut(refreshToken)
         return ResponseEntity.noContent().build()
     }
 
-    @PostMapping("/api/v1/auth/refresh_token")
+    @PostMapping("/api/v1/refresh_token")
     fun refreshToken(
         @CookieValue(value = "refreshToken", required = false) refreshToken: String?,
         response: HttpServletResponse,
     ): ResponseEntity<TokenResponse> {
         if (refreshToken == null) {
-            throw NoRefreshTokenException()
+            throw TokenNotFoundException()
         }
 
         val (newAccessToken, newRefreshToken) = userService.refreshAccessToken(refreshToken)
@@ -161,7 +151,7 @@ class UserController(
             Cookie("refreshToken", newRefreshToken).apply {
                 isHttpOnly = true
                 secure = true
-                path = "/api/v1/auth"
+                path = "/api/v1/refresh_token"
                 maxAge = 60 * 60 * 24 * 7
                 // TODO("domain 설정하기")
             }
@@ -187,11 +177,10 @@ data class SignInRequest(
     val password: String,
 )
 
-data class SignInResponse(
-    val user: User,
-    val accessToken: String,
-)
-
 data class TokenResponse(
     val accessToken: String,
 )
+
+data class SignOutRequest(val refreshToken: String)
+
+data class RefreshTokenRequest(val refreshToken: String)

@@ -25,11 +25,10 @@ class ReviewService(
     private val reviewLikeRepository: ReviewLikeRepository,
     private val replyService: ReplyService,
 ) {
-    fun getReviewsByUser(user: User): List<Review> {
-        val authorId = user.id
+    fun getReviewsByUser(userId: String): List<Review> {
         val reviews: List<Review> =
             reviewRepository
-                .findByAuthorId(authorId)
+                .findByAuthorId(userId)
                 .map { Review.fromEntity(it, replyService.countReplies(it.id)) }
         return reviews
     }
@@ -44,7 +43,7 @@ class ReviewService(
 
     @Transactional
     fun createReview(
-        author: User,
+        authorId: String,
         performanceId: String,
         rating: Int,
         title: String,
@@ -54,7 +53,7 @@ class ReviewService(
         validateRating(rating)
 
         val performanceEntity = performanceRepository.findByIdOrNull(performanceId) ?: throw PerformanceNotFoundException()
-        val authorEntity = userRepository.findByIdOrNull(author.id) ?: throw AuthenticateException()
+        val authorEntity = userRepository.findByIdOrNull(authorId) ?: throw AuthenticateException()
         val reviewEntity =
             ReviewEntity(
                 id = "",
@@ -73,7 +72,7 @@ class ReviewService(
 
     @Transactional
     fun editReview(
-        author: User,
+        authorId: String,
         reviewId: String,
         rating: Int?,
         title: String?,
@@ -82,7 +81,7 @@ class ReviewService(
         content?.let { validateContent(it) }
         rating?.let { validateRating(it) }
         val reviewEntity = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException()
-        val authorEntity = userRepository.findByIdOrNull(author.id) ?: throw AuthenticateException()
+        val authorEntity = userRepository.findByIdOrNull(authorId) ?: throw AuthenticateException()
         if (reviewEntity.author.id != authorEntity.id) {
             throw ReviewPermissionDeniedException()
         }
@@ -96,11 +95,11 @@ class ReviewService(
 
     @Transactional
     fun deleteReview(
-        author: User,
+        authorId: String,
         reviewId: String,
     ) {
         val reviewEntity = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException()
-        val authorEntity = userRepository.findByIdOrNull(author.id) ?: throw AuthenticateException()
+        val authorEntity = userRepository.findByIdOrNull(authorId) ?: throw AuthenticateException()
         if (reviewEntity.author.id != authorEntity.id) {
             throw ReviewPermissionDeniedException()
         }
@@ -124,11 +123,11 @@ class ReviewService(
 
     @Transactional
     fun likeReview(
-        user: User,
+        userId: String,
         reviewId: String,
     ) {
         val reviewEntity = reviewRepository.findByIdWithWriteLock(reviewId) ?: throw ReviewNotFoundException()
-        val userEntity = userRepository.findByIdOrNull(user.id) ?: throw AuthenticateException()
+        val userEntity = userRepository.findByIdOrNull(userId) ?: throw AuthenticateException()
         if (reviewEntity.reviewLikes.any { it.user.id == userEntity.id }) {
             return
         }
@@ -139,11 +138,11 @@ class ReviewService(
 
     @Transactional
     fun cancelLikeReview(
-        user: User,
+        userId: String,
         reviewId: String,
     ) {
         val reviewEntity = reviewRepository.findByIdWithWriteLock(reviewId) ?: throw ReviewNotFoundException()
-        val userEntity = userRepository.findByIdOrNull(user.id) ?: throw AuthenticateException()
+        val userEntity = userRepository.findByIdOrNull(userId) ?: throw AuthenticateException()
         val reviewLikeToDelete = reviewEntity.reviewLikes.find { it.user.id == userEntity.id } ?: return
         reviewEntity.reviewLikes -= reviewLikeToDelete
         reviewLikeRepository.delete(reviewLikeToDelete)

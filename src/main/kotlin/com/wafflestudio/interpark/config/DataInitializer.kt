@@ -10,6 +10,7 @@ import com.wafflestudio.interpark.performance.service.PerformanceHallService
 import com.wafflestudio.interpark.performance.service.PerformanceService
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Configuration
+import java.time.LocalDateTime
 
 @Configuration
 class DataInitializer(
@@ -270,8 +271,8 @@ class DataInitializer(
                 performanceEventService.createPerformanceEvent(
                     performanceId = performance.id!!,
                     performanceHallId = hall.id!!,
-                    startAt = startAt,
-                    endAt = endAt
+                    startAt = LocalDateTime.parse(startAt),
+                    endAt = LocalDateTime.parse(endAt)
                 )
             }
         }

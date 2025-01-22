@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 class PerformanceController(
     private val performanceService: PerformanceService,
 ) {
-    @GetMapping("v1/performance/search")
+    @GetMapping("api/v1/performance/search")
     fun searchPerformance(
         @RequestParam title: String?,
         @RequestParam genre: String?,

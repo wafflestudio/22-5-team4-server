@@ -2,14 +2,13 @@ package com.wafflestudio.interpark
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wafflestudio.interpark.user.UserAccessTokenUtil
-import com.wafflestudio.interpark.user.controller.User
 import com.wafflestudio.interpark.user.persistence.UserRepository
+import com.wafflestudio.interpark.user.persistence.UserRole
 import jakarta.servlet.http.Cookie
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
@@ -26,8 +25,6 @@ class UserIntegrationTest
     constructor(
         private val mvc: MockMvc,
         private val mapper: ObjectMapper,
-        private val userAccessTokenUtil: UserAccessTokenUtil,
-        private val userRepository: UserRepository,
     ) {
         @Test
         fun `회원가입시에 유저 이름 혹은 비밀번호가 정해진 규칙에 맞지 않는 경우 400 응답을 내려준다`() {
@@ -239,7 +236,7 @@ class UserIntegrationTest
         }
 
         @Test
-        fun `잘못된 인증 토큰으로 인증시 401 응답을 내려준다`() {
+        fun `잘못된 인증 토큰으로 접근 시 403 응답을 내려준다`() {
             val (username, password) = "correct4" to "12345678"
             mvc.perform(
                 post("/api/v1/local/signup")
@@ -280,7 +277,61 @@ class UserIntegrationTest
                 get("/api/v1/users/me")
                     .header("Authorization", "Bearer bad"),
             )
-                .andExpect(status().`is`(401))
+                .andExpect(status().`is`(403))
+
+            mvc.perform(
+                get("/api/v1/users/me")
+                    .header("Authorization", "Bearer $accessToken"),
+            )
+                .andExpect(status().`is`(200))
+                .andExpect(jsonPath("$.username").value(username))
+                .andExpect(jsonPath("$.nickname").value(username))
+        }
+
+        @Test
+        fun `관리자가 API 엔드포인트에 접근가능하다`(){
+            val (username, password) = "correct5" to "12345678"
+            mvc.perform(
+                post("/api/v1/local/signup")
+                    .content(
+                        mapper.writeValueAsString(
+                            mapOf(
+                                "username" to username,
+                                "password" to password,
+                                "nickname" to username,
+                                "phoneNumber" to "010-0000-0000",
+                                "email" to "test@example.com",
+                                "role" to UserRole.ADMIN,
+                            ),
+                        ),
+                    )
+                    .contentType(MediaType.APPLICATION_JSON),
+            )
+                .andExpect(status().`is`(200))
+
+            val accessToken =
+                mvc.perform(
+                    post("/api/v1/local/signin")
+                        .content(
+                            mapper.writeValueAsString(
+                                mapOf(
+                                    "username" to username,
+                                    "password" to password,
+                                ),
+                            ),
+                        )
+                        .contentType(MediaType.APPLICATION_JSON),
+                )
+                    .andExpect(status().`is`(200))
+                    .andReturn()
+                    .response.getContentAsString(Charsets.UTF_8)
+                    .let { mapper.readTree(it).get("accessToken").asText() }
+
+            mvc.perform(
+                get("/api/v1/users/me")
+                    .header("Authorization", "Bearer bad"),
+            )
+                .andExpect(status().`is`(403))
 
             mvc.perform(
                 get("/api/v1/users/me")

@@ -3,23 +3,22 @@ package com.wafflestudio.interpark.review.controller
 import com.wafflestudio.interpark.review.*
 import com.wafflestudio.interpark.review.service.ReplyService
 import com.wafflestudio.interpark.review.service.ReviewService
-import com.wafflestudio.interpark.user.AuthUser
-import com.wafflestudio.interpark.user.controller.User
+import com.wafflestudio.interpark.user.controller.UserDetailsImpl
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
 class ReviewController(
     private val reviewService: ReviewService,
-    private val replyService: ReplyService,
 ) {
 
     @GetMapping("/api/v1/me/review")
     fun getMyReviews(
-        @AuthUser user: User,
+        @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<GetReviewResponse>{
-        val reviews = reviewService.getReviewsByUser(user);
-        return ResponseEntity.ok(reviews);
+        val reviews = reviewService.getReviewsByUser(userDetails.getUserId())
+        return ResponseEntity.ok(reviews)
     }
 
     @GetMapping("/api/v1/performance/{performanceId}/review")
@@ -34,9 +33,9 @@ class ReviewController(
     fun createReview(
         @RequestBody request: CreateReviewRequest,
         @PathVariable performanceId: String,
-        @AuthUser user: User,
+        @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<CreateReviewResponse> {
-        val review = reviewService.createReview(user, performanceId, request.rating, request.title, request.content)
+        val review = reviewService.createReview(userDetails.getUserId(), performanceId, request.rating, request.title, request.content)
         return ResponseEntity.status(201).body(review)
     }
 
@@ -44,36 +43,36 @@ class ReviewController(
     fun editReview(
         @RequestBody request: EditReviewRequest,
         @PathVariable reviewId: String,
-        @AuthUser user: User,
+        @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<EditReviewResponse> {
-        val review = reviewService.editReview(user, reviewId, request.rating, request.title, request.content)
+        val review = reviewService.editReview(userDetails.getUserId(), reviewId, request.rating, request.title, request.content)
         return ResponseEntity.ok(review)
     }
 
     @DeleteMapping("/api/v1/review/{reviewId}")
     fun deleteReview(
         @PathVariable reviewId: String,
-        @AuthUser user: User,
+        @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<String> {
-        val review = reviewService.deleteReview(user, reviewId)
+        val review = reviewService.deleteReview(userDetails.getUserId(), reviewId)
         return ResponseEntity.noContent().build()
     }
 
     @PostMapping("/api/v1/review/{reviewId}/like")
     fun likeReview(
         @PathVariable reviewId: String,
-        @AuthUser user: User,
+        @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<String> {
-        reviewService.likeReview(user, reviewId)
+        reviewService.likeReview(userDetails.getUserId(), reviewId)
         return ResponseEntity.noContent().build()
     }
 
     @DeleteMapping("/api/v1/review/{reviewId}/like")
     fun cancelLikeReview(
         @PathVariable reviewId: String,
-        @AuthUser user: User,
+        @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<String> {
-        reviewService.cancelLikeReview(user, reviewId)
+        reviewService.cancelLikeReview(userDetails.getUserId(), reviewId)
         return ResponseEntity.noContent().build()
     }
 }

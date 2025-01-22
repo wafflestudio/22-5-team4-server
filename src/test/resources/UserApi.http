@@ -1,5 +1,5 @@
-### 회원가입
-POST http://localhost:8080/api/v1/local/signup
+### 회원가입(USER)
+POST http://localhost:80/api/v1/local/signup
 Content-Type: application/json
 
 {
@@ -10,8 +10,21 @@ Content-Type: application/json
   "email": "test@example.com"
 }
 
+### 회원가입(ADMIN)
+POST http://localhost:80/api/v1/local/signup
+Content-Type: application/json
+
+{
+  "username": "adminname",
+  "password": "12345678",
+  "nickname": "examplename",
+  "phoneNumber": "010-0000-0000",
+  "email": "test@example.com",
+  "role": "ADMIN"
+}
+
 ### 로그인
-POST http://localhost:8080/api/v1/local/signin
+POST http://localhost:80/api/v1/local/signin
 Content-Type: application/json
 
 {
@@ -20,13 +33,13 @@ Content-Type: application/json
 }
 
 ### 로그아웃
-POST http://localhost:8080/api/v1/auth/signout
+POST http://localhost:80/api/v1/auth/signout
 Content-Type: application/json
 
 ### pingpong
-GET http://localhost:8080/api/v1/ping
+GET http://localhost:80/api/v1/ping
 Accept: application/json
 
 ### 인증 토큰으로 유저 프로필 조회
-GET http://localhost:8080/api/v1/users/me
+GET http://localhost:80/api/v1/users/me
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiY2JlMjI5Yi0zYjgyLTRkM2MtOWFjNS03ZWYzZTUyMjViNWYiLCJpYXQiOjE3MzYzMjA2MDksImV4cCI6MTczNjMyMTUwOX0.RJHC9qQvBnt_q4aS81qdpTrTnXfS-qQ-wMygRFXXg8E

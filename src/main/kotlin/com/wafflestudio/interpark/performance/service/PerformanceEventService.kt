@@ -43,16 +43,16 @@ class PerformanceEventService(
             .map { PerformanceEvent.fromEntity(it) };
     }
 
-    fun parseKoreanTimeToInstant(koreanTime: String): Instant {
+    fun parseKoreanTimeToInstant(koreanTime: LocalDateTime): Instant {
         val koreanZone = ZoneId.of("Asia/Seoul")
-        return LocalDateTime.parse(koreanTime).atZone(koreanZone).toInstant()
+        return koreanTime.atZone(koreanZone).toInstant()
     }
 
     fun createPerformanceEvent(
         performanceId: String,
         performanceHallId: String,
-        startAt: String,
-        endAt: String,
+        startAt: LocalDateTime,
+        endAt: LocalDateTime,
     ): PerformanceEvent {
         val performanceEntity: PerformanceEntity = performanceRepository.findByIdOrNull(performanceId)
                                                                         ?: throw PerformanceNotFoundException()

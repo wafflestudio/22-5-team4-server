@@ -61,16 +61,15 @@ class UserService(
     fun signIn(
         username: String,
         password: String,
-    ): Triple<User, String, String> {
+    ): Pair<String, String> {
         val targetUser = userRepository.findByUsername(username) ?: throw SignInUserNotFoundException()
-        val user = User.fromEntity(targetUser)
         val targetIdentity = userIdentityRepository.findByUser(targetUser) ?: throw SignInUserNotFoundException()
         if (!BCrypt.checkpw(password, targetIdentity.hashedPassword)) {
             throw SignInInvalidPasswordException()
         }
         val accessToken = userAccessTokenUtil.generateAccessToken(targetUser.id!!)
-        val refreshToken = userAccessTokenUtil.generateRefreshToken(targetUser.id!!)
-        return Triple(user, accessToken, refreshToken)
+        val refreshToken = userAccessTokenUtil.generateRefreshToken(targetIdentity.id!!)
+        return Pair(accessToken, refreshToken)
     }
 
     @Transactional
@@ -78,7 +77,6 @@ class UserService(
         userAccessTokenUtil.removeRefreshToken(refreshToken)
     }
 
-    // spring security로 전가돼서 사실상 호출 안 됨.
     @Transactional
     fun authenticate(accessToken: String): User {
         val userId = userAccessTokenUtil.validateAccessToken(accessToken) ?: throw AuthenticateException()
@@ -89,5 +87,9 @@ class UserService(
     @Transactional
     fun refreshAccessToken(refreshToken: String): Pair<String, String> {
         return userAccessTokenUtil.refreshAccessToken(refreshToken) ?: throw AuthenticateException()
+    }
+
+    fun getUserIdentityByUserId(userId: String): UserIdentityEntity? {
+        return userIdentityRepository.findByUserId(userId)
     }
 }

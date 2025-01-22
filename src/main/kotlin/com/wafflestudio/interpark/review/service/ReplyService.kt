@@ -1,8 +1,6 @@
 package com.wafflestudio.interpark.review.service
 
 import com.wafflestudio.interpark.review.*
-import com.wafflestudio.interpark.review.controller.Review
-import com.wafflestudio.interpark.review.persistence.ReviewEntity
 import com.wafflestudio.interpark.review.persistence.ReviewRepository
 import com.wafflestudio.interpark.review.controller.Reply
 import com.wafflestudio.interpark.review.persistence.ReplyEntity
@@ -24,11 +22,10 @@ class ReplyService(
     private val userRepository: UserRepository,
 ) {
 
-    fun getRepliesByUser(user: User): List<Reply> {
-        val authorId = user.id
-        val replies: List<Reply> = 
+    fun getRepliesByUser(userId: String): List<Reply> {
+        val replies: List<Reply> =
             replyRepository
-                .findByAuthorId(authorId)
+                .findByAuthorId(userId)
                 .map { Reply.fromEntity(it) }
         return replies
     }
@@ -48,12 +45,12 @@ class ReplyService(
 
     @Transactional
     fun createReply(
-        author: User,
+        authorId: String,
         reviewId: String,
         content: String,
     ): Reply {
         validateContent(content)
-        val authorEntity = userRepository.findByIdOrNull(author.id) ?: throw AuthenticateException()
+        val authorEntity = userRepository.findByIdOrNull(authorId) ?: throw AuthenticateException()
         val reviewEntity = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException()
         val replyEntity =
             ReplyEntity(
@@ -71,13 +68,13 @@ class ReplyService(
 
     @Transactional
     fun editReply(
-        author: User,
+        authorId: String,
         replyId: String,
         content: String,
     ): Reply {
         content?.let { validateContent(it) }
         val replyEntity = replyRepository.findByIdOrNull(replyId) ?: throw ReplyNotFoundException()
-        val authorEntity = userRepository.findByIdOrNull(author.id) ?: throw AuthenticateException()
+        val authorEntity = userRepository.findByIdOrNull(authorId) ?: throw AuthenticateException()
         if (replyEntity.author.id != authorEntity.id) {
             throw ReplyPermissionDeniedException()
         }
@@ -89,11 +86,11 @@ class ReplyService(
 
     @Transactional
     fun deleteReply(
-        author: User,
+        authorId: String,
         replyId: String,
     ) {
         val replyEntity = replyRepository.findByIdOrNull(replyId) ?: throw ReplyNotFoundException()
-        val authorEntity = userRepository.findByIdOrNull(author.id) ?: throw AuthenticateException()
+        val authorEntity = userRepository.findByIdOrNull(authorId) ?: throw AuthenticateException()
         if (replyEntity.author.id != authorEntity.id) {
             throw ReplyPermissionDeniedException()
         }
