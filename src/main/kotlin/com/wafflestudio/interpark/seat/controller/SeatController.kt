@@ -3,7 +3,9 @@ package com.wafflestudio.interpark.seat.controller
 import com.wafflestudio.interpark.seat.service.SeatService
 import com.wafflestudio.interpark.user.AuthUser
 import com.wafflestudio.interpark.user.controller.User
+import com.wafflestudio.interpark.user.controller.UserDetailsImpl
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -26,35 +28,35 @@ class SeatController(
     @PostMapping("/api/v1/reservation/reserve")
     fun reserveSeat(
         @RequestBody request: ReserveSeatRequest,
-        @AuthUser user: User,
+        @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<ReserveSeatResponse> {
-        val reservationId = seatService.reserveSeat(user, request.reservationId)
+        val reservationId = seatService.reserveSeat(userDetails.getUserId(), request.reservationId)
         return ResponseEntity.status(200).body(ReserveSeatResponse(reservationId))
     }
 
     @GetMapping("/api/v1/me/reservation")
     fun getMyReservations(
-        @AuthUser user: User,
+        @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<GetMyReservationsResponse> {
-        val myReservations = seatService.getMyReservations(user)
+        val myReservations = seatService.getMyReservations(userDetails.getUserId())
         return ResponseEntity.ok(GetMyReservationsResponse(myReservations))
     }
 
     @GetMapping("/api/v1/reservation/detail/{reservationId}")
     fun getReservedSeatDetail(
         @PathVariable reservationId: String,
-        @AuthUser user: User,
+        @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<GetReservedSeatDetailResponse> {
-        val reservationDetail = seatService.getReservedSeatDetail(user, reservationId)
+        val reservationDetail = seatService.getReservedSeatDetail(userDetails.getUserId(), reservationId)
         return ResponseEntity.status(200).body(GetReservedSeatDetailResponse(reservationDetail))
     }
 
     @PostMapping("/api/v1/reservation/cancel")
     fun cancelReservedSeat(
         @RequestBody request: CancelReserveSeatRequest,
-        @AuthUser user: User,
+        @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<Void> {
-        seatService.cancelReservedSeat(user, request.reservationId)
+        seatService.cancelReservedSeat(userDetails.getUserId(), request.reservationId)
         return ResponseEntity.noContent().build()
     }
 }

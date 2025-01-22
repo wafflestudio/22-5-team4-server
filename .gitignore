@@ -16,6 +16,9 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
+# .env
+.env
+
 ### Kotlin ###
 .kotlin
 
@@ -43,5 +46,3 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-
-.env
