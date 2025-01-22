@@ -386,4 +386,94 @@ class ReplyIntegrationTest
             assert(targetReview!!.get("replyCount").asText() == "0") { "expected 0 replyCount but ${targetReview!!.get("likeCount").asText()}"}
 
         }
+
+        @Test
+        fun `GET을 했을 때 댓글을 최신순으로 정렬되어 반환된다`() {
+            val otherAccessTokens = (1..5).map { num ->
+                mvc.perform(
+                    post("/api/v1/local/signup")
+                        .content(
+                            mapper.writeValueAsString(
+                                mapOf(
+                                    "username" to "otherMan2$num",
+                                    "password" to "goodPassword",
+                                    "nickname" to "NICKNAME",
+                                    "phoneNumber" to "010-1234-5678",
+                                    "email" to "hacker@example.com",
+                                ),
+                            ),
+                        )
+                        .contentType(MediaType.APPLICATION_JSON),
+                ).andExpect(status().`is`(200))
+
+                mvc.perform(
+                    post("/api/v1/local/signin")
+                        .content(
+                            mapper.writeValueAsString(
+                                mapOf(
+                                    "username" to "otherMan2$num",
+                                    "password" to "goodPassword",
+                                ),
+                            ),
+                        )
+                        .contentType(MediaType.APPLICATION_JSON),
+                ).andExpect(status().`is`(200))
+                    .andReturn()
+                    .response
+                    .getContentAsString(Charsets.UTF_8)
+                    .let { mapper.readTree(it).get("accessToken").asText() }
+            }
+            (1..5).forEach {
+                mvc.perform(
+                    post("/api/v1/review/$reviewId/reply")
+                        .header("Authorization", "Bearer ${otherAccessTokens[it-1]}")
+                        .content(
+                            mapper.writeValueAsString(
+                                mapOf("content" to "$it"),
+                            ),
+                        )
+                        .contentType(MediaType.APPLICATION_JSON),
+                ).andExpect(status().`is`(201))
+                    .andReturn()
+            }
+
+            (1..5).forEach {
+                mvc.perform(
+                    post("/api/v1/review/$reviewId/reply")
+                        .header("Authorization", "Bearer $accessToken")
+                        .content(
+                            mapper.writeValueAsString(
+                                mapOf("content" to "$it"),
+                            ),
+                        )
+                        .contentType(MediaType.APPLICATION_JSON),
+                ).andExpect(status().`is`(201))
+                    .andReturn()
+            }
+
+            val reviewReplyContent = mvc.perform(
+                get("/api/v1/review/$reviewId/reply")
+            ).andExpect(status().`is`(200))
+                .andReturn()
+                .response
+                .getContentAsString(Charsets.UTF_8)
+                .let { mapper.readTree(it) }
+                .map { it.get("content").asText() }
+            assert (reviewReplyContent == listOf("5","4","3","2","1","5","4","3","2","1")) {
+                "expected rating ${listOf("5","4","3","2","1","5","4","3","2","1")} but $reviewReplyContent"
+            }
+
+            val userReplyContent = mvc.perform(
+                get("/api/v1/me/reply")
+                    .header("Authorization", "Bearer $accessToken")
+            ).andExpect(status().`is`(200))
+                .andReturn()
+                .response
+                .getContentAsString(Charsets.UTF_8)
+                .let { mapper.readTree(it) }
+                .map { it.get("content").asText() }
+            assert (userReplyContent == (5 downTo 1).map {"$it"}) {
+                "expected rating ${(5 downTo 1).map {"$it"}} but $userReplyContent"
+            }
+        }
     }

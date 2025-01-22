@@ -25,7 +25,6 @@ class ReviewController(
     @GetMapping("/api/v1/performance/{performanceId}/review")
     fun getReviews(
         @PathVariable performanceId: String,
-        @AuthUser user: User,
     ): ResponseEntity<GetReviewResponse>{
         val reviews = reviewService.getReviews(performanceId)
         return ResponseEntity.ok(reviews)
