@@ -1,5 +1,7 @@
 package com.wafflestudio.interpark.review.controller
 
+import com.wafflestudio.interpark.review.*
+import com.wafflestudio.interpark.review.service.ReplyService
 import com.wafflestudio.interpark.review.service.ReviewService
 import com.wafflestudio.interpark.user.controller.UserDetailsImpl
 import org.springframework.http.ResponseEntity
@@ -56,23 +58,23 @@ class ReviewController(
         return ResponseEntity.noContent().build()
     }
 
-    // @PostMapping("/api/v1/reviews/{reviewId}/like")
-    // fun likeReview(
-    //     @PathVariable reviewId: String,
-    //     @AuthUser user: User,
-    // ): ResponseEntity<String> {
-    //     reviewService.likeReview(user, reviewId)
-    //     return ResponseEntity.noContent().build()
-    // }
+    @PostMapping("/api/v1/review/{reviewId}/like")
+    fun likeReview(
+        @PathVariable reviewId: String,
+        @AuthenticationPrincipal userDetails: UserDetailsImpl
+    ): ResponseEntity<String> {
+        reviewService.likeReview(userDetails.getUserId(), reviewId)
+        return ResponseEntity.noContent().build()
+    }
 
-    // @PostMapping("/api/v1/reviews/{reviewId}/unlike")
-    // fun unlikeReview(
-    //     @PathVariable reviewId: String,
-    //     @AuthUser user: User,
-    // ): ResponseEntity<String> {
-    //     reviewService.unlikeReview(user, reviewId)
-    //     return ResponseEntity.noContent().build()
-    // }
+    @DeleteMapping("/api/v1/review/{reviewId}/like")
+    fun cancelLikeReview(
+        @PathVariable reviewId: String,
+        @AuthenticationPrincipal userDetails: UserDetailsImpl
+    ): ResponseEntity<String> {
+        reviewService.cancelLikeReview(userDetails.getUserId(), reviewId)
+        return ResponseEntity.noContent().build()
+    }
 }
 
 
