@@ -30,13 +30,17 @@ class ReplyService(
         return replies
     }
 
-    // TODO: 검색기능 구현해야 함
     fun getReplies(reviewId: String): List<Reply> {
         val replies: List<Reply> =
             replyRepository
                 .findByReviewId(reviewId)
                 .map { Reply.fromEntity(it) }
         return replies
+    }
+
+    fun countReplies(reviewId: String): Int {
+        val replyCount = replyRepository.countByReviewId(reviewId)
+        return replyCount
     }
 
     @Transactional

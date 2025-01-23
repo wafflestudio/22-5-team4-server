@@ -32,6 +32,7 @@ class UserController(
         description = """
         새로운 사용자를 등록합니다. 
         사용자 이름, 비밀번호, 닉네임, 이메일, 전화번호를 입력받아 저장합니다.
+        useraname은 6~20자, password는 8~12자를 만족해야 합니다
         요청이 유효하지 않은 경우 또는 사용자 이름이 중복된 경우 적절한 에러 메시지를 반환합니다.
         """,
         responses = [
@@ -194,7 +195,3 @@ data class SignInResponse(
 data class TokenResponse(
     val accessToken: String,
 )
-
-data class SignOutRequest(val refreshToken: String)
-
-data class RefreshTokenRequest(val refreshToken: String)

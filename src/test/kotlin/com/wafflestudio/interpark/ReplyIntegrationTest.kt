@@ -68,7 +68,18 @@ class ReplyIntegrationTest
                     .getContentAsString(Charsets.UTF_8)
                     .let { mapper.readTree(it).get("accessToken").asText() }
 
-            performanceId = "sample-performance"
+            //테스트 용으로 아무 공연 Id를 하나 가져온다
+            performanceId =
+                mvc.perform(
+                    get("/api/v1/performance/search")
+                ).andExpect(status().`is`(200))
+                    .andReturn()
+                    .response
+                    .getContentAsString(Charsets.UTF_8)
+                    .let {
+                        val performances = mapper.readTree(it)
+                        performances[0].get("id").asText()
+                    }
 
             // 3️⃣ 리뷰 생성 (테스트용)
             reviewId =
@@ -239,5 +250,230 @@ class ReplyIntegrationTest
                     .header("Authorization", "Bearer $otherAccessToken"),
             ).andExpect(status().`is`(401))
                 .andExpect(jsonPath("$.error").value("Unauthorized Access To Reply"))
+        }
+
+        @Test
+        fun `댓글을 달면 댓글수가 증가한다`() {
+            var reviews = mvc.perform(
+                get("/api/v1/performance/$performanceId/review")
+                    .header("Authorization", "Bearer $accessToken"),
+            ).andExpect(status().`is`(200))
+                .andExpect(jsonPath("$[?(@.id == '$reviewId')]").exists())
+                .andReturn()
+                .response
+                .getContentAsString(Charsets.UTF_8)
+                .let { mapper.readTree(it) }
+            var targetReview = reviews.find { it.get("id").asText() == reviewId }
+            assert(targetReview!!.get("replyCount").asText() == "0") { "expected 0 replyCount but ${targetReview!!.get("reply").asText()}"}
+
+            mvc.perform(
+                post("/api/v1/review/$reviewId/reply")
+                    .header("Authorization", "Bearer $accessToken")
+                    .content(
+                        mapper.writeValueAsString(
+                            mapOf("content" to "Great review! I totally agree."),
+                        ),
+                    )
+                    .contentType(MediaType.APPLICATION_JSON),
+            ).andExpect(status().`is`(201))
+
+            reviews = mvc.perform(
+                get("/api/v1/performance/$performanceId/review")
+                    .header("Authorization", "Bearer $accessToken"),
+            ).andExpect(status().`is`(200))
+                .andExpect(jsonPath("$[?(@.id == '$reviewId')]").exists())
+                .andReturn()
+                .response
+                .getContentAsString(Charsets.UTF_8)
+                .let { mapper.readTree(it) }
+            targetReview = reviews.find { it.get("id").asText() == reviewId }
+            assert(targetReview!!.get("replyCount").asText() == "1") { "expected 1 replyCount but ${targetReview!!.get("replyCount").asText()}"}
+        }
+
+        @Test
+        fun `댓글은 여러 개를 달 수 있다`() {
+            mvc.perform(
+                post("/api/v1/review/$reviewId/reply")
+                    .header("Authorization", "Bearer $accessToken")
+                    .content(
+                        mapper.writeValueAsString(
+                            mapOf("content" to "Great review! I totally agree."),
+                        ),
+                    )
+                    .contentType(MediaType.APPLICATION_JSON),
+            ).andExpect(status().`is`(201))
+
+            mvc.perform(
+                post("/api/v1/review/$reviewId/reply")
+                    .header("Authorization", "Bearer $accessToken")
+                    .content(
+                        mapper.writeValueAsString(
+                            mapOf("content" to "I can't stop thinking about this review! I totally agree again."),
+                        ),
+                    )
+                    .contentType(MediaType.APPLICATION_JSON),
+            ).andExpect(status().`is`(201))
+
+            mvc.perform(
+                post("/api/v1/review/$reviewId/reply")
+                    .header("Authorization", "Bearer $accessToken")
+                    .content(
+                        mapper.writeValueAsString(
+                            mapOf("content" to "Again and Again and Again"),
+                        ),
+                    )
+                    .contentType(MediaType.APPLICATION_JSON),
+            ).andExpect(status().`is`(201))
+
+            val reviews = mvc.perform(
+                get("/api/v1/performance/$performanceId/review")
+                    .header("Authorization", "Bearer $accessToken"),
+            ).andExpect(status().`is`(200))
+                .andExpect(jsonPath("$[?(@.id == '$reviewId')]").exists())
+                .andReturn()
+                .response
+                .getContentAsString(Charsets.UTF_8)
+                .let { mapper.readTree(it) }
+            val targetReview = reviews.find { it.get("id").asText() == reviewId }
+            assert(targetReview!!.get("replyCount").asText() == "3") { "expected 3 replyCount but ${targetReview!!.get("replyCount").asText()}"}
+        }
+
+        @Test
+        fun `댓글을 지우면 댓글수가 줄어든다`() {
+            replyId =
+                mvc.perform(
+                    post("/api/v1/review/$reviewId/reply")
+                        .header("Authorization", "Bearer $accessToken")
+                        .content(
+                            mapper.writeValueAsString(
+                                mapOf("content" to "Great review! I totally agree."),
+                            ),
+                        )
+                        .contentType(MediaType.APPLICATION_JSON),
+                ).andExpect(status().`is`(201))
+                    .andReturn()
+                    .response
+                    .getContentAsString(Charsets.UTF_8)
+                    .let { mapper.readTree(it).get("id").asText() }
+
+            var reviews = mvc.perform(
+                get("/api/v1/performance/$performanceId/review")
+                    .header("Authorization", "Bearer $accessToken"),
+            ).andExpect(status().`is`(200))
+                .andExpect(jsonPath("$[?(@.id == '$reviewId')]").exists())
+                .andReturn()
+                .response
+                .getContentAsString(Charsets.UTF_8)
+                .let { mapper.readTree(it) }
+            var targetReview = reviews.find { it.get("id").asText() == reviewId }
+            assert(targetReview!!.get("replyCount").asText() == "1") { "expected 1 replyCount but ${targetReview!!.get("replyCount").asText()}"}
+
+            mvc.perform(
+                delete("/api/v1/reply/$replyId")
+                    .header("Authorization", "Bearer $accessToken"),
+            ).andExpect(status().`is`(204))
+
+            reviews = mvc.perform(
+                get("/api/v1/performance/$performanceId/review")
+                    .header("Authorization", "Bearer $accessToken"),
+            ).andExpect(status().`is`(200))
+                .andExpect(jsonPath("$[?(@.id == '$reviewId')]").exists())
+                .andReturn()
+                .response
+                .getContentAsString(Charsets.UTF_8)
+                .let { mapper.readTree(it) }
+            targetReview = reviews.find { it.get("id").asText() == reviewId }
+            assert(targetReview!!.get("replyCount").asText() == "0") { "expected 0 replyCount but ${targetReview!!.get("likeCount").asText()}"}
+
+        }
+
+        @Test
+        fun `GET을 했을 때 댓글을 최신순으로 정렬되어 반환된다`() {
+            val otherAccessTokens = (1..5).map { num ->
+                mvc.perform(
+                    post("/api/v1/local/signup")
+                        .content(
+                            mapper.writeValueAsString(
+                                mapOf(
+                                    "username" to "otherMan2$num",
+                                    "password" to "goodPassword",
+                                    "nickname" to "NICKNAME",
+                                    "phoneNumber" to "010-1234-5678",
+                                    "email" to "hacker@example.com",
+                                ),
+                            ),
+                        )
+                        .contentType(MediaType.APPLICATION_JSON),
+                ).andExpect(status().`is`(200))
+
+                mvc.perform(
+                    post("/api/v1/local/signin")
+                        .content(
+                            mapper.writeValueAsString(
+                                mapOf(
+                                    "username" to "otherMan2$num",
+                                    "password" to "goodPassword",
+                                ),
+                            ),
+                        )
+                        .contentType(MediaType.APPLICATION_JSON),
+                ).andExpect(status().`is`(200))
+                    .andReturn()
+                    .response
+                    .getContentAsString(Charsets.UTF_8)
+                    .let { mapper.readTree(it).get("accessToken").asText() }
+            }
+            (1..5).forEach {
+                mvc.perform(
+                    post("/api/v1/review/$reviewId/reply")
+                        .header("Authorization", "Bearer ${otherAccessTokens[it-1]}")
+                        .content(
+                            mapper.writeValueAsString(
+                                mapOf("content" to "$it"),
+                            ),
+                        )
+                        .contentType(MediaType.APPLICATION_JSON),
+                ).andExpect(status().`is`(201))
+                    .andReturn()
+            }
+
+            (1..5).forEach {
+                mvc.perform(
+                    post("/api/v1/review/$reviewId/reply")
+                        .header("Authorization", "Bearer $accessToken")
+                        .content(
+                            mapper.writeValueAsString(
+                                mapOf("content" to "$it"),
+                            ),
+                        )
+                        .contentType(MediaType.APPLICATION_JSON),
+                ).andExpect(status().`is`(201))
+                    .andReturn()
+            }
+
+            val reviewReplyContent = mvc.perform(
+                get("/api/v1/review/$reviewId/reply")
+            ).andExpect(status().`is`(200))
+                .andReturn()
+                .response
+                .getContentAsString(Charsets.UTF_8)
+                .let { mapper.readTree(it) }
+                .map { it.get("content").asText() }
+            assert (reviewReplyContent == listOf("5","4","3","2","1","5","4","3","2","1")) {
+                "expected rating ${listOf("5","4","3","2","1","5","4","3","2","1")} but $reviewReplyContent"
+            }
+
+            val userReplyContent = mvc.perform(
+                get("/api/v1/me/reply")
+                    .header("Authorization", "Bearer $accessToken")
+            ).andExpect(status().`is`(200))
+                .andReturn()
+                .response
+                .getContentAsString(Charsets.UTF_8)
+                .let { mapper.readTree(it) }
+                .map { it.get("content").asText() }
+            assert (userReplyContent == (5 downTo 1).map {"$it"}) {
+                "expected rating ${(5 downTo 1).map {"$it"}} but $userReplyContent"
+            }
         }
     }
