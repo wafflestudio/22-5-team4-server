@@ -2,6 +2,9 @@ package com.wafflestudio.interpark.user.service
 
 import com.wafflestudio.interpark.user.*
 import com.wafflestudio.interpark.user.controller.User
+import com.wafflestudio.interpark.user.persistence.Provider
+import com.wafflestudio.interpark.user.persistence.SocialAccountEntity
+import com.wafflestudio.interpark.user.persistence.SocialAccountRepository
 import com.wafflestudio.interpark.user.persistence.UserEntity
 import com.wafflestudio.interpark.user.persistence.UserIdentityEntity
 import com.wafflestudio.interpark.user.persistence.UserIdentityRepository
@@ -17,6 +20,8 @@ class UserService(
     private val userRepository: UserRepository,
     private val userIdentityRepository: UserIdentityRepository,
     private val userAccessTokenUtil: UserAccessTokenUtil,
+    private val socialAccountRepository: SocialAccountRepository,
+
 ) {
     @Transactional
     fun signUp(
@@ -26,6 +31,7 @@ class UserService(
         phoneNumber: String,
         email: String,
         role: UserRole = UserRole.USER,
+        provider: Provider? = null,
     ): User {
         if (username.length < 6 || username.length > 20) {
             throw SignUpBadUsernameException()
@@ -51,9 +57,11 @@ class UserService(
                 user = user,
                 role = role,
                 hashedPassword = encryptedPassword,
-                provider = "self",
             ),
         )
+
+        // TODO: provider가 null이 아니라면 소셜계정 연동해주기
+
         return User.fromEntity(user)
     }
 
@@ -89,5 +97,34 @@ class UserService(
     @Transactional
     fun refreshAccessToken(refreshToken: String): Pair<String, String> {
         return userAccessTokenUtil.refreshAccessToken(refreshToken) ?: throw AuthenticateException()
+    }
+
+    @Transactional
+    fun linkSocialAccount(
+        userId: String,
+        provider: Provider,
+        providerId: String
+    ): UserIdentityEntity {
+        // 유저 확인
+        val userIdentity = userIdentityRepository.findById(userId)
+            .orElseThrow { UserIdentityNotFoundException() }
+
+        // 소셜 계정 중복 확인
+        val existingSocialAccount = socialAccountRepository.findByProviderAndProviderId(provider, providerId)
+        if (existingSocialAccount != null) {
+            if (existingSocialAccount.userIdentity.user.id != userId) {
+                throw SocialAccountAlreadyLinkedException()
+            }
+        }
+
+        // 소셜 계정 생성 및 연동
+        val socialAccount = SocialAccountEntity(
+            userIdentity = userIdentity,
+            provider = provider,
+            providerId = providerId
+        )
+        socialAccountRepository.save(socialAccount)
+
+        return userIdentity
     }
 }

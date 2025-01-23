@@ -1,12 +1,15 @@
 package com.wafflestudio.interpark.user.persistence
 
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToOne
+import jakarta.persistence.OneToMany
 import org.springframework.security.core.GrantedAuthority
 
 @Entity
@@ -21,10 +24,8 @@ class UserIdentityEntity(
     var role: UserRole = UserRole.USER,
     @Column(name = "hashed_password", nullable = false)
     val hashedPassword: String,
-    @Column(name = "provider", nullable = false)
-    val provider: String,
-    @Column(name = "social_id", nullable = true)
-    val socialId: String? = null,
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    val socialAccounts: MutableList<SocialAccountEntity> = mutableListOf(),
 )
 
 enum class UserRole : GrantedAuthority {

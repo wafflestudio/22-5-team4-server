@@ -64,3 +64,9 @@ class NoRefreshTokenException : UserException(
     httpStatusCode = HttpStatus.UNAUTHORIZED,
     msg = "Token not found",
 )
+
+class SocialAccountAlreadyLinkedException : UserException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.CONFLICT,
+    msg = "Social Account already linked to another user",
+)

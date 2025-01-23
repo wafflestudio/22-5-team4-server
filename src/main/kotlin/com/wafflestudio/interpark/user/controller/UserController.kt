@@ -1,6 +1,7 @@
 package com.wafflestudio.interpark.user.controller
 
 import com.wafflestudio.interpark.user.*
+import com.wafflestudio.interpark.user.persistence.Provider
 import com.wafflestudio.interpark.user.persistence.UserRole
 import com.wafflestudio.interpark.user.service.UserService
 import io.swagger.v3.oas.annotations.Operation
@@ -96,6 +97,7 @@ class UserController(
                 email = request.email,
                 phoneNumber = request.phoneNumber,
                 role = request.role,
+                provider = request.provider,
             )
         return ResponseEntity.ok(SignUpResponse(user))
     }
@@ -168,6 +170,14 @@ class UserController(
 
         return ResponseEntity.ok(TokenResponse(newAccessToken))
     }
+
+    @PostMapping("/api/v1/social/link")
+    fun linkSocialAccount(
+        @RequestBody request: LinkSocialAccountRequest
+    ): ResponseEntity<Void> {
+        userService.linkSocialAccount(request.userId, request.provider, request.providerId)
+        return ResponseEntity.ok().build()
+    }
 }
 
 data class SignUpRequest(
@@ -177,6 +187,7 @@ data class SignUpRequest(
     val phoneNumber: String,
     val email: String,
     val role: UserRole = UserRole.USER,
+    val provider: Provider? = null,
 )
 
 data class SignUpResponse(val user: User)
@@ -195,6 +206,8 @@ data class TokenResponse(
     val accessToken: String,
 )
 
-data class SignOutRequest(val refreshToken: String)
-
-data class RefreshTokenRequest(val refreshToken: String)
+data class LinkSocialAccountRequest(
+    val userId: String,
+    val provider: Provider,
+    val providerId: String,
+)
