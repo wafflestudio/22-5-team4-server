@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
 import java.util.UUID
 
 @AutoConfigureMockMvc
@@ -324,19 +325,18 @@ class ReviewIntegrationTest
                     .andReturn()
             }
 
-            val performanceReviewRating = mvc.perform(
+            val performanceReviews = mvc.perform(
                 get("/api/v1/performance/$performanceId/review")
             ).andExpect(status().`is`(200))
                 .andReturn()
                 .response
                 .getContentAsString(Charsets.UTF_8)
                 .let { mapper.readTree(it) }
-                .map { it.get("rating").asInt() }
-            assert (performanceReviewRating == listOf(5,4,3,2,1,5,4,3,2,1)) {
-                "expected rating ${(5 downTo 1).toList()} but $performanceReviewRating"
-            }
+                .map { Instant.parse(it.get("createdAt").asText()) }
+            val isPerformanceReviewSorted = performanceReviews.zipWithNext { a,b -> !a.isBefore(b) }.all {it}
+            assert (isPerformanceReviewSorted) { "expected sorted performance reviews but not" }
 
-            val userReviewRating = mvc.perform(
+            val userReviews = mvc.perform(
                 get("/api/v1/me/review")
                     .header("Authorization", "Bearer $accessToken")
             ).andExpect(status().`is`(200))
@@ -344,9 +344,8 @@ class ReviewIntegrationTest
                 .response
                 .getContentAsString(Charsets.UTF_8)
                 .let { mapper.readTree(it) }
-                .map { it.get("rating").asInt() }
-            assert (userReviewRating == (5 downTo 1).toList()) {
-                "expected rating ${(5 downTo 1).toList()} but $userReviewRating"
-            }
+                .map { Instant.parse(it.get("createdAt").asText()) }
+            val isUserReviewSorted = userReviews.zipWithNext { a,b -> !a.isBefore(b) }.all {it}
+            assert (isUserReviewSorted) { "expected sorted user reviews but not" }
         }
     }

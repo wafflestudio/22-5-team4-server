@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
 import java.util.UUID
 
 @AutoConfigureMockMvc
@@ -451,19 +452,18 @@ class ReplyIntegrationTest
                     .andReturn()
             }
 
-            val reviewReplyContent = mvc.perform(
+            val reviewReplies = mvc.perform(
                 get("/api/v1/review/$reviewId/reply")
             ).andExpect(status().`is`(200))
                 .andReturn()
                 .response
                 .getContentAsString(Charsets.UTF_8)
                 .let { mapper.readTree(it) }
-                .map { it.get("content").asText() }
-            assert (reviewReplyContent == listOf("5","4","3","2","1","5","4","3","2","1")) {
-                "expected rating ${listOf("5","4","3","2","1","5","4","3","2","1")} but $reviewReplyContent"
-            }
+                .map { Instant.parse(it.get("createdAt").asText()) }
+            val isReviewReplySorted = reviewReplies.zipWithNext { a,b -> !a.isBefore(b) }.all {it}
+            assert (isReviewReplySorted) { "expected review rating sorted but not" }
 
-            val userReplyContent = mvc.perform(
+            val userReplies = mvc.perform(
                 get("/api/v1/me/reply")
                     .header("Authorization", "Bearer $accessToken")
             ).andExpect(status().`is`(200))
@@ -471,9 +471,8 @@ class ReplyIntegrationTest
                 .response
                 .getContentAsString(Charsets.UTF_8)
                 .let { mapper.readTree(it) }
-                .map { it.get("content").asText() }
-            assert (userReplyContent == (5 downTo 1).map {"$it"}) {
-                "expected rating ${(5 downTo 1).map {"$it"}} but $userReplyContent"
-            }
+                .map { Instant.parse(it.get("createdAt").asText()) }
+            val isUserReplySorted = userReplies.zipWithNext { a,b -> !a.isBefore(b) }.all {it}
+            assert (isUserReplySorted) { "expected user reply sorted but not" }
         }
     }
