@@ -14,7 +14,7 @@ data class Reply(
         fun fromEntity(entity: ReplyEntity): Reply {
             return Reply(
                 id = entity.id!!,
-                author = entity.author.id!!,
+                author = entity.author.nickname,
                 content = entity.content,
                 createdAt = entity.createdAt,
                 updatedAt = entity.updatedAt,

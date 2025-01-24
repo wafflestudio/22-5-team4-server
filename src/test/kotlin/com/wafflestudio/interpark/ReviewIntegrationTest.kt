@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
 import java.util.UUID
 
 @AutoConfigureMockMvc
@@ -68,7 +69,18 @@ class ReviewIntegrationTest
                     .getContentAsString(Charsets.UTF_8)
                     .let { mapper.readTree(it).get("accessToken").asText() }
 
-            performanceId = "sample-performance" // 가상의 공연 ID
+            //테스트 용으로 아무 공연 Id를 하나 가져온다
+            performanceId =
+                mvc.perform(
+                    get("/api/v1/performance/search")
+                ).andExpect(status().`is`(200))
+                    .andReturn()
+                    .response
+                    .getContentAsString(Charsets.UTF_8)
+                    .let {
+                        val performances = mapper.readTree(it)
+                        performances[0].get("id").asText()
+                    }
         }
 
         @Test
@@ -97,7 +109,6 @@ class ReviewIntegrationTest
             // 4️⃣ 리뷰 조회 (성공)
             mvc.perform(
                 get("/api/v1/performance/$performanceId/review")
-                    .header("Authorization", "Bearer $accessToken"),
             ).andExpect(status().`is`(200))
                 .andExpect(jsonPath("$[?(@.id == '$reviewId')]").exists()) // reviewId가 포함된 객체가 존재하는지 확인
 
@@ -239,5 +250,102 @@ class ReviewIntegrationTest
                     .header("Authorization", "Bearer $otherAccessToken"),
             ).andExpect(status().`is`(401))
                 .andExpect(jsonPath("$.error").value("Unauthorized Access To Review"))
+        }
+
+        @Test
+        fun `GET을 했을 때 리뷰를 최신순으로 정렬하여 반환된다`() {
+            val otherAccessTokens = (1..5).map { num ->
+                mvc.perform(
+                    post("/api/v1/local/signup")
+                        .content(
+                            mapper.writeValueAsString(
+                                mapOf(
+                                    "username" to "otherMan$num",
+                                    "password" to "goodPassword",
+                                    "nickname" to "NICKNAME",
+                                    "phoneNumber" to "010-1234-5678",
+                                    "email" to "hacker@example.com",
+                                ),
+                            ),
+                        )
+                        .contentType(MediaType.APPLICATION_JSON),
+                ).andExpect(status().`is`(200))
+
+                mvc.perform(
+                    post("/api/v1/local/signin")
+                        .content(
+                            mapper.writeValueAsString(
+                                mapOf(
+                                    "username" to "otherMan$num",
+                                    "password" to "goodPassword",
+                                ),
+                            ),
+                        )
+                        .contentType(MediaType.APPLICATION_JSON),
+                ).andExpect(status().`is`(200))
+                    .andReturn()
+                    .response
+                    .getContentAsString(Charsets.UTF_8)
+                    .let { mapper.readTree(it).get("accessToken").asText() }
+            }
+
+            (1..5).forEach {
+                mvc.perform(
+                    post("/api/v1/performance/$performanceId/review")
+                        .header("Authorization", "Bearer ${otherAccessTokens[it-1]}")
+                        .content(
+                            mapper.writeValueAsString(
+                                mapOf(
+                                    "rating" to it,
+                                    "title" to "Great Performance!",
+                                    "content" to "Absolutely amazing. Highly recommend!",
+                                ),
+                            ),
+                        )
+                        .contentType(MediaType.APPLICATION_JSON),
+                ).andExpect(status().`is`(201))
+                    .andReturn()
+            }
+
+            (1..5).forEach {
+                mvc.perform(
+                    post("/api/v1/performance/$performanceId/review")
+                        .header("Authorization", "Bearer ${accessToken}")
+                        .content(
+                            mapper.writeValueAsString(
+                                mapOf(
+                                    "rating" to it,
+                                    "title" to "Great Performance!",
+                                    "content" to "Absolutely amazing. Highly recommend!",
+                                ),
+                            ),
+                        )
+                        .contentType(MediaType.APPLICATION_JSON),
+                ).andExpect(status().`is`(201))
+                    .andReturn()
+            }
+
+            val performanceReviews = mvc.perform(
+                get("/api/v1/performance/$performanceId/review")
+            ).andExpect(status().`is`(200))
+                .andReturn()
+                .response
+                .getContentAsString(Charsets.UTF_8)
+                .let { mapper.readTree(it) }
+                .map { Instant.parse(it.get("createdAt").asText()) }
+            val isPerformanceReviewSorted = performanceReviews.zipWithNext { a,b -> !a.isBefore(b) }.all {it}
+            assert (isPerformanceReviewSorted) { "expected sorted performance reviews but not" }
+
+            val userReviews = mvc.perform(
+                get("/api/v1/me/review")
+                    .header("Authorization", "Bearer $accessToken")
+            ).andExpect(status().`is`(200))
+                .andReturn()
+                .response
+                .getContentAsString(Charsets.UTF_8)
+                .let { mapper.readTree(it) }
+                .map { Instant.parse(it.get("createdAt").asText()) }
+            val isUserReviewSorted = userReviews.zipWithNext { a,b -> !a.isBefore(b) }.all {it}
+            assert (isUserReviewSorted) { "expected sorted user reviews but not" }
         }
     }

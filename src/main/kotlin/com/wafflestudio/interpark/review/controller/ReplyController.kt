@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*
 class ReplyController(
     private val replyService: ReplyService,
 ) {
-    @GetMapping("/api/v1/user/me/reply")
+    @GetMapping("/api/v1/me/reply")
     fun getRepliesByUser(
         @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<GetReplyResponse>{
