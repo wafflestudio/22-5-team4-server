@@ -1,6 +1,5 @@
 package com.wafflestudio.interpark.security
 
-import com.wafflestudio.interpark.user.AuthenticateException
 import com.wafflestudio.interpark.user.UserAccessTokenUtil
 import com.wafflestudio.interpark.user.service.UserDetailsServiceImpl
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -29,19 +28,21 @@ class JwtAuthenticationFilter(
             val accessToken = header.split(" ")[1]
 
             // 2) UserAccessTokenUtil로 토큰 유효성 검사
-            //    유효하면 userId가 반환되고, 유효하지 않으면 AuthenticateException 던짐
-            val subject = userAccessTokenUtil.validateAccessToken(accessToken) ?: throw AuthenticateException()
+            //    유효하면 userId가 반환되고, 유효하지 않으면 null
+            val subject = userAccessTokenUtil.validateAccessToken(accessToken)
 
-            // 3) subject(userId)를 기반으로 DB에서 유저/권한 정보 조회 (UserDetails)
-            val userDetails = userDetailsService.loadUserByUserId(subject)
+            if (subject != null) {
+                // 3) subject(userId)를 기반으로 DB에서 유저/권한 정보 조회 (UserDetails)
+                val userDetails = userDetailsService.loadUserByUserId(subject)
 
-            // 4) Spring Security에 Authentication 등록
-            val authentication = UsernamePasswordAuthenticationToken(
-                userDetails,
-                null,
-                userDetails.authorities
-            )
-            SecurityContextHolder.getContext().authentication = authentication
+                // 4) Spring Security에 Authentication 등록
+                val authentication = UsernamePasswordAuthenticationToken(
+                    userDetails,
+                    null,
+                    userDetails.authorities
+                )
+                SecurityContextHolder.getContext().authentication = authentication
+            }
         }
 
         // 5) 체인 계속 진행
