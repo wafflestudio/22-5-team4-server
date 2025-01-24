@@ -24,7 +24,6 @@ class SeatIntegrationTest
 constructor(
     private val mvc: MockMvc,
     private val mapper: ObjectMapper,
-    private val seatCreationService: SeatCreationService,
 ) {
     private lateinit var accessToken: String
     private lateinit var performanceEventId: String

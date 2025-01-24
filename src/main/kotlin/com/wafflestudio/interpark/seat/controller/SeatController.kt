@@ -22,7 +22,7 @@ class SeatController(
         @PathVariable performanceEventId: String,
     ): ResponseEntity<GetAvailableSeatsResponse> {
         val seats = seatService.getAvailableSeats(performanceEventId)
-        return ResponseEntity.ok(GetAvailableSeatsResponse(seats.map { AvailableSeat(it.first, it.second) }))
+        return ResponseEntity.ok(GetAvailableSeatsResponse(seats))
     }
 
     @PostMapping("/api/v1/reservation/reserve")
@@ -30,7 +30,7 @@ class SeatController(
         @RequestBody request: ReserveSeatRequest,
         @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<ReserveSeatResponse> {
-        val reservationId = seatService.reserveSeat(userDetails.getUserId(), request.reservationId)
+        val reservationId = seatService.reserveSeat(userDetails.getUserId(), request.performanceEventId, request.seatId)
         return ResponseEntity.status(200).body(ReserveSeatResponse(reservationId))
     }
 
@@ -68,17 +68,14 @@ data class BriefReservation(
     val performanceDate: LocalDate,
     val reservationDate: LocalDate,
 )
-data class AvailableSeat(
-    val reservationId: String,
-    val seat: Seat,
-)
 
 data class GetAvailableSeatsResponse(
-    val availableSeats: List<AvailableSeat>,
+    val availableSeats: List<Seat>,
 )
 
 data class ReserveSeatRequest(
-    val reservationId: String,
+    val performanceEventId: String,
+    val seatId: String,
 )
 
 data class ReserveSeatResponse(

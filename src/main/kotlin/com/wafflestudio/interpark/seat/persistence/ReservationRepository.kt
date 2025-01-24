@@ -9,9 +9,5 @@ interface ReservationRepository : JpaRepository<ReservationEntity, String> {
     @Query("SELECT r FROM ReservationEntity r WHERE r.user.id = :userId ORDER BY r.reservationDate DESC")
     fun findByUserId(userId: String): List<ReservationEntity>
 
-    fun findByPerformanceEventIdAndReservedIsFalse(performanceEventId: String): List<ReservationEntity>
-
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT r FROM ReservationEntity r WHERE r.id = :id")
-    fun findByIdWithWriteLock(id: String): ReservationEntity?
+    fun findByPerformanceEventId(performanceEventId: String): List<ReservationEntity>
 }
