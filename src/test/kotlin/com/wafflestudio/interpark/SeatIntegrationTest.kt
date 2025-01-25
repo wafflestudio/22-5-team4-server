@@ -314,7 +314,7 @@ constructor(
                 .content(
                     mapper.writeValueAsString(
                         mapOf(
-                            "username" to "correct2",
+                            "username" to "seatTest2",
                             "password" to "12345678",
                             "nickname" to "examplename",
                             "phoneNumber" to "010-0000-0000",
@@ -331,7 +331,7 @@ constructor(
                     .content(
                         mapper.writeValueAsString(
                             mapOf(
-                                "username" to "correct2",
+                                "username" to "seatTest2",
                                 "password" to "12345678",
                             ),
                         ),
