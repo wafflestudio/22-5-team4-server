@@ -85,7 +85,7 @@ constructor(
                     performanceEvents[0].get("id").asText()
                 }
 
-        val reservationId = mvc.perform(
+        val seatId = mvc.perform(
             get("/api/v1/seat/$performanceEventId/available")
         ).andExpect(status().`is`(200))
             .andReturn()
@@ -93,7 +93,7 @@ constructor(
             .getContentAsString(Charsets.UTF_8)
             .let {
                 val availableSeats = mapper.readTree(it).get("availableSeats")
-                availableSeats[0].get("reservationId").asText()
+                availableSeats[0].get("id").asText()
             }
 
         val results = mutableListOf<Int>()
@@ -106,7 +106,8 @@ constructor(
                         .content(
                             mapper.writeValueAsString(
                                 mapOf(
-                                    "reservationId" to reservationId,
+                                    "performanceEventId" to performanceEventId,
+                                    "seatId" to seatId,
                                 ),
                             ),
                         )
@@ -114,7 +115,7 @@ constructor(
                         .contentType(MediaType.APPLICATION_JSON)
                 ).andReturn().response.status
                 results.add(responseStatus)
-                if (responseStatus == 200) { successCnt.incrementAndGet() }
+                if (responseStatus == 201) { successCnt.incrementAndGet() }
                 if (responseStatus == 409) { conflictCnt.incrementAndGet() }
             }
         }
@@ -182,7 +183,7 @@ constructor(
                     performanceEvents[0].get("id").asText()
                 }
 
-        val reservationId = mvc.perform(
+        val seatId = mvc.perform(
             get("/api/v1/seat/$performanceEventId/available")
         ).andExpect(status().`is`(200))
             .andReturn()
@@ -190,7 +191,7 @@ constructor(
             .getContentAsString(Charsets.UTF_8)
             .let {
                 val availableSeats = mapper.readTree(it).get("availableSeats")
-                availableSeats[0].get("reservationId").asText()
+                availableSeats[0].get("id").asText()
             }
 
         val results = mutableListOf<Int>()
@@ -203,7 +204,8 @@ constructor(
                         .content(
                             mapper.writeValueAsString(
                                 mapOf(
-                                    "reservationId" to reservationId,
+                                    "performanceEventId" to performanceEventId,
+                                    "seatId" to seatId,
                                 ),
                             ),
                         )
@@ -211,7 +213,7 @@ constructor(
                         .contentType(MediaType.APPLICATION_JSON)
                 ).andReturn().response.status
                 results.add(responseStatus)
-                if (responseStatus == 200) { successCnt.incrementAndGet() }
+                if (responseStatus == 201) { successCnt.incrementAndGet() }
                 if (responseStatus == 409) { conflictCnt.incrementAndGet() }
             }
         }
@@ -279,7 +281,7 @@ constructor(
                     performanceEvents[0].get("id").asText()
                 }
 
-        val reservationId = mvc.perform(
+        val seatId = mvc.perform(
             get("/api/v1/seat/$performanceEventId/available")
         ).andExpect(status().`is`(200))
             .andReturn()
@@ -287,7 +289,7 @@ constructor(
             .getContentAsString(Charsets.UTF_8)
             .let {
                 val availableSeats = mapper.readTree(it).get("availableSeats")
-                (1..10).map { availableSeats[it].get("reservationId").asText() }
+                (1..10).map {availableSeats[it].get("id").asText() }
             }
 
         val results = mutableListOf<Int>()
@@ -300,7 +302,8 @@ constructor(
                         .content(
                             mapper.writeValueAsString(
                                 mapOf(
-                                    "reservationId" to reservationId[it],
+                                    "performanceEventId" to performanceEventId,
+                                    "seatId" to seatId[it],
                                 ),
                             ),
                         )
@@ -308,7 +311,7 @@ constructor(
                         .contentType(MediaType.APPLICATION_JSON)
                 ).andReturn().response.status
                 results.add(responseStatus)
-                if (responseStatus == 200) { successCnt.incrementAndGet() }
+                if (responseStatus == 201) { successCnt.incrementAndGet() }
                 if (responseStatus == 409) { conflictCnt.incrementAndGet() }
             }
         }

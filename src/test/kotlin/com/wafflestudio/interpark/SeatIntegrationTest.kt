@@ -170,7 +170,6 @@ constructor(
             .getContentAsString(Charsets.UTF_8)
             .let { mapper.readTree(it).get("reservationId").asText() }
 
-
         val myReservations = mvc.perform(
                 get("/api/v1/me/reservation")
                     .header("Authorization", "Bearer $accessToken")
@@ -187,7 +186,7 @@ constructor(
 
     @Test
     fun `본인의 예매를 자세히 볼 수 있다`() {
-        val reservationId = mvc.perform(
+        val seatId = mvc.perform(
             get("/api/v1/seat/$performanceEventId/available")
         ).andExpect(status().`is`(200))
             .andReturn()
@@ -195,22 +194,26 @@ constructor(
             .getContentAsString(Charsets.UTF_8)
             .let {
                 val availableSeats = mapper.readTree(it).get("availableSeats")
-                availableSeats[0].get("reservationId").asText()
+                availableSeats[0].get("id").asText()
             }
-        mvc.perform(
+        val reservationId = mvc.perform(
             post("/api/v1/reservation/reserve")
                 .content(
                     mapper.writeValueAsString(
                         mapOf(
-                            "reservationId" to reservationId,
+                            "performanceEventId" to performanceEventId,
+                            "seatId" to seatId,
                         ),
                     ),
                 )
                 .header("Authorization", "Bearer $accessToken")
                 .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().`is`(200))
-
-        val myReservationIds = mvc.perform(
+        ).andExpect(status().`is`(201))
+            .andReturn()
+            .response
+            .getContentAsString(Charsets.UTF_8)
+            .let { mapper.readTree(it).get("reservationId").asText() }
+        mvc.perform(
             get("/api/v1/reservation/detail/$reservationId")
                 .header("Authorization", "Bearer $accessToken")
         ).andExpect(status().`is`(200))
@@ -218,7 +221,7 @@ constructor(
 
     @Test
     fun `좌석을 취소할 수 있다`() {
-        val reservationId = mvc.perform(
+        val seatId = mvc.perform(
             get("/api/v1/seat/$performanceEventId/available")
         ).andExpect(status().`is`(200))
             .andReturn()
@@ -226,20 +229,25 @@ constructor(
             .getContentAsString(Charsets.UTF_8)
             .let {
                 val availableSeats = mapper.readTree(it).get("availableSeats")
-                availableSeats[0].get("reservationId").asText()
+                availableSeats[0].get("id").asText()
             }
-        mvc.perform(
+        val reservationId = mvc.perform(
             post("/api/v1/reservation/reserve")
                 .content(
                     mapper.writeValueAsString(
                         mapOf(
-                            "reservationId" to reservationId,
+                            "performanceEventId" to performanceEventId,
+                            "seatId" to seatId,
                         ),
                     ),
                 )
                 .header("Authorization", "Bearer $accessToken")
                 .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().`is`(200))
+        ).andExpect(status().`is`(201))
+            .andReturn()
+            .response
+            .getContentAsString(Charsets.UTF_8)
+            .let { mapper.readTree(it).get("reservationId").asText() }
 
         mvc.perform(
             post("/api/v1/reservation/cancel")
@@ -260,18 +268,19 @@ constructor(
                 .content(
                     mapper.writeValueAsString(
                         mapOf(
-                            "reservationId" to reservationId,
+                            "performanceEventId" to performanceEventId,
+                            "seatId" to seatId,
                         ),
                     ),
                 )
                 .header("Authorization", "Bearer $accessToken")
                 .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().`is`(200))
+        ).andExpect(status().`is`(201))
     }
 
     @Test
     fun `다른 사람은 좌석을 취소할 수 없다`() {
-        val reservationId = mvc.perform(
+        val seatId = mvc.perform(
             get("/api/v1/seat/$performanceEventId/available")
         ).andExpect(status().`is`(200))
             .andReturn()
@@ -279,8 +288,26 @@ constructor(
             .getContentAsString(Charsets.UTF_8)
             .let {
                 val availableSeats = mapper.readTree(it).get("availableSeats")
-                availableSeats[0].get("reservationId").asText()
+                availableSeats[0].get("id").asText()
             }
+        val reservationId = mvc.perform(
+            post("/api/v1/reservation/reserve")
+                .content(
+                    mapper.writeValueAsString(
+                        mapOf(
+                            "performanceEventId" to performanceEventId,
+                            "seatId" to seatId,
+                        ),
+                    ),
+                )
+                .header("Authorization", "Bearer $accessToken")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().`is`(201))
+            .andReturn()
+            .response
+            .getContentAsString(Charsets.UTF_8)
+            .let { mapper.readTree(it).get("reservationId").asText() }
+
 
         mvc.perform(
             post("/api/v1/local/signup")
@@ -315,19 +342,6 @@ constructor(
                 .response
                 .getContentAsString(Charsets.UTF_8)
                 .let { mapper.readTree(it).get("accessToken").asText() }
-
-        mvc.perform(
-            post("/api/v1/reservation/reserve")
-                .content(
-                    mapper.writeValueAsString(
-                        mapOf(
-                            "reservationId" to reservationId,
-                        ),
-                    ),
-                )
-                .header("Authorization", "Bearer $accessToken")
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().`is`(200))
 
         mvc.perform(
             post("/api/v1/reservation/cancel")
