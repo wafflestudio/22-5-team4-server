@@ -24,13 +24,39 @@ GET http://localhost:80/api/v1/performance/search
 Accept: application/json
 
 ### event 찾기
-GET http://localhost:80/api/v1/performance-event/e1656490-a5be-446e-b119-d8efa393dd05/2025-01-11
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkODUyNjcwMy0zM2Y2LTRmM2ItYTdhMC1mOGZlOGQ3NTcxNDAiLCJpYXQiOjE3MzcyNzcyMjQsImV4cCI6MTczNzI3ODEyNH0.KObDWrRBDRZU-iNyFHHherkbxIjigmjpVn-Iv5Lx3yY
+GET http://localhost:80/api/v1/performance-event/e3516b5b-a157-4fd6-9b0a-81fc1de48798/2024-11-29
+Accept: application/json
 
 ### event 받기
 GET http://localhost:80/api/v1/performance-event
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkODUyNjcwMy0zM2Y2LTRmM2ItYTdhMC1mOGZlOGQ3NTcxNDAiLCJpYXQiOjE3MzcyNzcyMjQsImV4cCI6MTczNzI3ODEyNH0.KObDWrRBDRZU-iNyFHHherkbxIjigmjpVn-Iv5Lx3yY
 
 ### 가능한 좌석 받기
-GET http://localhost:80/api/v1/seat/eade9900-a141-4532-bd2c-c362ceb7c8c0/available
+GET http://localhost:80/api/v1/seat/0a0684f4-e69e-40bb-9590-eab0616148be/available
 Accept: application/json
+
+### 예매하기
+POST http://localhost/api/v1/reservation/reserve
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjMmE5Mjc0Ny0zOGRlLTRjNmQtOWNlYi00MTUyYmZiMzJjNGEiLCJpYXQiOjE3Mzc4MjIwNzMsImV4cCI6MTczNzgyMjk3M30.FV6LZCg4qkJ1JVkOiHdhpgIWur4bAxzr0ZsQ9Pg9BRo
+Content-Type: application/json
+
+{
+  "performanceEventId": "0a0684f4-e69e-40bb-9590-eab0616148be",
+  "seatId": "fa431f1d-200e-4ec6-8da6-b24d030fd14a"
+}
+
+### 예매정보 확인하기
+GET http://localhost/api/v1/me/reservation
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjMmE5Mjc0Ny0zOGRlLTRjNmQtOWNlYi00MTUyYmZiMzJjNGEiLCJpYXQiOjE3Mzc4MjIwNzMsImV4cCI6MTczNzgyMjk3M30.FV6LZCg4qkJ1JVkOiHdhpgIWur4bAxzr0ZsQ9Pg9BRo
+
+### 예매 취소하기
+POST http://localhost/api/v1/reservation/cancel
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjMmE5Mjc0Ny0zOGRlLTRjNmQtOWNlYi00MTUyYmZiMzJjNGEiLCJpYXQiOjE3Mzc4MjIwNzMsImV4cCI6MTczNzgyMjk3M30.FV6LZCg4qkJ1JVkOiHdhpgIWur4bAxzr0ZsQ9Pg9BRo
+Content-Type: application/json
+
+{
+  "reservationId": "825573d0-3406-464a-84ad-dd682a5cd5a4"
+}
+
+### 예매정보 확인하기
+GET http://localhost/api/v1/me/reservation
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjMmE5Mjc0Ny0zOGRlLTRjNmQtOWNlYi00MTUyYmZiMzJjNGEiLCJpYXQiOjE3Mzc4MjIwNzMsImV4cCI6MTczNzgyMjk3M30.FV6LZCg4qkJ1JVkOiHdhpgIWur4bAxzr0ZsQ9Pg9BRo
