@@ -250,14 +250,7 @@ constructor(
             .let { mapper.readTree(it).get("reservationId").asText() }
 
         mvc.perform(
-            post("/api/v1/reservation/cancel")
-                .content(
-                    mapper.writeValueAsString(
-                        mapOf(
-                            "reservationId" to reservationId,
-                        ),
-                    ),
-                )
+            delete("/api/v1/reservation/$reservationId")
                 .header("Authorization", "Bearer $accessToken")
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().`is`(204))
@@ -344,14 +337,7 @@ constructor(
                 .let { mapper.readTree(it).get("accessToken").asText() }
 
         mvc.perform(
-            post("/api/v1/reservation/cancel")
-                .content(
-                    mapper.writeValueAsString(
-                        mapOf(
-                            "reservationId" to reservationId,
-                        ),
-                    ),
-                )
+            delete("/api/v1/reservation/$reservationId")
                 .header("Authorization", "Bearer $otherAccessToken")
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().`is`(403))
