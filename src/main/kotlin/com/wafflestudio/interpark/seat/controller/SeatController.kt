@@ -31,7 +31,7 @@ class SeatController(
         @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<ReserveSeatResponse> {
         val reservationId = seatService.reserveSeat(userDetails.getUserId(), request.performanceEventId, request.seatId)
-        return ResponseEntity.status(200).body(ReserveSeatResponse(reservationId))
+        return ResponseEntity.status(201).body(ReserveSeatResponse(reservationId))
     }
 
     @GetMapping("/api/v1/me/reservation")

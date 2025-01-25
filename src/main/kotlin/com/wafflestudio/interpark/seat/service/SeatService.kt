@@ -7,6 +7,7 @@ import com.wafflestudio.interpark.seat.ReservationPermissionDeniedException
 import com.wafflestudio.interpark.seat.ReservedAlreadyException
 import com.wafflestudio.interpark.seat.ReservedYetException
 import com.wafflestudio.interpark.seat.SeatNotFoundException
+import com.wafflestudio.interpark.seat.WrongSeatException
 import com.wafflestudio.interpark.seat.controller.BriefReservation
 import com.wafflestudio.interpark.seat.controller.Reservation
 import com.wafflestudio.interpark.seat.controller.Seat
@@ -46,6 +47,7 @@ class SeatService(
         val targetUser = userRepository.findByIdOrNull(userId) ?: throw AuthenticateException()
         val targetSeat = seatRepository.findByIdOrNull(seatId) ?: throw SeatNotFoundException()
         val targetPerformanceEvent = performanceEventRepository.findByIdOrNull(performanceEventId) ?: throw PerformanceEventNotFoundException()
+        if(targetSeat.performanceHall != targetPerformanceEvent.performanceHall) { throw WrongSeatException() }
         val newReservation = ReservationEntity(
             user = targetUser,
             seat = targetSeat,
@@ -54,7 +56,7 @@ class SeatService(
         )
 
         val savedReservationId = try {
-            reservationRepository.save(newReservation).id!!
+            reservationRepository.saveAndFlush(newReservation).id!!
         } catch (e: DataIntegrityViolationException) {
             throw ReservedAlreadyException()
         }

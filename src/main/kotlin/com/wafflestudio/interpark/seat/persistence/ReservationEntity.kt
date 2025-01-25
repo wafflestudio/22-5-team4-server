@@ -18,7 +18,7 @@ import java.time.LocalDate
 @Table(
     name = "reservations",
     uniqueConstraints = [
-        UniqueConstraint(columnNames = ["performance_event_id", "seat_id"])
+        UniqueConstraint(name = "UniquePerfEvAndSeat", columnNames = ["performance_event_id", "seat_id"])
     ]
 )
 class ReservationEntity(
@@ -32,7 +32,7 @@ class ReservationEntity(
     @JoinColumn(name = "seat_id", nullable = false)
     val seat: SeatEntity,
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "performance_event_id")
+    @JoinColumn(name = "performance_event_id", nullable = false)
     val performanceEvent: PerformanceEventEntity,
     @Column(name = "reservation_date")
     var reservationDate: LocalDate?,

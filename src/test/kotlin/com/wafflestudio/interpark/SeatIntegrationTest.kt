@@ -18,7 +18,6 @@ import java.util.UUID
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Transactional
 class SeatIntegrationTest
 @Autowired
 constructor(
@@ -97,7 +96,7 @@ constructor(
 
     @Test
     fun `좌석을 예매할 수 있고 예매되면 더 이상 예매되지 못한다`() {
-        val reservationId = mvc.perform(
+        val seatId = mvc.perform(
             get("/api/v1/seat/$performanceEventId/available")
         ).andExpect(status().`is`(200))
             .andReturn()
@@ -105,27 +104,34 @@ constructor(
             .getContentAsString(Charsets.UTF_8)
             .let {
                 val availableSeats = mapper.readTree(it).get("availableSeats")
-                availableSeats[0].get("reservationId").asText()
+                availableSeats[0].get("id").asText()
             }
         mvc.perform(
             post("/api/v1/reservation/reserve")
                 .content(
                     mapper.writeValueAsString(
                         mapOf(
-                            "reservationId" to reservationId,
+                            "performanceEventId" to performanceEventId,
+                            "seatId" to seatId,
                         ),
                     ),
                 )
                 .header("Authorization", "Bearer $accessToken")
                 .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().`is`(200))
+        ).andExpect(status().`is`(201))
+            .andReturn()
+            .response
+            .getContentAsString(Charsets.UTF_8)
+            .let { mapper.readTree(it).get("reservationId").asText() }
+
         //한번 예매된 좌석은 예매되지 않는다
         mvc.perform(
             post("/api/v1/reservation/reserve")
                 .content(
                     mapper.writeValueAsString(
                         mapOf(
-                            "reservationId" to reservationId,
+                            "performanceEventId" to performanceEventId,
+                            "seatId" to seatId,
                         ),
                     ),
                 )
@@ -136,7 +142,7 @@ constructor(
 
     @Test
     fun `본인의 예매내역을 확인할 수 있다`() {
-        val reservationId = mvc.perform(
+        val seatId = mvc.perform(
             get("/api/v1/seat/$performanceEventId/available")
         ).andExpect(status().`is`(200))
             .andReturn()
@@ -144,20 +150,26 @@ constructor(
             .getContentAsString(Charsets.UTF_8)
             .let {
                 val availableSeats = mapper.readTree(it).get("availableSeats")
-                availableSeats[0].get("reservationId").asText()
+                availableSeats[0].get("id").asText()
             }
-        mvc.perform(
+        val reservationId = mvc.perform(
             post("/api/v1/reservation/reserve")
                 .content(
                     mapper.writeValueAsString(
                         mapOf(
-                            "reservationId" to reservationId,
+                            "performanceEventId" to performanceEventId,
+                            "seatId" to seatId,
                         ),
                     ),
                 )
                 .header("Authorization", "Bearer $accessToken")
                 .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().`is`(200))
+        ).andExpect(status().`is`(201))
+            .andReturn()
+            .response
+            .getContentAsString(Charsets.UTF_8)
+            .let { mapper.readTree(it).get("reservationId").asText() }
+
 
         val myReservations = mvc.perform(
                 get("/api/v1/me/reservation")

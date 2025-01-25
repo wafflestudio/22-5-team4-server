@@ -17,6 +17,12 @@ class SeatNotFoundException : SeatException(
     msg = "Seat Not Found",
 )
 
+class WrongSeatException : SeatException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.BAD_REQUEST,
+    msg = "Wrong Seat",
+)
+
 class ReservationNotFoundException : SeatException(
     errorCode = 0,
     httpStatusCode = HttpStatus.NOT_FOUND,
