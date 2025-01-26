@@ -6,6 +6,7 @@ import com.wafflestudio.interpark.user.controller.User
 import com.wafflestudio.interpark.user.controller.UserDetailsImpl
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -22,7 +23,7 @@ class SeatController(
         @PathVariable performanceEventId: String,
     ): ResponseEntity<GetAvailableSeatsResponse> {
         val seats = seatService.getAvailableSeats(performanceEventId)
-        return ResponseEntity.ok(GetAvailableSeatsResponse(seats.map { AvailableSeat(it.first, it.second) }))
+        return ResponseEntity.ok(GetAvailableSeatsResponse(seats))
     }
 
     @PostMapping("/api/v1/reservation/reserve")
@@ -30,8 +31,8 @@ class SeatController(
         @RequestBody request: ReserveSeatRequest,
         @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<ReserveSeatResponse> {
-        val reservationId = seatService.reserveSeat(userDetails.getUserId(), request.reservationId)
-        return ResponseEntity.status(200).body(ReserveSeatResponse(reservationId))
+        val reservationId = seatService.reserveSeat(userDetails.getUserId(), request.performanceEventId, request.seatId)
+        return ResponseEntity.status(201).body(ReserveSeatResponse(reservationId))
     }
 
     @GetMapping("/api/v1/me/reservation")
@@ -51,12 +52,12 @@ class SeatController(
         return ResponseEntity.status(200).body(GetReservedSeatDetailResponse(reservationDetail))
     }
 
-    @PostMapping("/api/v1/reservation/cancel")
+    @DeleteMapping("/api/v1/reservation/{reservationId}")
     fun cancelReservedSeat(
-        @RequestBody request: CancelReserveSeatRequest,
+        @PathVariable reservationId: String,
         @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<Void> {
-        seatService.cancelReservedSeat(userDetails.getUserId(), request.reservationId)
+        seatService.cancelReservedSeat(userDetails.getUserId(), reservationId)
         return ResponseEntity.noContent().build()
     }
 }
@@ -68,17 +69,14 @@ data class BriefReservation(
     val performanceDate: LocalDate,
     val reservationDate: LocalDate,
 )
-data class AvailableSeat(
-    val reservationId: String,
-    val seat: Seat,
-)
 
 data class GetAvailableSeatsResponse(
-    val availableSeats: List<AvailableSeat>,
+    val availableSeats: List<Seat>,
 )
 
 data class ReserveSeatRequest(
-    val reservationId: String,
+    val performanceEventId: String,
+    val seatId: String,
 )
 
 data class ReserveSeatResponse(
@@ -91,8 +89,4 @@ data class GetMyReservationsResponse(
 
 data class GetReservedSeatDetailResponse(
     val reservedSeat: Reservation
-)
-
-data class CancelReserveSeatRequest(
-    val reservationId: String,
 )

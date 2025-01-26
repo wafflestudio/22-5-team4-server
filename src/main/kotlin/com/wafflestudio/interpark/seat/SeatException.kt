@@ -11,6 +11,18 @@ sealed class SeatException(
     cause: Throwable? = null,
 ) : DomainException(errorCode, httpStatusCode, msg, cause)
 
+class SeatNotFoundException : SeatException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.NOT_FOUND,
+    msg = "Seat Not Found",
+)
+
+class WrongSeatException : SeatException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.BAD_REQUEST,
+    msg = "Wrong Seat",
+)
+
 class ReservationNotFoundException : SeatException(
     errorCode = 0,
     httpStatusCode = HttpStatus.NOT_FOUND,
