@@ -17,7 +17,7 @@ abstract class CursorPageService<T>(
 
         val cursorSpec = CursorSpecification.withCursor<T>(
             cursor = cursor,
-            sortFieldName = cursorPageable.sortFieldName ?: "id",
+            sortFieldName = cursorPageable.sortFieldName,
             isDescending = cursorPageable.isDescending,
         )
 
@@ -36,7 +36,7 @@ abstract class CursorPageService<T>(
 
 data class CursorPageable(
     val cursor: String?,
-    val sortFieldName: String? = null,
+    val sortFieldName: String = "id", // 기준이 없다면 id만 가지고 정렬
     val isDescending: Boolean = true,
     val size: Int = 5,
 ) {

@@ -27,12 +27,8 @@ class PerformanceController(
         @RequestParam category: PerformanceCategory?,
         @RequestParam cursor: String?,
     ): ResponseEntity<SearchPerformanceResponse> {
-        // @RequestParam(defaultValue) 대신 내부적으로 기본값 처리
-        val sortField: String? = null
-        val isDescending = false
-        val size = 5
-
-        val cursorPageable= CursorPageable(cursor, sortField, isDescending, size)
+        // @RequestParam(defaultValue) 대신 데이터 클래스 내부적으로 기본값 처리
+        val cursorPageable= CursorPageable(cursor = cursor)
 
         val queriedPerformances = performanceService.searchPerformance(title, category, cursorPageable)
         return ResponseEntity.ok(queriedPerformances)
