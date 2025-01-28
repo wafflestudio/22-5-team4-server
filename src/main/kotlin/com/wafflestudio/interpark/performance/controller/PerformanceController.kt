@@ -1,5 +1,6 @@
 package com.wafflestudio.interpark.performance.controller
 
+import com.wafflestudio.interpark.pagination.CursorPageable
 import com.wafflestudio.interpark.performance.persistence.PerformanceCategory
 import io.swagger.v3.oas.annotations.Operation
 import com.wafflestudio.interpark.performance.service.PerformanceService
@@ -24,8 +25,16 @@ class PerformanceController(
     fun searchPerformance(
         @RequestParam title: String?,
         @RequestParam category: PerformanceCategory?,
+        @RequestParam cursor: String?,
     ): ResponseEntity<SearchPerformanceResponse> {
-        val queriedPerformances = performanceService.searchPerformance(title, category)
+        // @RequestParam(defaultValue) 대신 내부적으로 기본값 처리
+        val sortField: String? = null
+        val isDescending = false
+        val size = 5
+
+        val cursorPageable= CursorPageable(cursor, sortField, isDescending, size)
+
+        val queriedPerformances = performanceService.searchPerformance(title, category, cursorPageable)
         return ResponseEntity.ok(queriedPerformances)
     }
 

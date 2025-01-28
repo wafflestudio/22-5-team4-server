@@ -1,5 +1,7 @@
 package com.wafflestudio.interpark.performance.service
 
+import com.wafflestudio.interpark.pagination.CursorPageService
+import com.wafflestudio.interpark.pagination.CursorPageable
 import com.wafflestudio.interpark.performance.PerformanceNotFoundException
 import com.wafflestudio.interpark.performance.controller.BriefPerformanceDetail
 import com.wafflestudio.interpark.performance.controller.Performance
@@ -14,10 +16,11 @@ import org.springframework.data.repository.findByIdOrNull
 class PerformanceService(
     private val performanceRepository: PerformanceRepository,
     private val performanceEventRepository: PerformanceEventRepository,
-) {
+) : CursorPageService<PerformanceEntity>(performanceRepository) {
     fun searchPerformance(
         title: String?,
         category: PerformanceCategory?,
+        cursorPageable: CursorPageable,
     ): List<BriefPerformanceDetail> {
         // 시작점: 아무 조건이 없는 스펙
         var spec: Specification<PerformanceEntity> = Specification.where(null)
@@ -33,7 +36,7 @@ class PerformanceService(
         }
 
         // 스펙이 결국 아무 조건도 없으면 -> 전체 검색
-        val performanceEntities = performanceRepository.findAll(spec)
+        val performanceEntities = findAllWithCursor(cursorPageable, spec)
 
         // BriefDetail DTO 변환
         return performanceEntities.map { performanceEntity ->

@@ -4,6 +4,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
+import java.awt.Cursor
 
 abstract class CursorPageService<T>(
     private val repository: JpaSpecificationExecutor<T>
@@ -12,15 +13,11 @@ abstract class CursorPageService<T>(
         cursorPageable: CursorPageable,
         specification: Specification<T>? = null,
     ): List<T> {
-        val cursor = if (cursorPageable.fieldCursor != null && cursorPageable.idCursor != null) {
-            cursorPageable.fieldCursor to cursorPageable.idCursor
-        } else {
-            null
-        }
+        val cursor = cursorPageable.decodeCursor()
 
         val cursorSpec = CursorSpecification.withCursor<T>(
             cursor = cursor,
-            sortFieldName = cursorPageable.sortFieldName,
+            sortFieldName = cursorPageable.sortFieldName ?: "id",
             isDescending = cursorPageable.isDescending,
         )
 
@@ -38,9 +35,12 @@ abstract class CursorPageService<T>(
 }
 
 data class CursorPageable(
-    val fieldCursor: Any?,
-    val idCursor: String?,
-    val sortFieldName: String = "createdAt",
+    val cursor: String?,
+    val sortFieldName: String? = null,
     val isDescending: Boolean = true,
     val size: Int = 5,
-)
+) {
+    fun decodeCursor(): Pair<Any, String>? {
+        return cursor?.let {CursorEncoder.decodeCursor(it) }
+    }
+}
