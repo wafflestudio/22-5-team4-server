@@ -24,7 +24,7 @@ class SocialAuthController(
     @Operation(
         summary = "소셜 로그인 요청",
         description = """
-        클라이언트가 인가코드와 Provider(ex. KAKAO, NAVER)를 요청본문에 담아 소셜로그인을 요청합니다.
+        클라이언트가 인가코드와 provider(ex. KAKAO, NAVER)를 요청에 담아 소셜로그인을 요청합니다.
         서버에서는 인가 코드를 통해 소셜 인증 서버에 액세스 토큰을 요청하고 이를 다시 소셜 계정 정보와 교환합니다.
         
         - 로그인한 소셜 계정이 로컬 계정과 연동되어 있는 계정인 경우
