@@ -171,14 +171,6 @@ class UserController(
 
         return ResponseEntity.ok(TokenResponse(newAccessToken))
     }
-
-    @PostMapping("/api/v1/social/link")
-    fun linkSocialAccount(
-        @RequestBody request: LinkSocialAccountRequest
-    ): ResponseEntity<Void> {
-        userService.linkSocialAccount(request.userId, request.provider, request.providerId)
-        return ResponseEntity.ok().build()
-    }
 }
 
 data class SignUpRequest(
@@ -205,10 +197,4 @@ data class SignInResponse(
 
 data class TokenResponse(
     val accessToken: String,
-)
-
-data class LinkSocialAccountRequest(
-    val userId: String,
-    val provider: Provider,
-    val providerId: String,
 )

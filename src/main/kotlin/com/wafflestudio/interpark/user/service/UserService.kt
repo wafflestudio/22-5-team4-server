@@ -21,7 +21,6 @@ class UserService(
     private val userIdentityRepository: UserIdentityRepository,
     private val userAccessTokenUtil: UserAccessTokenUtil,
     private val socialAccountRepository: SocialAccountRepository,
-
 ) {
     @Transactional
     fun signUp(
@@ -32,6 +31,7 @@ class UserService(
         email: String,
         role: UserRole = UserRole.USER,
         provider: Provider? = null,
+        providerId: String? = null,
     ): User {
         if (username.length < 6 || username.length > 20) {
             throw SignUpBadUsernameException()
@@ -52,15 +52,25 @@ class UserService(
                     email = email,
                 ),
             )
-        userIdentityRepository.save(
-            UserIdentityEntity(
-                user = user,
-                role = role,
-                hashedPassword = encryptedPassword,
-            ),
-        )
+        val userIdentity =
+            userIdentityRepository.save(
+                UserIdentityEntity(
+                    user = user,
+                    role = role,
+                    hashedPassword = encryptedPassword,
+                ),
+            )
 
-        // TODO: provider가 null이 아니라면 소셜계정 연동해주기
+        // 소셜 계정 연동
+        if (provider != null && providerId != null) {
+            socialAccountRepository.save(
+                SocialAccountEntity(
+                    userIdentity = userIdentity,
+                    provider = provider,
+                    providerId = providerId,
+                ),
+            )
+        }
 
         return User.fromEntity(user)
     }
@@ -97,34 +107,5 @@ class UserService(
     @Transactional
     fun refreshAccessToken(refreshToken: String): Pair<String, String> {
         return userAccessTokenUtil.refreshAccessToken(refreshToken) ?: throw AuthenticateException()
-    }
-
-    @Transactional
-    fun linkSocialAccount(
-        userId: String,
-        provider: Provider,
-        providerId: String
-    ): UserIdentityEntity {
-        // 유저 확인
-        val userIdentity = userIdentityRepository.findById(userId)
-            .orElseThrow { UserIdentityNotFoundException() }
-
-        // 소셜 계정 중복 확인
-        val existingSocialAccount = socialAccountRepository.findByProviderAndProviderId(provider, providerId)
-        if (existingSocialAccount != null) {
-            if (existingSocialAccount.userIdentity.user.id != userId) {
-                throw SocialAccountAlreadyLinkedException()
-            }
-        }
-
-        // 소셜 계정 생성 및 연동
-        val socialAccount = SocialAccountEntity(
-            userIdentity = userIdentity,
-            provider = provider,
-            providerId = providerId
-        )
-        socialAccountRepository.save(socialAccount)
-
-        return userIdentity
     }
 }

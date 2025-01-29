@@ -24,8 +24,8 @@ class UserIdentityEntity(
     var role: UserRole = UserRole.USER,
     @Column(name = "hashed_password", nullable = false)
     val hashedPassword: String,
-    @OneToMany(mappedBy = "userIdentity", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    val socialAccounts: MutableList<SocialAccountEntity> = mutableListOf(),
+//    @OneToMany(mappedBy = "userIdentity", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+//    val socialAccounts: MutableList<SocialAccountEntity> = mutableListOf(),
 )
 
 enum class UserRole : GrantedAuthority {
