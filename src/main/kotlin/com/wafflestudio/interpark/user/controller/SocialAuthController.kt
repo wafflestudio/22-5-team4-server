@@ -3,6 +3,7 @@ package com.wafflestudio.interpark.user.controller
 import com.wafflestudio.interpark.user.persistence.Provider
 import com.wafflestudio.interpark.user.service.SocialAuthService
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -66,8 +67,12 @@ class SocialAuthController(
     )
     @PostMapping("/{provider}/login")
     fun socialLogin(
+        @Parameter(description = "소셜 로그인 제공자 (예: KAKAO, NAVER)", example = "KAKAO")
         @PathVariable provider: Provider,
+
+        @Parameter(description = "인가 코드", example = "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7")
         @RequestParam("code") authorizationCode: String,
+
         response: HttpServletResponse
     ): ResponseEntity<SocialLoginResponse> {
         val result = socialAuthService.socialLogin(provider, authorizationCode)
