@@ -1,5 +1,6 @@
 package com.wafflestudio.interpark.performance.service
 
+import com.wafflestudio.interpark.pagination.CursorPageResponse
 import com.wafflestudio.interpark.pagination.CursorPageService
 import com.wafflestudio.interpark.pagination.CursorPageable
 import com.wafflestudio.interpark.performance.PerformanceNotFoundException
@@ -11,6 +12,7 @@ import com.wafflestudio.interpark.performance.persistence.*
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
 import org.springframework.data.repository.findByIdOrNull
+import java.awt.Cursor
 
 @Service
 class PerformanceService(
@@ -21,7 +23,7 @@ class PerformanceService(
         title: String?,
         category: PerformanceCategory?,
         cursorPageable: CursorPageable,
-    ): List<BriefPerformanceDetail> {
+    ): CursorPageResponse<BriefPerformanceDetail> {
         // 시작점: 아무 조건이 없는 스펙
         var spec: Specification<PerformanceEntity> = Specification.where(null)
 
@@ -36,10 +38,12 @@ class PerformanceService(
         }
 
         // 스펙이 결국 아무 조건도 없으면 -> 전체 검색
-        val performanceEntities = findAllWithCursor(cursorPageable, spec)
+        val searchResult = findAllWithCursor(cursorPageable, spec)
+
+        val performanceEntities = searchResult.data
 
         // BriefDetail DTO 변환
-        return performanceEntities.map { performanceEntity ->
+        val performanceData = performanceEntities.map { performanceEntity ->
             val performanceEventEntities = performanceEventRepository.findAllByPerformanceId(performanceEntity.id!!)
             val performanceEvents = if (performanceEventEntities.isEmpty()) {
                 null
@@ -56,6 +60,12 @@ class PerformanceService(
                 performanceEvents = performanceEvents
             )
         }
+
+        return CursorPageResponse(
+            data = performanceData,
+            nextCursor = searchResult.nextCursor,
+            hasNext = searchResult.hasNext,
+        )
     }
 
     fun getAllPerformance(): List<Performance> {

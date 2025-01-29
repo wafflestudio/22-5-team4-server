@@ -112,7 +112,7 @@ constructor(
                 .response
                 .getContentAsString(Charsets.UTF_8)
                 .let {
-                    val performances = mapper.readTree(it)
+                    val performances = mapper.readTree(it).get("data")
                     performances[0].get("id").asText()
                 }
 

@@ -1,5 +1,6 @@
 package com.wafflestudio.interpark.performance.controller
 
+import com.wafflestudio.interpark.pagination.CursorPageResponse
 import com.wafflestudio.interpark.pagination.CursorPageable
 import com.wafflestudio.interpark.performance.persistence.PerformanceCategory
 import io.swagger.v3.oas.annotations.Operation
@@ -76,7 +77,7 @@ class PerformanceController(
 
 }
 
-typealias SearchPerformanceResponse = List<BriefPerformanceDetail>
+typealias SearchPerformanceResponse = CursorPageResponse<BriefPerformanceDetail>
 
 data class BriefPerformanceDetail(
     val id: String,

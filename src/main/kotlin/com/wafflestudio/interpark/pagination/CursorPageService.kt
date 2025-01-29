@@ -12,7 +12,7 @@ abstract class CursorPageService<T>(
     fun findAllWithCursor(
         cursorPageable: CursorPageable,
         specification: Specification<T>? = null,
-    ): List<T> {
+    ): CursorPageResponse<T> {
         val cursor = cursorPageable.decodeCursor()
 
         val cursorSpec = CursorSpecification.withCursor<T>(
@@ -28,9 +28,21 @@ abstract class CursorPageService<T>(
         }
 
         val sortDirection = if(cursorPageable.isDescending) Sort.Direction.DESC else Sort.Direction.ASC
-        val pageable = PageRequest.of(0, cursorPageable.size, Sort.by(sortDirection, cursorPageable.sortFieldName, "id"))
+        val pageable = PageRequest.of(0, cursorPageable.size+1, Sort.by(sortDirection, cursorPageable.sortFieldName, "id"))
 
-        return repository.findAll(combinedSpec, pageable).content
+        val results = repository.findAll(combinedSpec, pageable).content
+        val hasNext = results.size > cursorPageable.size
+
+        val returnData = if(hasNext) results.dropLast(1) else results
+        val nextCursor = returnData.lastOrNull()?.let {
+            CursorEncoder.encodeCursor(it, cursorPageable.sortFieldName)
+        }
+
+        return CursorPageResponse(
+            data = returnData,
+            nextCursor = nextCursor,
+            hasNext = hasNext,
+        )
     }
 }
 
@@ -44,3 +56,9 @@ data class CursorPageable(
         return cursor?.let {CursorEncoder.decodeCursor(it) }
     }
 }
+
+data class CursorPageResponse<T>(
+    val data: List<T>,
+    val nextCursor: String?,
+    val hasNext : Boolean,
+)
