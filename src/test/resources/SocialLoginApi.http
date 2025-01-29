@@ -1,0 +1,9 @@
+### 카카오 로그인
+### 1️⃣ 카카오 인가 코드 요청 (웹 브라우저에서 실행하여 직접 로그인)
+# {baseUrl}은 카카오에서 등록한 리다이렉트 URI
+GET https://kauth.kakao.com/oauth/authorize
+    ?client_id={{KAKAO_CLIENT_ID}}
+    &redirect_uri={{YOUR_REDIRECT_URI}}
+    &response_type=code
+
+###
