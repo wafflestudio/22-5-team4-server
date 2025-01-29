@@ -5,8 +5,8 @@ import kotlin.text.Charsets.UTF_8
 
 object CursorEncoder {
     fun encodeCursor(targetEntity: Any, fieldName: String): String {
-        val idCursor = targetEntity.javaClass.getDeclaredField("id")
-        val fieldCursor = targetEntity.javaClass.getDeclaredField(fieldName)
+        val idCursor = targetEntity.javaClass.getDeclaredField("id").apply { isAccessible = true }.get(targetEntity)
+        val fieldCursor = targetEntity.javaClass.getDeclaredField(fieldName).apply { isAccessible = true }.get(targetEntity)
 
         val cursorString = "$fieldCursor,$idCursor"
         return Base64.getEncoder().encodeToString(cursorString.toByteArray(UTF_8))

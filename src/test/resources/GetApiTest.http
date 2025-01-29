@@ -1,0 +1,16 @@
+### performance 받기
+GET http://localhost/api/v1/performance/search
+Accept: application/json
+
+### 다음 cursor로 요청
+GET http://localhost/api/v1/performance/search?cursor=NzBkOTlhYTktNGI3My00YWMzLTg2NDQtMzE0ZjM3M2EwZThlLDcwZDk5YWE5LTRiNzMtNGFjMy04NjQ0LTMxNGYzNzNhMGU4ZQ==
+Accept: application/json
+
+### 다음 cursor로 요청
+GET http://localhost/api/v1/performance/search?cursor=MGY5NGY1MTAtZDMxYS00MjdmLTg4M2YtM2UyMGRmMWIyNDkyLDBmOTRmNTEwLWQzMWEtNDI3Zi04ODNmLTNlMjBkZjFiMjQ5Mg==
+Accept: application/json
+
+### 다음 cursor로 요청
+GET http://localhost/api/v1/performance/search?cursor=MDkxZTY3YWItNDRiOS00NjlmLTk1NGYtMWFmZjhmNjcwYjI2LDA5MWU2N2FiLTQ0YjktNDY5Zi05NTRmLTFhZmY4ZjY3MGIyNg==
+Accept: application/json
+
