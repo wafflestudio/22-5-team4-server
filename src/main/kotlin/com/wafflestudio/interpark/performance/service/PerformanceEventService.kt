@@ -68,8 +68,6 @@ class PerformanceEventService(
             performanceEventRepository.save(it)
         }
 
-        seatCreationService.createEmptyReservations(newPerformanceEventEntity.id)
-
         return PerformanceEvent.fromEntity(newPerformanceEventEntity)
     }
 
