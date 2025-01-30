@@ -155,7 +155,7 @@ constructor(
         //TODO : 테스트를 강화할 필요가 있음
         val reviewId1 =
             mvc.perform(
-                post("/api/v2/performance/$performanceId/review")
+                post("/api/v1/performance/$performanceId/review")
                     .header("Authorization", "Bearer $userAccessToken")
                     .content(
                         mapper.writeValueAsString(
@@ -175,7 +175,7 @@ constructor(
 
         (1..5).forEach {
             mvc.perform(
-                post("/api/v2/performance/$performanceId/review")
+                post("/api/v1/performance/$performanceId/review")
                     .header("Authorization", "Bearer $userAccessToken")
                     .content(
                         mapper.writeValueAsString(
