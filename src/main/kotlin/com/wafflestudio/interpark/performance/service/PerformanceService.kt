@@ -22,6 +22,46 @@ class PerformanceService(
     fun searchPerformance(
         title: String?,
         category: PerformanceCategory?,
+    ): List<BriefPerformanceDetail> {
+        // 시작점: 아무 조건이 없는 스펙
+        var spec: Specification<PerformanceEntity> = Specification.where(null)
+
+        // title 조건이 있다면 스펙에 and로 연결
+        PerformanceSpecifications.withTitle(title)?.let {
+            spec = spec.and(it)
+        }
+
+        // category 조건이 있다면 스펙에 and로 연결
+        PerformanceSpecifications.withCategory(category)?.let {
+            spec = spec.and(it)
+        }
+
+        // 스펙이 결국 아무 조건도 없으면 -> 전체 검색
+        val performanceEntities = performanceRepository.findAll(spec)
+
+        // BriefDetail DTO 변환
+        return performanceEntities.map { performanceEntity ->
+            val performanceEventEntities = performanceEventRepository.findAllByPerformanceId(performanceEntity.id!!)
+            val performanceEvents = if (performanceEventEntities.isEmpty()) {
+                null
+            } else {
+                performanceEventEntities.map { PerformanceEvent.fromEntity(it) }
+            }
+            val performanceHall = performanceEventEntities.firstOrNull()?.let {
+                PerformanceHall.fromEntity(it.performanceHall)
+            }
+
+            Performance.fromEntityToBriefDetails(
+                performanceEntity = performanceEntity,
+                performanceHall = performanceHall,
+                performanceEvents = performanceEvents
+            )
+        }
+    }
+
+    fun searchPerformanceWithCursor(
+        title: String?,
+        category: PerformanceCategory?,
         cursorPageable: CursorPageable,
     ): CursorPageResponse<BriefPerformanceDetail> {
         // 시작점: 아무 조건이 없는 스펙

@@ -26,12 +26,21 @@ class PerformanceController(
     fun searchPerformance(
         @RequestParam title: String?,
         @RequestParam category: PerformanceCategory?,
-        @RequestParam cursor: String?,
     ): ResponseEntity<SearchPerformanceResponse> {
+        val queriedPerformances = performanceService.searchPerformance(title, category)
+        return ResponseEntity.ok(queriedPerformances)
+    }
+
+    @GetMapping("/api/v2/performance/search")
+    fun searchCursorPerformance(
+        @RequestParam title: String?,
+        @RequestParam category: PerformanceCategory?,
+        @RequestParam cursor: String?,
+    ): ResponseEntity<SearchCursorPerformanceResponse> {
         // @RequestParam(defaultValue) 대신 데이터 클래스 내부적으로 기본값 처리
         val cursorPageable= CursorPageable(cursor = cursor)
 
-        val queriedPerformances = performanceService.searchPerformance(title, category, cursorPageable)
+        val queriedPerformances = performanceService.searchPerformanceWithCursor(title, category, cursorPageable)
         return ResponseEntity.ok(queriedPerformances)
     }
 
@@ -77,7 +86,9 @@ class PerformanceController(
 
 }
 
-typealias SearchPerformanceResponse = CursorPageResponse<BriefPerformanceDetail>
+typealias SearchPerformanceResponse = List<BriefPerformanceDetail>
+
+typealias SearchCursorPerformanceResponse = CursorPageResponse<BriefPerformanceDetail>
 
 data class BriefPerformanceDetail(
     val id: String,
