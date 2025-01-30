@@ -26,6 +26,7 @@ class SecurityConfig (
             authorizeHttpRequests {
                 // 사용자 권한
                 authorize(HttpMethod.GET, "/api/v1/performance/search", permitAll) // 공연 조회
+                authorize(HttpMethod.GET, "/api/v2/performance/search", permitAll) // 공연 조회 + 페이지네이션
                 authorize(HttpMethod.GET, "/api/v1/performance/{performanceId}", permitAll) // 공연 상세정보 반환
                 authorize(HttpMethod.GET, "/api/v1/performance-event", permitAll)
                 authorize(HttpMethod.GET, "/api/v1/performance-event/{performanceId}/{performanceDate}", permitAll)
@@ -39,6 +40,7 @@ class SecurityConfig (
                 authorize(HttpMethod.GET, "/api/v1/performance/{performanceId}/review", permitAll)
                 authorize(HttpMethod.GET, "/api/v2/performance/{performanceId}/review", permitAll)
                 authorize(HttpMethod.GET, "/api/v1/review/{reviewId}/reply", permitAll)
+                authorize(HttpMethod.GET, "/api/v2/review/{reviewId}/reply", permitAll)
                 authorize("/api/v1/**", hasAnyRole("USER", "ADMIN")) // 그 외 모두 유저 권한 필요
                 authorize("/admin/v1/**", hasRole("ADMIN"))
 
