@@ -12,6 +12,7 @@ sealed class CursorException(
 ) : DomainException(errorCode, httpStatusCode, msg, cause)
 
 class InvalidFieldNameException : CursorException(
+    //TODO: exception 늘려서 제대로 처리하기
     errorCode = 0,
     httpStatusCode = HttpStatus.BAD_REQUEST,
     msg = "Invalid field name",

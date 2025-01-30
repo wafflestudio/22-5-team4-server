@@ -1,5 +1,7 @@
 package com.wafflestudio.interpark.review.controller
 
+import com.wafflestudio.interpark.pagination.CursorPageResponse
+import com.wafflestudio.interpark.pagination.CursorPageable
 import com.wafflestudio.interpark.review.service.ReplyService
 import com.wafflestudio.interpark.user.controller.UserDetailsImpl
 import org.springframework.http.ResponseEntity
@@ -24,6 +26,16 @@ class ReplyController(
     ): ResponseEntity<GetReplyResponse>{
         val replies = replyService.getReplies(reviewId)
         return ResponseEntity.ok(replies)
+    }
+
+    @GetMapping("/api/v1/review/{reviewId}/reply")
+    fun getCursorReplies(
+        @PathVariable reviewId: String,
+        @RequestParam cursor: String?,
+    ): ResponseEntity<GetCursorReplyResponse>{
+        val cursorPageable= CursorPageable(sortFieldName = "createdAt", cursor = cursor)
+        val reviews = replyService.getRepliesWithCursor(reviewId, cursorPageable)
+        return ResponseEntity.ok(reviews)
     }
 
     @PostMapping("/api/v1/review/{reviewId}/reply")
@@ -60,6 +72,7 @@ class ReplyController(
 
 typealias GetReplyResponse = List<Reply>
 
+typealias GetCursorReplyResponse = CursorPageResponse<Reply>
 
 data class CreateReplyRequest(
     val content: String,

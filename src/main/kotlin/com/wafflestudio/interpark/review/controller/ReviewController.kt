@@ -32,7 +32,7 @@ class ReviewController(
     }
 
     @GetMapping("/api/v2/performance/{performanceId}/review")
-    fun getReviews(
+    fun getCursorReviews(
         @PathVariable performanceId: String,
         @RequestParam cursor: String?,
     ): ResponseEntity<GetCursorReviewResponse>{
