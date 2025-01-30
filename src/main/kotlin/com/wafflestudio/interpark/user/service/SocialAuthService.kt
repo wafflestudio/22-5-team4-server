@@ -235,13 +235,13 @@ class SocialAuthService(
     @Transactional
     fun socialLogin(
         provider: Provider,
-        code: String,
+        accessToken: String,
     ) : SocialLoginResult {
         // (1) code -> token
-        val token = exchangeCodeForToken(provider, code)
+        //val token = exchangeCodeForToken(provider, code)
 
         // (2) token -> userInfo
-        val userInfo = getUserInfo(provider, token.accessToken)
+        val userInfo = getUserInfo(provider, accessToken)
 
         // (3) DB에서 "이미 존재하는" 소셜 계정 찾기
         val socialAccount = socialAccountRepository.findByProviderAndProviderId(provider, userInfo.providerId)

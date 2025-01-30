@@ -71,12 +71,12 @@ class SocialAuthController(
         @Parameter(description = "소셜 로그인 제공자 (예: KAKAO, NAVER)", example = "KAKAO")
         @PathVariable provider: Provider,
 
-        @Parameter(description = "인가 코드", example = "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7")
-        @RequestParam("code") authorizationCode: String,
+        @Parameter(description = "소셜 인증 서버 액세스 토큰", example = "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7")
+        @RequestParam("code") socialAccessToken: String,
 
         response: HttpServletResponse
     ): ResponseEntity<SocialLoginResponse> {
-        val result = socialAuthService.socialLogin(provider, authorizationCode)
+        val result = socialAuthService.socialLogin(provider, socialAccessToken)
         val (user, accessToken, refreshToken, providerId) = result
         val cookie =
             Cookie("refreshToken", refreshToken).apply {
