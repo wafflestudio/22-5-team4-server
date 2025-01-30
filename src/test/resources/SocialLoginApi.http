@@ -3,7 +3,17 @@
 # {baseUrl}은 카카오에서 등록한 리다이렉트 URI
 GET https://kauth.kakao.com/oauth/authorize
     ?client_id={{KAKAO_CLIENT_ID}}
-    &redirect_uri={{YOUR_REDIRECT_URI}}
     &response_type=code
 
-###
+### 2️⃣ (수동 입력) 받은 인가 코드 저장
+@KAKAO_AUTH_CODE = XXXXXXXXXXXXXXXXXX
+
+### 3️⃣ 카카오 액세스 토큰 요청
+POST https://kauth.kakao.com/oauth/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code
+    &client_id={{KAKAO_CLIENT_ID}}
+    &client_secret={{KAKAO_CLIENT_SECRET}}
+    &redirect_uri={{YOUR_REDIRECT_URI}}
+    &code={{KAKAO_AUTH_CODE}}

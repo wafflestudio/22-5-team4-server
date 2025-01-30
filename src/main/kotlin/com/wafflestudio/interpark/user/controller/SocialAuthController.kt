@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -34,7 +35,7 @@ class SocialAuthController(
         
         - 로그인한 소셜 계정이 로컬 계정과 연동되어 있지 않은 경우
         404에러와 본문에 provider, providerId를 담아 반환합니다.
-        이 값을 이용해서 추후에 \"/api/v1/social/link\"로 연동 요청을 보내시면 됩니다.
+        이 값을 이용해서 추후에 "/api/v1/social/link"로 연동 요청을 보내시면 됩니다.
         """,
         responses = [
             ApiResponse(
@@ -164,6 +165,13 @@ class SocialAuthController(
             providerId = request.providerId
         )
         return ResponseEntity.ok().build()
+    }
+
+    @GetMapping("/callback")
+    fun callback(
+        @RequestParam code: String,
+    ) : ResponseEntity<Map<String, String>> {
+        return ResponseEntity.ok(mapOf("code" to code))
     }
 }
 
