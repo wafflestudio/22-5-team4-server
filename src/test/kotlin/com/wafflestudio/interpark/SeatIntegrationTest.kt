@@ -149,6 +149,7 @@ constructor(
             .response
             .getContentAsString(Charsets.UTF_8)
             .let {
+                
                 val availableSeats = mapper.readTree(it).get("availableSeats")
                 availableSeats[0].get("id").asText()
             }
