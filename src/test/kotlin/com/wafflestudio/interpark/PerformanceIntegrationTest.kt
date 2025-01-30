@@ -112,7 +112,7 @@ constructor(
         // 3️⃣ 테스트용 공연 ID 반환
         performanceId =
             mvc.perform(
-                get("/api/v1/performance/search")
+                get("/api/v2/performance/search")
                     .header("Authorization", "Bearer $userAccessToken")
                     .param("title", "지킬앤하이드")
                     .contentType(MediaType.APPLICATION_JSON),
@@ -133,7 +133,7 @@ constructor(
     fun `공연 검색 플로우 테스트`() {
         // 4️⃣ 공연 검색 (title 조건)
         mvc.perform(
-            get("/api/v1/performance/search")
+            get("/api/v2/performance/search")
                 .header("Authorization", "Bearer $userAccessToken")
                 .param("title", "지킬앤하이드")
                 .contentType(MediaType.APPLICATION_JSON),
@@ -143,7 +143,7 @@ constructor(
 
         // 5️⃣ 공연 검색 (category 조건)
         mvc.perform(
-            get("/api/v1/performance/search")
+            get("/api/v2/performance/search")
                 .header("Authorization", "Bearer $userAccessToken")
                 .param("category", PerformanceCategory.CONCERT.name)
                 .contentType(MediaType.APPLICATION_JSON),

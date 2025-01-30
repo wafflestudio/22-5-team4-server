@@ -75,7 +75,7 @@ constructor(
         // 3️⃣ 테스트용 공연 ID 반환
         performanceId =
             mvc.perform(
-                get("/api/v1/performance/search")
+                get("/api/v2/performance/search")
                     .header("Authorization", "Bearer $userAccessToken")
                     .param("title", "지킬앤하이드")
                     .contentType(MediaType.APPLICATION_JSON),
@@ -100,7 +100,7 @@ constructor(
 
         while(iterations < maxIteration) {
             val response = mvc.perform(
-                get("/api/v1/performance/search")
+                get("/api/v2/performance/search")
                     .apply { cursor?.let { param("cursor", it) } }
                     .contentType(MediaType.APPLICATION_JSON),
             ).andExpect(status().`is`(200))
@@ -128,7 +128,7 @@ constructor(
 
         while(iterations < maxIteration) {
             val response = mvc.perform(
-                get("/api/v1/performance/search")
+                get("/api/v2/performance/search")
                     .param("category", PerformanceCategory.CONCERT.name)
                     .apply { cursor?.let { param("cursor", it) } }
                     .contentType(MediaType.APPLICATION_JSON),
@@ -155,7 +155,7 @@ constructor(
         //TODO : 테스트를 강화할 필요가 있음
         val reviewId1 =
             mvc.perform(
-                post("/api/v1/performance/$performanceId/review")
+                post("/api/v2/performance/$performanceId/review")
                     .header("Authorization", "Bearer $userAccessToken")
                     .content(
                         mapper.writeValueAsString(
@@ -175,7 +175,7 @@ constructor(
 
         (1..5).forEach {
             mvc.perform(
-                post("/api/v1/performance/$performanceId/review")
+                post("/api/v2/performance/$performanceId/review")
                     .header("Authorization", "Bearer $userAccessToken")
                     .content(
                         mapper.writeValueAsString(
