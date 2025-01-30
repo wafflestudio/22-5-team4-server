@@ -1,17 +1,17 @@
 ### performance 받기
-GET http://localhost/api/v1/performance/search
+GET http://localhost/api/v2/performance/search
 Accept: application/json
 
 ### 다음 cursor로 요청
-GET http://localhost/api/v1/performance/search?cursor=NzBkOTlhYTktNGI3My00YWMzLTg2NDQtMzE0ZjM3M2EwZThlLDcwZDk5YWE5LTRiNzMtNGFjMy04NjQ0LTMxNGYzNzNhMGU4ZQ==
+GET http://localhost/api/v2/performance/search?cursor=OGE1YzU0MjctY2IzOC00OTMzLWFkZGYtOWU2NTQxOTkwNGU0LDhhNWM1NDI3LWNiMzgtNDkzMy1hZGRmLTllNjU0MTk5MDRlNA==
 Accept: application/json
 
 ### 다음 cursor로 요청
-GET http://localhost/api/v1/performance/search?cursor=MGY5NGY1MTAtZDMxYS00MjdmLTg4M2YtM2UyMGRmMWIyNDkyLDBmOTRmNTEwLWQzMWEtNDI3Zi04ODNmLTNlMjBkZjFiMjQ5Mg==
+GET http://localhost/api/v2/performance/search?cursor=MjRkMWQwZGItNzIxYi00OWE1LWE1MmMtMjc2ZDBmODg1N2M3LDI0ZDFkMGRiLTcyMWItNDlhNS1hNTJjLTI3NmQwZjg4NTdjNw==
 Accept: application/json
 
 ### 다음 cursor로 요청
-GET http://localhost/api/v1/performance/search?cursor=MDkxZTY3YWItNDRiOS00NjlmLTk1NGYtMWFmZjhmNjcwYjI2LDA5MWU2N2FiLTQ0YjktNDY5Zi05NTRmLTFhZmY4ZjY3MGIyNg==
+GET http://localhost/api/v2/performance/search?cursor=MDcwYjkwN2EtZGM1ZS00ZmU0LTgzNDEtZDIyYWY1ZWQ3MmNiLDA3MGI5MDdhLWRjNWUtNGZlNC04MzQxLWQyMmFmNWVkNzJjYg==
 Accept: application/json
 
 ### 회원가입(USER)
@@ -36,24 +36,24 @@ Content-Type: application/json
 }
 
 ### 댓글 쓰기
-POST http://localhost/api/v1/performance/f8d31155-8243-48a8-a060-3306b52fa227/review
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0ZjhmZWQ0OC1mMzUyLTRlNzItOWFjYi05ZTUzZDc2YWNlMzYiLCJpYXQiOjE3MzgyMTk4MDMsImV4cCI6MTczODIyMDcwM30.lX6Ory8LVzsc494R1_q_OtMJSRWpsVvWV-Jo8DysR7M
+POST http://localhost/api/v1/performance/d2f2bf55-be48-4981-b92a-b2c6aa181826/review
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3NWNmMjQ2Ni1hMzdmLTQ3MjktYmJhMi1hNWVlZTRhYmNkNDIiLCJpYXQiOjE3MzgyMjQ0MTMsImV4cCI6MTczODIyNTMxM30.YhLLhe4FpL4PYA_7lPDxtPcnvnfBwF5DiCEdJSM5pjw
 Content-Type: application/json
 
 {
-  "rating": 5,
-  "title": "3rd Good",
+  "rating": 3,
+  "title": "1st Bad Good",
   "content": "very good"
 }
 
 ### 댓글 조회
-GET http://localhost/api/v2/performance/f8d31155-8243-48a8-a060-3306b52fa227/review
+GET http://localhost/api/v2/performance/d2f2bf55-be48-4981-b92a-b2c6aa181826/review
 Content-Type: application/json
 
 ### 커서와 함께 댓글 조회
-GET http://localhost/api/v2/performance/f8d31155-8243-48a8-a060-3306b52fa227/review?cursor=MjAyNS0wMS0zMFQwNjo1MDo0MC45MzU1OTBaLGE1NzgxMTU4LWE3ODEtNGE5Ni1hNDM2LTA1MjY3MzQ5OWE4NQ==
+GET http://localhost/api/v2/performance/d2f2bf55-be48-4981-b92a-b2c6aa181826/review?cursor=MjAyNS0wMS0zMFQwODowNzo0Ny4wOTE5NTVaLDg4YTgyZDA2LTdlZDQtNGM0NC05ZmJjLWUwYzZjNzlkNjE3YQ==
 Content-Type: application/json
 
 ### 커서와 함께 한번더 댓글 조회
-GET http://localhost/api/v2/performance/f8d31155-8243-48a8-a060-3306b52fa227/review?cursor=MjAyNS0wMS0zMFQwNjo1MDozMy4wMDY4NjdaLDIwZGU2NWE2LThkNWYtNDE2My1iOTkzLWExMjIyYjFjNGMzZQ==
+GET http://localhost/api/v2/performance/f8d31155-8243-48a8-a060-3306b52fa227/review?cursor=MjAyNS0wMS0zMFQwODowNzo0MC44NTQzMzhaLDgzODI0Njg4LWIzMGEtNGZmZi1iOThjLTgzNmRlOTNhMjMxYg==
 Content-Type: application/json
