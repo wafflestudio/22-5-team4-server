@@ -14,7 +14,7 @@ services:
   myapp:
     build:
       context: .
-      dockerfile: deploy-Dockerfile
+      dockerfile: Dockerfile
     image: myapp:1.0
     env_file:
     - .env
@@ -24,6 +24,16 @@ services:
       - "80:8080"
     depends_on:
       - mysql
+      - redis
+    networks:
+      - my-network
+    cpus: 0.5  # CPU 제한 (0.5 vCPU)
+    mem_limit: "1g"  # 메모리 제한 (1GB)
+  redis:
+    image: redis:latest
+    container_name: redis-container
+    ports:
+      - "6379:6379"
     networks:
       - my-network
 networks:

@@ -31,6 +31,7 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
+    implementation("org.redisson:redisson-spring-boot-starter:3.16.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     runtimeOnly("com.h2database:h2")
 }
