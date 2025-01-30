@@ -14,3 +14,38 @@ Accept: application/json
 GET http://localhost/api/v1/performance/search?cursor=MDkxZTY3YWItNDRiOS00NjlmLTk1NGYtMWFmZjhmNjcwYjI2LDA5MWU2N2FiLTQ0YjktNDY5Zi05NTRmLTFhZmY4ZjY3MGIyNg==
 Accept: application/json
 
+### 회원가입(USER)
+POST http://localhost:80/api/v1/local/signup
+Content-Type: application/json
+
+{
+  "username": "correct",
+  "password": "12345678",
+  "nickname": "examplename",
+  "phoneNumber": "010-0000-0000",
+  "email": "test@example.com"
+}
+
+### 로그인
+POST http://localhost:80/api/v1/local/signin
+Content-Type: application/json
+
+{
+  "username": "correct",
+  "password": "12345678"
+}
+
+### 댓글 쓰기
+POST http://localhost/api/v1/performance/f1c7da85-c5a3-4c38-b3d6-993ef245ab84/review
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyOTRlYTU0OS1hMTQxLTRmMTktYWE0NC05MGIyODI3Nzg0YTYiLCJpYXQiOjE3MzgyMTY3NTQsImV4cCI6MTczODIxNzY1NH0.931yggANm302o8VZbENqFNQDbJ-k1FlbMzeFoFS2HQo
+Content-Type: application/json
+
+{
+  "rating": 5,
+  "title": "Good",
+  "content": "very good"
+}
+
+### 댓글 조회
+GET http://localhost/api/v2/performance/f1c7da85-c5a3-4c38-b3d6-993ef245ab84/review
+Content-Type: application/json

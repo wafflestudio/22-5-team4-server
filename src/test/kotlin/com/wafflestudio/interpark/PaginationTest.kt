@@ -26,7 +26,6 @@ constructor(
     private val mapper: ObjectMapper,
 ) {
     private lateinit var userAccessToken: String
-    private lateinit var adminAccessToken: String
     private lateinit var performanceId: String
 
     @BeforeEach
@@ -53,24 +52,6 @@ constructor(
                 .contentType(MediaType.APPLICATION_JSON),
         ).andExpect(status().`is`(200))
 
-        // 관리자
-        mvc.perform(
-            post("/api/v1/local/signup")
-                .content(
-                    mapper.writeValueAsString(
-                        mapOf(
-                            "username" to adminname,
-                            "password" to password,
-                            "nickname" to "test_admin",
-                            "phoneNumber" to "010-0000-0000",
-                            "email" to "test@example.com",
-                            "role" to UserRole.ADMIN,
-                        ),
-                    ),
-                )
-                .contentType(MediaType.APPLICATION_JSON),
-        ).andExpect(status().`is`(200))
-
         // 2️⃣ 로그인 → 토큰 획득
         // 일반 유저
         userAccessToken =
@@ -80,25 +61,6 @@ constructor(
                         mapper.writeValueAsString(
                             mapOf(
                                 "username" to username,
-                                "password" to password,
-                            ),
-                        ),
-                    )
-                    .contentType(MediaType.APPLICATION_JSON),
-            ).andExpect(status().`is`(200))
-                .andReturn()
-                .response
-                .getContentAsString(Charsets.UTF_8)
-                .let { mapper.readTree(it).get("accessToken").asText() }
-
-        // 관리자
-        adminAccessToken =
-            mvc.perform(
-                post("/api/v1/local/signin")
-                    .content(
-                        mapper.writeValueAsString(
-                            mapOf(
-                                "username" to adminname,
                                 "password" to password,
                             ),
                         ),
@@ -186,5 +148,56 @@ constructor(
 
             iterations++
         }
+    }
+
+    @Test
+    fun `공연의 리뷰 조회 페이지네이션 테스트`() {
+        //TODO : 테스트를 강화할 필요가 있음
+        val reviewId1 =
+            mvc.perform(
+                post("/api/v1/performance/$performanceId/review")
+                    .header("Authorization", "Bearer $userAccessToken")
+                    .content(
+                        mapper.writeValueAsString(
+                            mapOf(
+                                "rating" to 5,
+                                "title" to "Great Performance!",
+                                "content" to "Absolutely amazing. Highly recommend!",
+                            ),
+                        ),
+                    )
+                    .contentType(MediaType.APPLICATION_JSON),
+            ).andExpect(status().`is`(201))
+                .andReturn()
+                .response
+                .getContentAsString(Charsets.UTF_8)
+                .let { mapper.readTree(it).get("id").asText() }
+
+        val reviewId2 =
+            mvc.perform(
+                post("/api/v1/performance/$performanceId/review")
+                    .header("Authorization", "Bearer $userAccessToken")
+                    .content(
+                        mapper.writeValueAsString(
+                            mapOf(
+                                "rating" to 5,
+                                "title" to "Great Performance!",
+                                "content" to "Absolutely amazing. Highly recommend!",
+                            ),
+                        ),
+                    )
+                    .contentType(MediaType.APPLICATION_JSON),
+            ).andExpect(status().`is`(201))
+                .andReturn()
+                .response
+                .getContentAsString(Charsets.UTF_8)
+                .let { mapper.readTree(it).get("id").asText() }
+
+        mvc.perform(
+            get("/api/v2/performance/$performanceId/review")
+        ).andExpect(status().`is`(200))
+            .andExpect(jsonPath("$.data[?(@.id == '$reviewId1')]").exists())
+            .andExpect(jsonPath("$.data[?(@.id == '$reviewId2')]").exists())
+
     }
 }

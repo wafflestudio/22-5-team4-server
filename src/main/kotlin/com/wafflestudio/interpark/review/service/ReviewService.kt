@@ -1,6 +1,10 @@
 package com.wafflestudio.interpark.review.service
 
+import com.wafflestudio.interpark.pagination.CursorPageResponse
+import com.wafflestudio.interpark.pagination.CursorPageService
+import com.wafflestudio.interpark.pagination.CursorPageable
 import com.wafflestudio.interpark.performance.PerformanceNotFoundException
+import com.wafflestudio.interpark.performance.persistence.PerformanceEntity
 import com.wafflestudio.interpark.performance.persistence.PerformanceRepository
 import com.wafflestudio.interpark.review.*
 import com.wafflestudio.interpark.review.controller.Review
@@ -12,6 +16,7 @@ import com.wafflestudio.interpark.user.AuthenticateException
 import com.wafflestudio.interpark.user.controller.User
 import com.wafflestudio.interpark.user.persistence.UserRepository
 import jakarta.persistence.EntityManager
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -24,7 +29,7 @@ class ReviewService(
     private val userRepository: UserRepository,
     private val reviewLikeRepository: ReviewLikeRepository,
     private val replyService: ReplyService,
-) {
+) : CursorPageService<ReviewEntity>(reviewRepository) {
     fun getReviewsByUser(userId: String): List<Review> {
         val reviews: List<Review> =
             reviewRepository
@@ -39,6 +44,26 @@ class ReviewService(
                 .findByPerformanceId(performanceId)
                 .map { Review.fromEntity(it, replyService.countReplies(it.id)) }
         return reviews
+    }
+
+    fun getReviewsWithCursor(
+        performanceId: String,
+        cursorPageable: CursorPageable,
+    ): CursorPageResponse<Review> {
+        val spec: Specification<ReviewEntity> = Specification.where { root, _, cb ->
+            cb.equal(root.get<PerformanceEntity>("performance").get<String>("id"), performanceId)
+        }
+
+        val searchResult = findAllWithCursor(cursorPageable, spec)
+        val reviewEntities = searchResult.data
+
+        val reviewData = reviewEntities.map { Review.fromEntity(it, replyService.countReplies(it.id)) }
+
+        return CursorPageResponse(
+            data = reviewData,
+            nextCursor = searchResult.nextCursor,
+            hasNext = searchResult.hasNext,
+        )
     }
 
     @Transactional
