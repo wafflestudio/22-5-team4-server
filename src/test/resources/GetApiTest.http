@@ -36,16 +36,24 @@ Content-Type: application/json
 }
 
 ### 댓글 쓰기
-POST http://localhost/api/v1/performance/f1c7da85-c5a3-4c38-b3d6-993ef245ab84/review
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyOTRlYTU0OS1hMTQxLTRmMTktYWE0NC05MGIyODI3Nzg0YTYiLCJpYXQiOjE3MzgyMTY3NTQsImV4cCI6MTczODIxNzY1NH0.931yggANm302o8VZbENqFNQDbJ-k1FlbMzeFoFS2HQo
+POST http://localhost/api/v1/performance/f8d31155-8243-48a8-a060-3306b52fa227/review
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0ZjhmZWQ0OC1mMzUyLTRlNzItOWFjYi05ZTUzZDc2YWNlMzYiLCJpYXQiOjE3MzgyMTk4MDMsImV4cCI6MTczODIyMDcwM30.lX6Ory8LVzsc494R1_q_OtMJSRWpsVvWV-Jo8DysR7M
 Content-Type: application/json
 
 {
   "rating": 5,
-  "title": "Good",
+  "title": "3rd Good",
   "content": "very good"
 }
 
 ### 댓글 조회
-GET http://localhost/api/v2/performance/f1c7da85-c5a3-4c38-b3d6-993ef245ab84/review
+GET http://localhost/api/v2/performance/f8d31155-8243-48a8-a060-3306b52fa227/review
+Content-Type: application/json
+
+### 커서와 함께 댓글 조회
+GET http://localhost/api/v2/performance/f8d31155-8243-48a8-a060-3306b52fa227/review?cursor=MjAyNS0wMS0zMFQwNjo1MDo0MC45MzU1OTBaLGE1NzgxMTU4LWE3ODEtNGE5Ni1hNDM2LTA1MjY3MzQ5OWE4NQ==
+Content-Type: application/json
+
+### 커서와 함께 한번더 댓글 조회
+GET http://localhost/api/v2/performance/f8d31155-8243-48a8-a060-3306b52fa227/review?cursor=MjAyNS0wMS0zMFQwNjo1MDozMy4wMDY4NjdaLDIwZGU2NWE2LThkNWYtNDE2My1iOTkzLWExMjIyYjFjNGMzZQ==
 Content-Type: application/json

@@ -173,31 +173,39 @@ constructor(
                 .getContentAsString(Charsets.UTF_8)
                 .let { mapper.readTree(it).get("id").asText() }
 
-        val reviewId2 =
+        (1..5).forEach {
             mvc.perform(
                 post("/api/v1/performance/$performanceId/review")
                     .header("Authorization", "Bearer $userAccessToken")
                     .content(
                         mapper.writeValueAsString(
                             mapOf(
-                                "rating" to 5,
-                                "title" to "Great Performance!",
+                                "rating" to it,
+                                "title" to "Great Performance! $it",
                                 "content" to "Absolutely amazing. Highly recommend!",
                             ),
                         ),
                     )
                     .contentType(MediaType.APPLICATION_JSON),
             ).andExpect(status().`is`(201))
-                .andReturn()
-                .response
-                .getContentAsString(Charsets.UTF_8)
-                .let { mapper.readTree(it).get("id").asText() }
+        }
 
-        mvc.perform(
+        val response = mvc.perform(
             get("/api/v2/performance/$performanceId/review")
         ).andExpect(status().`is`(200))
-            .andExpect(jsonPath("$.data[?(@.id == '$reviewId1')]").exists())
-            .andExpect(jsonPath("$.data[?(@.id == '$reviewId2')]").exists())
+            .andReturn()
+            .response
+            .getContentAsString(Charsets.UTF_8)
+            .let { mapper.readTree(it) }
 
+        val hasNext = response.get("hasNext").asBoolean()
+        assert(hasNext) {"expected hasNext true but false"}
+
+        val cursor = response.get("nextCursor").asText()
+        mvc.perform(
+            get("/api/v2/performance/$performanceId/review")
+                .apply { param("cursor", cursor) }
+        ).andExpect(status().`is`(200))
+            .andExpect(jsonPath("$.data[?(@.id == '$reviewId1')]").exists())
     }
 }
