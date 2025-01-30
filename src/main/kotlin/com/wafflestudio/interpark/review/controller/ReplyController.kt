@@ -28,7 +28,7 @@ class ReplyController(
         return ResponseEntity.ok(replies)
     }
 
-    @GetMapping("/api/v1/review/{reviewId}/reply")
+    @GetMapping("/api/v2/review/{reviewId}/reply")
     fun getCursorReplies(
         @PathVariable reviewId: String,
         @RequestParam cursor: String?,
