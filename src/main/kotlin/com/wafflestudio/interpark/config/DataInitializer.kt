@@ -75,6 +75,26 @@ class DataInitializer(
             address = "서울 종로구 세종대로",
             maxAudience = 100
         )
+        performanceHallService.createPerformanceHall(
+            name = "동덕여자대학교 공연예술센터 코튼홀",
+            address = "서울특별시 종로구 동숭길 134",
+            maxAudience = 100
+        )
+        performanceHallService.createPerformanceHall(
+            name = "대학로 자유극장",
+            address = "서울특별시 종로구 대학로12길",
+            maxAudience = 100
+        )
+        performanceHallService.createPerformanceHall(
+            name = "인터파크 서경스퀘어",
+            address = "서울 종로구 동숭길",
+            maxAudience = 100
+        )
+        performanceHallService.createPerformanceHall(
+            name = "샤롯데씨어터",
+            address = "서울특별시 송파구 잠실동",
+            maxAudience = 100
+        )
 
         // 2) Performance 데이터 넣기
         performanceService.createPerformance(
@@ -161,33 +181,68 @@ class DataInitializer(
             posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24017573_p.gif",
             backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
+        performanceService.createPerformance(
+            title = "종의 기원",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/24016611-01.jpg",
+            category = PerformanceCategory.MUSICAL,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24016611_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "하트셉수트",
+            detail = "https://ticketimage.interpark.com/Play/ITM/Data/Modify/2025/1/2025013111034957.jpg",
+            category = PerformanceCategory.MUSICAL,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/25/25001185_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "그해 여름",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/24017986-08.jpg",
+            category = PerformanceCategory.MUSICAL,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24017986_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "명성황후",
+            detail = "https://ticketimage.interpark.com/P00041072025/01/20/762a8f19.jpg",
+            category = PerformanceCategory.MUSICAL,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/P0/P0004107_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "알라딘",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/24012498-18.jpg",
+            category = PerformanceCategory.MUSICAL,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24012498_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
 
         // 3) Performance Event 데이터 넣기
         val performanceEvents = listOf(
             Triple(
                 "뮤지컬 지킬앤하이드",
                 "블루스퀘어 신한카드홀",
-                generateDateRange("2024-11-29","2025-05-18","16:00:00","18:00:00")
+                generateDateRange("2025-02-05","2025-05-18","16:00:00","18:00:00")
             ),
             Triple(
                 "마타하리",
                 "LG아트센터 서울 SIGNATURE홀",
-                generateDateRange("2024-12-05", "2025-03-02", "16:00:00","18:00:00")
+                generateDateRange("2025-02-03", "2025-03-02", "16:00:00","18:00:00")
             ),
             Triple(
                 "웃는남자",
                 "예술의전당 오페라극장",
-                generateDateRange("2025-01-09", "2025-03-09", "16:00:00","18:00:00")
+                generateDateRange("2025-02-09", "2025-03-09", "16:00:00","18:00:00")
             ),
             Triple(
                 "2025 기리보이 콘서트",
                 "블루스퀘어 마스터카드홀",
-                generateDateRange("2025-02-01", "2025-02-02", "16:00:00","18:00:00")
+                generateDateRange("2025-02-10", "2025-02-02", "16:00:00","18:00:00")
             ),
             Triple(
                 "2025 검정치마 단독공연",
                 "올림픽공원 올림픽홀",
-                generateDateRange("2025-02-01", "2025-02-02", "16:00:00","18:00:00")
+                generateDateRange("2025-02-03", "2025-02-02", "16:00:00","18:00:00")
             ),
             Triple(
                 "콜드플레이 내한공연",
@@ -207,22 +262,47 @@ class DataInitializer(
             Triple(
                 "발레의 별빛, 글로벌 발레스타 초청 갈라공연",
                 "세종문화회관 대극장",
-                generateDateRange("2025-01-11", "2025-01-12", "16:00:00","18:00:00")
+                generateDateRange("2025-03-11", "2025-04-12", "16:00:00","18:00:00")
             ),
             Triple(
                 "연극 애나엑스",
                 "LG아트센터 서울 U+ 스테이지",
-                generateDateRange("2025-01-28", "2025-03-16", "16:00:00","18:00:00")
+                generateDateRange("2025-03-11", "2025-04-12", "16:00:00","18:00:00")
             ),
             Triple(
                 "연극 타인의 삶",
                 "LG아트센터 서울 U+ 스테이지",
-                generateDateRange("2025-01-28", "2025-03-16", "16:00:00","18:00:00")
+                generateDateRange("2025-02-28", "2025-03-16", "16:00:00","18:00:00")
             ),
             Triple(
                 "세일즈맨의 죽음",
                 "세종문화회관 M씨어터",
-                generateDateRange("2025-01-07", "2025-03-03", "16:00:00","18:00:00")
+                generateDateRange("2025-02-07", "2025-03-03", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "종의 기원",
+                "동덕여자대학교 공연예술센터 코튼홀",
+                generateDateRange("2025-02-04", "2025-05-03", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "하트셉수트",
+                "대학로 자유극장",
+                generateDateRange("2025-02-04", "2025-06-01", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "그해 여름",
+                "인터파크 서경스퀘어",
+                generateDateRange("2025-02-12", "2025-03-02", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "명성황후",
+                "세종문화회관 대극장",
+                generateDateRange("2025-02-15", "2025-03-30", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "알라딘",
+                "샤롯데씨어터",
+                generateDateRange("2025-03-01", "2025-06-22", "16:00:00","18:00:00")
             )
         )
 
