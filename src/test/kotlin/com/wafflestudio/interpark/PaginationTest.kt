@@ -96,6 +96,7 @@ constructor(
         var cursor: String? = null
         val maxIteration = 4
         var iterations = 0
+        var totalItems = 0
 
         while(iterations < maxIteration) {
             val response = mvc.perform(
@@ -110,6 +111,8 @@ constructor(
                 .let { mapper.readTree(it) }
 
             val hasNext = response.get("hasNext").asBoolean()
+            val dataSize = response.get("data").size()
+            totalItems += dataSize
             if(!hasNext) {
                 break
             }
@@ -117,6 +120,18 @@ constructor(
 
             iterations++
         }
+
+        // 전체 데이터를 다 가져왔는지 확인
+        val totalSize = mvc.perform(
+            get("/api/v1/performance/search")
+                .contentType(MediaType.APPLICATION_JSON),
+        ).andExpect(status().`is`(200))
+            .andReturn()
+            .response
+            .getContentAsString(Charsets.UTF_8)
+            .let { mapper.readTree(it).size() }
+
+        assert( totalItems == totalSize ) {"Expected $totalSize items but got $totalItems"}
     }
 
     @Test
@@ -124,6 +139,7 @@ constructor(
         var cursor: String? = null
         val maxIteration = 4
         var iterations = 0
+        var totalItems = 0
 
         while(iterations < maxIteration) {
             val response = mvc.perform(
@@ -132,14 +148,14 @@ constructor(
                     .apply { cursor?.let { param("cursor", it) } }
                     .contentType(MediaType.APPLICATION_JSON),
             ).andExpect(status().`is`(200))
-                // CONCERT는 테스트 코드상에서 3개만 조회되어야 한다
-                .andExpect(jsonPath("$.data.size()").value(3))
                 .andReturn()
                 .response
                 .getContentAsString(Charsets.UTF_8)
                 .let { mapper.readTree(it) }
 
             val hasNext = response.get("hasNext").asBoolean()
+            val dataSize = response.get("data").size()
+            totalItems += dataSize
             if(!hasNext) {
                 break
             }
@@ -147,11 +163,32 @@ constructor(
 
             iterations++
         }
+
+        // 전체 데이터를 다 가져왔는지 확인
+        val totalSize = mvc.perform(
+            get("/api/v1/performance/search")
+                .param("category", PerformanceCategory.CONCERT.name)
+                .contentType(MediaType.APPLICATION_JSON),
+        ).andExpect(status().`is`(200))
+            .andReturn()
+            .response
+            .getContentAsString(Charsets.UTF_8)
+            .let { mapper.readTree(it).size() }
+
+        assert( totalItems == totalSize ) {"Expected $totalSize items but got $totalItems"}
+    }
+
+    @Test
+    fun `잘못된 커서로 요청하면 오류`() {
+        mvc.perform(
+            get("/api/v2/performance/search")
+                .apply { param("cursor", "WrongCursor") }
+                .contentType(MediaType.APPLICATION_JSON),
+        ).andExpect(status().`is`(400))
     }
 
     @Test
     fun `공연의 리뷰 조회 페이지네이션 테스트`() {
-        //TODO : 테스트를 강화할 필요가 있음
         val reviewId1 =
             mvc.perform(
                 post("/api/v1/performance/$performanceId/review")
@@ -201,10 +238,85 @@ constructor(
         assert(hasNext) {"expected hasNext true but false"}
 
         val cursor = response.get("nextCursor").asText()
+        // 가장 먼저 등록한 리뷰가 가장 마지막에 조회된다
         mvc.perform(
             get("/api/v2/performance/$performanceId/review")
                 .apply { param("cursor", cursor) }
         ).andExpect(status().`is`(200))
             .andExpect(jsonPath("$.data[?(@.id == '$reviewId1')]").exists())
+            .andExpect(jsonPath("$.hasNext").value(false))
+    }
+
+    @Test
+    fun `리뷰의 댓글 조회 페이지네이션 테스트`() {
+        val reviewId =
+            mvc.perform(
+                post("/api/v1/performance/$performanceId/review")
+                    .header("Authorization", "Bearer $userAccessToken")
+                    .content(
+                        mapper.writeValueAsString(
+                            mapOf(
+                                "rating" to 5,
+                                "title" to "Great Performance!",
+                                "content" to "Absolutely amazing. Highly recommend!",
+                            ),
+                        ),
+                    )
+                    .contentType(MediaType.APPLICATION_JSON),
+            ).andExpect(status().`is`(201))
+                .andReturn()
+                .response
+                .getContentAsString(Charsets.UTF_8)
+                .let { mapper.readTree(it).get("id").asText() }
+
+        val replyId1 =
+            mvc.perform(
+                post("/api/v1/review/$reviewId/reply")
+                    .header("Authorization", "Bearer $userAccessToken")
+                    .content(
+                        mapper.writeValueAsString(
+                            mapOf("content" to "First Reply"),
+                        ),
+                    )
+                    .contentType(MediaType.APPLICATION_JSON),
+            ).andExpect(status().`is`(201))
+                .andReturn()
+                .response
+                .getContentAsString(Charsets.UTF_8)
+                .let { mapper.readTree(it).get("id").asText() }
+
+        (1..5).forEach {
+            mvc.perform(
+                post("/api/v1/review/$reviewId/reply")
+                    .header("Authorization", "Bearer $userAccessToken")
+                    .content(
+                        mapper.writeValueAsString(
+                            mapOf("content" to "$it"),
+                        ),
+                    )
+                    .contentType(MediaType.APPLICATION_JSON),
+            ).andExpect(status().`is`(201))
+                .andReturn()
+        }
+
+        val response = mvc.perform(
+            get("/api/v2/review/$reviewId/reply")
+        ).andExpect(status().`is`(200))
+            .andReturn()
+            .response
+            .getContentAsString(Charsets.UTF_8)
+            .let { mapper.readTree(it) }
+
+        val hasNext = response.get("hasNext").asBoolean()
+        assert(hasNext) {"expected hasNext true but false"}
+
+        val cursor = response.get("nextCursor").asText()
+        // 가장 먼저 등록한 댓글이 가장 마지막에 조회된다
+        mvc.perform(
+            get("/api/v2/review/$reviewId/reply")
+                .apply { param("cursor", cursor) }
+        ).andExpect(status().`is`(200))
+            .andExpect(jsonPath("$.data[?(@.id == '$replyId1')]").exists())
+            .andExpect(jsonPath("$.hasNext").value(false))
     }
 }

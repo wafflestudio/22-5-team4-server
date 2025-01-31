@@ -35,9 +35,9 @@ Content-Type: application/json
   "password": "12345678"
 }
 
-### 댓글 쓰기
-POST http://localhost/api/v1/performance/d2f2bf55-be48-4981-b92a-b2c6aa181826/review
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3NWNmMjQ2Ni1hMzdmLTQ3MjktYmJhMi1hNWVlZTRhYmNkNDIiLCJpYXQiOjE3MzgyMjQ0MTMsImV4cCI6MTczODIyNTMxM30.YhLLhe4FpL4PYA_7lPDxtPcnvnfBwF5DiCEdJSM5pjw
+### 리뷰 쓰기
+POST http://localhost/api/v1/performance/ec18db5d-09ab-47d0-8fec-46858a2780a7/review
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkMTQwYTU0Ni03ZDdiLTQ5OGItOWM4MS0zMTczYmQwODEzZjgiLCJpYXQiOjE3MzgzMTExNDUsImV4cCI6MTczODMxMjA0NX0.eR5Qh-B4h73reHCt82YWgpd8I1rhtdW8UIUajM1SGOE
 Content-Type: application/json
 
 {
@@ -46,14 +46,31 @@ Content-Type: application/json
   "content": "very good"
 }
 
-### 댓글 조회
+### 리뷰 조회
 GET http://localhost/api/v2/performance/d2f2bf55-be48-4981-b92a-b2c6aa181826/review
 Content-Type: application/json
 
-### 커서와 함께 댓글 조회
+### 커서와 함께 리뷰 조회
 GET http://localhost/api/v2/performance/d2f2bf55-be48-4981-b92a-b2c6aa181826/review?cursor=MjAyNS0wMS0zMFQwODowNzo0Ny4wOTE5NTVaLDg4YTgyZDA2LTdlZDQtNGM0NC05ZmJjLWUwYzZjNzlkNjE3YQ==
 Content-Type: application/json
 
-### 커서와 함께 한번더 댓글 조회
+### 커서와 함께 한번더 리뷰 조회
 GET http://localhost/api/v2/performance/f8d31155-8243-48a8-a060-3306b52fa227/review?cursor=MjAyNS0wMS0zMFQwODowNzo0MC44NTQzMzhaLDgzODI0Njg4LWIzMGEtNGZmZi1iOThjLTgzNmRlOTNhMjMxYg==
+Content-Type: application/json
+
+### 댓글 쓰기
+POST http://localhost/api/v1/review/8dc698c8-26c2-4bbe-b548-33b9b0584d3a/reply
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkMTQwYTU0Ni03ZDdiLTQ5OGItOWM4MS0zMTczYmQwODEzZjgiLCJpYXQiOjE3MzgzMTExNDUsImV4cCI6MTczODMxMjA0NX0.eR5Qh-B4h73reHCt82YWgpd8I1rhtdW8UIUajM1SGOE
+Content-Type: application/json
+
+{
+  "content": "Agree7"
+}
+
+### 댓글 조회
+GET http://localhost/api/v2/review/8dc698c8-26c2-4bbe-b548-33b9b0584d3a/reply
+Content-Type: application/json
+
+### 커서와 함께 댓글 조회
+GET http://localhost/api/v2/review/8dc698c8-26c2-4bbe-b548-33b9b0584d3a/reply?cursor=MjAyNS0wMS0zMVQwODoxNToxMS41MzM0MDFaLDg2ZjFmNmRiLWMwNWEtNGIwOS04OWQwLWM3OWNlMDA1YTg4YQ==
 Content-Type: application/json
