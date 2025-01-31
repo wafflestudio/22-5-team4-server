@@ -95,6 +95,26 @@ class DataInitializer(
             address = "서울특별시 송파구 잠실동",
             maxAudience = 100
         )
+        performanceHallService.createPerformanceHall(
+            name = "디큐브 링크아트센터",
+            address = "서울시 구로구 경인로 662 7층",
+            maxAudience = 100
+        )
+        performanceHallService.createPerformanceHall(
+            name = "예술의전당 CJ 토월극장",
+            address = " 서울특별시 서초구 서초동",
+            maxAudience = 100
+        )
+        performanceHallService.createPerformanceHall(
+            name = "인터파크 유니플렉스 1관",
+            address = "서울특별시 종로구 동숭동",
+            maxAudience = 100
+        )
+        performanceHallService.createPerformanceHall(
+            name = "인터파크 유니플렉스 2관",
+            address = "서울특별시 종로구 동숭동",
+            maxAudience = 100
+        )
 
         // 2) Performance 데이터 넣기
         performanceService.createPerformance(
@@ -216,6 +236,34 @@ class DataInitializer(
             posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24012498_p.gif",
             backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
+        performanceService.createPerformance(
+            title = "베르테르 25주년 공연",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/24017198-07.jpg",
+            category = PerformanceCategory.MUSICAL,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24017198_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "시라노",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/24014885-18.jpg",
+            category = PerformanceCategory.MUSICAL,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24014885_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "여신님이 보고 계셔",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/24014618-03.jpg",
+            category = PerformanceCategory.MUSICAL,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24014618_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "빨래",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/24006709-30.jpg",
+            category = PerformanceCategory.MUSICAL,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24006709_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
 
         // 3) Performance Event 데이터 넣기
         val performanceEvents = listOf(
@@ -303,7 +351,41 @@ class DataInitializer(
                 "알라딘",
                 "샤롯데씨어터",
                 generateDateRange("2025-03-01", "2025-06-22", "16:00:00","18:00:00")
-            )
+            ),
+            Triple(
+                "베르테르 25주년 공연",
+                "디큐브 링크아트센터",
+                generateDateRange("2025-02-15", "2025-02-16", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "시라노",
+                "예술의전당 CJ 토월극장",
+                generateDateRange("2025-02-15", "2025-02-16", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "여신님이 보고 계셔",
+                "인터파크 유니플렉스 1관",
+                listOf(
+                    listOf("2025-02-07T16:00:00", "2025-02-07T18:00:00"),
+                    listOf("2025-02-08T16:00:00", "2025-02-08T18:00:00"),
+                    listOf("2025-02-09T16:00:00", "2025-02-09T18:00:00"),
+                    listOf("2025-02-14T16:00:00", "2025-02-14T18:00:00"),
+                    listOf("2025-02-15T16:00:00", "2025-02-15T18:00:00"),
+                    listOf("2025-02-16T16:00:00", "2025-02-16T18:00:00"),
+                )
+            ),
+            Triple(
+                "빨래",
+                "인터파크 유니플렉스 2관",
+                listOf(
+                    listOf("2025-02-07T16:00:00", "2025-02-07T18:00:00"),
+                    listOf("2025-02-08T16:00:00", "2025-02-08T18:00:00"),
+                    listOf("2025-02-09T16:00:00", "2025-02-09T18:00:00"),
+                    listOf("2025-02-14T16:00:00", "2025-02-14T18:00:00"),
+                    listOf("2025-02-15T16:00:00", "2025-02-15T18:00:00"),
+                    listOf("2025-02-16T16:00:00", "2025-02-16T18:00:00"),
+                )
+            ),
         )
 
         performanceEvents.forEach { (performanceTitle, hallName, eventTimes) ->
