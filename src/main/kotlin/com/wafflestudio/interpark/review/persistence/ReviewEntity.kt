@@ -1,5 +1,6 @@
 package com.wafflestudio.interpark.review.persistence
 
+import com.wafflestudio.interpark.performance.persistence.PerformanceEntity
 import com.wafflestudio.interpark.user.persistence.UserEntity
 import jakarta.persistence.*
 import java.time.Instant
@@ -15,8 +16,9 @@ class ReviewEntity(
     @JoinColumn(name = "user_id", nullable = false)
     val author: UserEntity,
 
-    @Column(name = "performance_id", nullable = false)
-    val performanceId: String,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "performance_id", nullable = false)
+    val performance: PerformanceEntity,
 
     @Column(name = "rating", nullable = false)
     var rating: Int,
@@ -32,4 +34,7 @@ class ReviewEntity(
 
     @Column(name = "updated_at", nullable = false)
     var updatedAt: Instant = Instant.now(),
+
+    @OneToMany(mappedBy = "review")
+    var reviewLikes: List<ReviewLikeEntity> = emptyList(),
 )

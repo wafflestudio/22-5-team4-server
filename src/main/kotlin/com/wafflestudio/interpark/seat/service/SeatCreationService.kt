@@ -46,19 +46,4 @@ class SeatCreationService(
             }
         }
     }
-
-    @Transactional
-    fun createEmptyReservations(performanceEventId: String) {
-        val performanceEventEntity = performanceEventRepository.findByIdOrNull(performanceEventId) ?: throw PerformanceEventNotFoundException()
-        val seats = seatRepository.findByPerformanceHall(performanceEventEntity.performanceHall)
-        val emptyReservations =
-            seats.map {
-                ReservationEntity(
-                    seat = it,
-                    performanceEvent = performanceEventEntity,
-                    reservationDate = null,
-                )
-            }
-        reservationRepository.saveAll(emptyReservations)
-    }
 }

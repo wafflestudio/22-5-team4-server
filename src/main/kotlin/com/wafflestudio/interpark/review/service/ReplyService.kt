@@ -1,16 +1,21 @@
 package com.wafflestudio.interpark.review.service
 
+import com.wafflestudio.interpark.pagination.CursorPageResponse
+import com.wafflestudio.interpark.pagination.CursorPageService
+import com.wafflestudio.interpark.pagination.CursorPageable
+import com.wafflestudio.interpark.performance.persistence.PerformanceEntity
 import com.wafflestudio.interpark.review.*
-import com.wafflestudio.interpark.review.controller.Review
-import com.wafflestudio.interpark.review.persistence.ReviewEntity
 import com.wafflestudio.interpark.review.persistence.ReviewRepository
 import com.wafflestudio.interpark.review.controller.Reply
+import com.wafflestudio.interpark.review.controller.Review
 import com.wafflestudio.interpark.review.persistence.ReplyEntity
 import com.wafflestudio.interpark.review.persistence.ReplyRepository
+import com.wafflestudio.interpark.review.persistence.ReviewEntity
 import com.wafflestudio.interpark.user.AuthenticateException
 import com.wafflestudio.interpark.user.controller.User
 import com.wafflestudio.interpark.user.persistence.UserRepository
 import jakarta.persistence.EntityManager
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -22,18 +27,16 @@ class ReplyService(
     private val reviewRepository: ReviewRepository,
     private val replyRepository: ReplyRepository,
     private val userRepository: UserRepository,
-) {
+) : CursorPageService<ReplyEntity>(replyRepository) {
 
-    fun getRepliesByUser(user: User): List<Reply> {
-        val authorId = user.id
-        val replies: List<Reply> = 
+    fun getRepliesByUser(userId: String): List<Reply> {
+        val replies: List<Reply> =
             replyRepository
-                .findByAuthorId(authorId)
+                .findByAuthorId(userId)
                 .map { Reply.fromEntity(it) }
         return replies
     }
 
-    // TODO: 검색기능 구현해야 함
     fun getReplies(reviewId: String): List<Reply> {
         val replies: List<Reply> =
             replyRepository
@@ -42,14 +45,39 @@ class ReplyService(
         return replies
     }
 
+    fun getRepliesWithCursor(
+        reviewId: String,
+        cursorPageable: CursorPageable,
+    ): CursorPageResponse<Reply> {
+        val spec: Specification<ReplyEntity> = Specification.where { root, _, cb ->
+            cb.equal(root.get<ReviewEntity>("review").get<String>("id"), reviewId)
+        }
+
+        val searchResult = findAllWithCursor(cursorPageable, spec)
+        val replyEntities = searchResult.data
+
+        val replyData = replyEntities.map { Reply.fromEntity(it) }
+
+        return CursorPageResponse(
+            data = replyData,
+            nextCursor = searchResult.nextCursor,
+            hasNext = searchResult.hasNext,
+        )
+    }
+
+    fun countReplies(reviewId: String): Int {
+        val replyCount = replyRepository.countByReviewId(reviewId)
+        return replyCount
+    }
+
     @Transactional
     fun createReply(
-        author: User,
+        authorId: String,
         reviewId: String,
         content: String,
     ): Reply {
         validateContent(content)
-        val authorEntity = userRepository.findByIdOrNull(author.id) ?: throw AuthenticateException()
+        val authorEntity = userRepository.findByIdOrNull(authorId) ?: throw AuthenticateException()
         val reviewEntity = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException()
         val replyEntity =
             ReplyEntity(
@@ -67,13 +95,13 @@ class ReplyService(
 
     @Transactional
     fun editReply(
-        author: User,
+        authorId: String,
         replyId: String,
         content: String,
     ): Reply {
         content?.let { validateContent(it) }
         val replyEntity = replyRepository.findByIdOrNull(replyId) ?: throw ReplyNotFoundException()
-        val authorEntity = userRepository.findByIdOrNull(author.id) ?: throw AuthenticateException()
+        val authorEntity = userRepository.findByIdOrNull(authorId) ?: throw AuthenticateException()
         if (replyEntity.author.id != authorEntity.id) {
             throw ReplyPermissionDeniedException()
         }
@@ -85,11 +113,11 @@ class ReplyService(
 
     @Transactional
     fun deleteReply(
-        author: User,
+        authorId: String,
         replyId: String,
     ) {
         val replyEntity = replyRepository.findByIdOrNull(replyId) ?: throw ReplyNotFoundException()
-        val authorEntity = userRepository.findByIdOrNull(author.id) ?: throw AuthenticateException()
+        val authorEntity = userRepository.findByIdOrNull(authorId) ?: throw AuthenticateException()
         if (replyEntity.author.id != authorEntity.id) {
             throw ReplyPermissionDeniedException()
         }

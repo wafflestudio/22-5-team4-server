@@ -4,19 +4,22 @@ import com.wafflestudio.interpark.user.persistence.RefreshTokenEntity
 import com.wafflestudio.interpark.user.persistence.RefreshTokenRepository
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
 import java.util.*
+import javax.crypto.SecretKey
 
 @Component
 class UserAccessTokenUtil(
     private var refreshTokenRepository: RefreshTokenRepository,
+    private val secretKey: SecretKey
 ) {
     fun generateAccessToken(username: String): String {
         val now = Date()
         val expiryDate = Date(now.time + ACCESS_EXPIRATION_TIME)
         return Jwts.builder()
-            .signWith(SECRET_KEY)
+            .signWith(secretKey)
             .setSubject(username)
             .setIssuedAt(now)
             .setExpiration(expiryDate)
@@ -27,7 +30,7 @@ class UserAccessTokenUtil(
         return try {
             val claims =
                 Jwts.parserBuilder()
-                    .setSigningKey(SECRET_KEY)
+                    .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(accessToken)
                     .body
@@ -80,7 +83,9 @@ class UserAccessTokenUtil(
     companion object {
         private const val ACCESS_EXPIRATION_TIME = 1000 * 60 * 15 // 15 minutes
         private const val REFRESH_EXPIRATION_TIME = 1000 * 60 * 60 * 24 // 1 day
-        private val SECRET_KEY = Keys.hmacShaKeyFor("THISSHOULDBEPROTECTEDASDFASDFASDFASDFASDFASDF".toByteArray(StandardCharsets.UTF_8))
+//        @Value("\${jwt.secret}")
+//        lateinit var secretKey: String
+//        private val SECRET_KEY = Keys.hmacShaKeyFor(secretKey.toByteArray(StandardCharsets.UTF_8))
         // TODO("비밀키 숨겨야 한다")
     }
 }

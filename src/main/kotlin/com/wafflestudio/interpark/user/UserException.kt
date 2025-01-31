@@ -1,6 +1,7 @@
 package com.wafflestudio.interpark.user
 
 import com.wafflestudio.interpark.DomainException
+import com.wafflestudio.interpark.user.persistence.Provider
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
 
@@ -41,6 +42,12 @@ class SignInInvalidPasswordException : UserException(
     msg = "Invalid Password",
 )
 
+class UserIdentityNotFoundException : UserException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.NOT_FOUND,
+    msg = "UserIdentity not found",
+)
+
 class AuthenticateException : UserException(
     errorCode = 0,
     httpStatusCode = HttpStatus.UNAUTHORIZED,
@@ -53,8 +60,23 @@ class TokenExpiredException : UserException(
     msg = "Token Expired",
 )
 
-class TokenNotFoundException : UserException(
+class NoRefreshTokenException : UserException(
     errorCode = 0,
     httpStatusCode = HttpStatus.UNAUTHORIZED,
     msg = "Token not found",
+)
+
+class SocialAccountAlreadyLinkedException : UserException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.CONFLICT,
+    msg = "Social Account already linked to another user",
+)
+
+class SocialAccountNotFoundException (
+    val provider: Provider,
+    val providerId: String,
+): UserException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.NOT_FOUND,
+    msg = "This $provider account is not linked to local account",
 )

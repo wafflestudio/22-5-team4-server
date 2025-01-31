@@ -1,0 +1,60 @@
+### 회원가입
+POST http://localhost:80/api/v1/local/signup
+Content-Type: application/json
+
+{
+  "username": "good_name",
+  "password": "12345678",
+  "nickname": "examplename",
+  "phoneNumber": "010-0000-0000",
+  "email": "test@example.com"
+}
+
+### 로그인
+POST http://localhost:80/api/v1/local/signin
+Content-Type: application/json
+
+{
+  "username": "good_name",
+  "password": "12345678"
+}
+
+### performance detail 조회
+GET http://localhost/api/v1/performance/26039e50-7bde-45ac-b845-0e75ae7548ac
+
+### performance 받기
+GET http://localhost:80/api/v1/performance/search
+Accept: application/json
+
+### event 찾기
+GET http://localhost:80/api/v1/performance-event/e3c2dd31-d867-4279-8a3b-869829f134f4/2025-05-11
+Accept: application/json
+
+### event 받기
+GET http://localhost:80/api/v1/performance-event
+
+### 가능한 좌석 받기
+GET http://localhost:80/api/v1/seat/6b5b9259-d396-49fa-bb9c-27abc6094c36/available
+Accept: application/json
+
+### 예매하기
+POST http://localhost/api/v1/reservation/reserve
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5MzJkYjdkMC1jNWUzLTRlNzUtODY5Ni1iZTlkZWYxMGQzMDciLCJpYXQiOjE3Mzc4MjM2MDUsImV4cCI6MTczNzgyNDUwNX0.obnMoxlszxQwkM6Ltg-9Rsd2QGu0qJckejaMp2eqs-E
+Content-Type: application/json
+
+{
+  "performanceEventId": "6b5b9259-d396-49fa-bb9c-27abc6094c36",
+  "seatId": "fd9a1f0f-56d8-4d2b-8ad4-47e70b39fc0c"
+}
+
+### 예매정보 확인하기
+GET http://localhost/api/v1/me/reservation
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5MzJkYjdkMC1jNWUzLTRlNzUtODY5Ni1iZTlkZWYxMGQzMDciLCJpYXQiOjE3Mzc4MjM2MDUsImV4cCI6MTczNzgyNDUwNX0.obnMoxlszxQwkM6Ltg-9Rsd2QGu0qJckejaMp2eqs-E
+
+### 예매 취소하기
+DELETE http://localhost/api/v1/reservation/7e5d1f20-dfad-4978-b1d5-2f06da8479ce
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5MzJkYjdkMC1jNWUzLTRlNzUtODY5Ni1iZTlkZWYxMGQzMDciLCJpYXQiOjE3Mzc4MjM2MDUsImV4cCI6MTczNzgyNDUwNX0.obnMoxlszxQwkM6Ltg-9Rsd2QGu0qJckejaMp2eqs-E
+
+### 예매정보 확인하기
+GET http://localhost/api/v1/me/reservation
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5MzJkYjdkMC1jNWUzLTRlNzUtODY5Ni1iZTlkZWYxMGQzMDciLCJpYXQiOjE3Mzc4MjM2MDUsImV4cCI6MTczNzgyNDUwNX0.obnMoxlszxQwkM6Ltg-9Rsd2QGu0qJckejaMp2eqs-E

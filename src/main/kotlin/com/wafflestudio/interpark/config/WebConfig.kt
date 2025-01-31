@@ -1,4 +1,4 @@
-package com.wafflestudio.interpark
+package com.wafflestudio.interpark.config
 
 import com.wafflestudio.interpark.user.UserArgumentResolver
 import org.springframework.context.annotation.Configuration

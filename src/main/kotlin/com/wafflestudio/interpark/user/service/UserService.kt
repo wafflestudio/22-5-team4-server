@@ -2,10 +2,14 @@ package com.wafflestudio.interpark.user.service
 
 import com.wafflestudio.interpark.user.*
 import com.wafflestudio.interpark.user.controller.User
+import com.wafflestudio.interpark.user.persistence.Provider
+import com.wafflestudio.interpark.user.persistence.SocialAccountEntity
+import com.wafflestudio.interpark.user.persistence.SocialAccountRepository
 import com.wafflestudio.interpark.user.persistence.UserEntity
 import com.wafflestudio.interpark.user.persistence.UserIdentityEntity
 import com.wafflestudio.interpark.user.persistence.UserIdentityRepository
 import com.wafflestudio.interpark.user.persistence.UserRepository
+import com.wafflestudio.interpark.user.persistence.UserRole
 import org.mindrot.jbcrypt.BCrypt
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -24,6 +28,7 @@ class UserService(
         nickname: String,
         phoneNumber: String,
         email: String,
+        role: UserRole = UserRole.USER,
     ): User {
         if (username.length < 6 || username.length > 20) {
             throw SignUpBadUsernameException()
@@ -44,14 +49,15 @@ class UserService(
                     email = email,
                 ),
             )
-        userIdentityRepository.save(
-            UserIdentityEntity(
-                user = user,
-                role = "USER",
-                hashedPassword = encryptedPassword,
-                provider = "self",
-            ),
-        )
+        val userIdentity =
+            userIdentityRepository.save(
+                UserIdentityEntity(
+                    user = user,
+                    role = role,
+                    hashedPassword = encryptedPassword,
+                ),
+            )
+
         return User.fromEntity(user)
     }
 
@@ -59,15 +65,16 @@ class UserService(
     fun signIn(
         username: String,
         password: String,
-    ): Pair<String, String> {
+    ): Triple<User, String, String> {
         val targetUser = userRepository.findByUsername(username) ?: throw SignInUserNotFoundException()
+        val user = User.fromEntity(targetUser)
         val targetIdentity = userIdentityRepository.findByUser(targetUser) ?: throw SignInUserNotFoundException()
         if (!BCrypt.checkpw(password, targetIdentity.hashedPassword)) {
             throw SignInInvalidPasswordException()
         }
         val accessToken = userAccessTokenUtil.generateAccessToken(targetUser.id!!)
-        val refreshToken = userAccessTokenUtil.generateRefreshToken(targetIdentity.id!!)
-        return Pair(accessToken, refreshToken)
+        val refreshToken = userAccessTokenUtil.generateRefreshToken(targetUser.id!!)
+        return Triple(user, accessToken, refreshToken)
     }
 
     @Transactional
@@ -75,6 +82,7 @@ class UserService(
         userAccessTokenUtil.removeRefreshToken(refreshToken)
     }
 
+    // spring security로 전가돼서 사실상 호출 안 됨.
     @Transactional
     fun authenticate(accessToken: String): User {
         val userId = userAccessTokenUtil.validateAccessToken(accessToken) ?: throw AuthenticateException()
