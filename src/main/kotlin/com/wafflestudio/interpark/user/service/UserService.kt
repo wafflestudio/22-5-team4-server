@@ -20,7 +20,6 @@ class UserService(
     private val userRepository: UserRepository,
     private val userIdentityRepository: UserIdentityRepository,
     private val userAccessTokenUtil: UserAccessTokenUtil,
-    private val socialAccountRepository: SocialAccountRepository,
 ) {
     @Transactional
     fun signUp(
@@ -30,8 +29,6 @@ class UserService(
         phoneNumber: String,
         email: String,
         role: UserRole = UserRole.USER,
-        provider: Provider? = null,
-        providerId: String? = null,
     ): User {
         if (username.length < 6 || username.length > 20) {
             throw SignUpBadUsernameException()
@@ -60,17 +57,6 @@ class UserService(
                     hashedPassword = encryptedPassword,
                 ),
             )
-
-        // 소셜 계정 연동
-        if (provider != null && providerId != null) {
-            socialAccountRepository.save(
-                SocialAccountEntity(
-                    userIdentity = userIdentity,
-                    provider = provider,
-                    providerId = providerId,
-                ),
-            )
-        }
 
         return User.fromEntity(user)
     }
