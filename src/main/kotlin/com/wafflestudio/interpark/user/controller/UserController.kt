@@ -98,7 +98,6 @@ class UserController(
                 email = request.email,
                 phoneNumber = request.phoneNumber,
                 role = request.role,
-                provider = request.provider,
             )
         return ResponseEntity.ok(SignUpResponse(user))
     }
@@ -180,7 +179,6 @@ data class SignUpRequest(
     val phoneNumber: String,
     val email: String,
     val role: UserRole = UserRole.USER,
-    val provider: Provider? = null,
 )
 
 data class SignUpResponse(val user: User)
