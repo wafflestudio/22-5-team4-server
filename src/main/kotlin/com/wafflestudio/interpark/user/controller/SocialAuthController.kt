@@ -26,8 +26,8 @@ class SocialAuthController(
     @Operation(
         summary = "소셜 로그인 요청",
         description = """
-        클라이언트가 인가코드와 provider(ex. KAKAO, NAVER)를 요청에 담아 소셜로그인을 요청합니다.
-        서버에서는 인가 코드를 통해 소셜 인증 서버에 액세스 토큰을 요청하고 이를 다시 소셜 계정 정보와 교환합니다.
+        클라이언트가 소셜 서버 엑세스 토큰과 provider(ex. KAKAO, NAVER)를 요청에 담아 소셜로그인을 요청합니다.
+        서버에서는 엑세스 토큰을 소셜 계정 정보와 교환합니다.
         
         - 로그인한 소셜 계정이 로컬 계정과 연동되어 있는 계정인 경우
         기존 로컬 로그인 응답 객체에 provider와 providerId를 추가로 담아 반환합니다.
@@ -71,8 +71,8 @@ class SocialAuthController(
         @Parameter(description = "소셜 로그인 제공자 (예: KAKAO, NAVER)", example = "KAKAO")
         @PathVariable provider: Provider,
 
-        @Parameter(description = "소셜 인증 서버 액세스 토큰", example = "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7")
-        @RequestParam("code") socialAccessToken: String,
+        @Parameter(description = "소셜 인증 서버 액세스 토큰")
+        @RequestParam("token") socialAccessToken: String,
 
         response: HttpServletResponse
     ): ResponseEntity<SocialLoginResponse> {
