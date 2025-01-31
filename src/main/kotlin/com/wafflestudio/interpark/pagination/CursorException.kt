@@ -11,9 +11,26 @@ sealed class CursorException(
     cause: Throwable? = null,
 ) : DomainException(errorCode, httpStatusCode, msg, cause)
 
+class InvalidCursorException : CursorException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.BAD_REQUEST,
+    msg = "Failed to decode Cursor",
+)
+
 class InvalidFieldNameException : CursorException(
-    //TODO: exception 늘려서 제대로 처리하기
     errorCode = 0,
     httpStatusCode = HttpStatus.BAD_REQUEST,
     msg = "Invalid field name",
+)
+
+class FieldNotFoundException : CursorException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.BAD_REQUEST,
+    msg = "Field not found",
+)
+
+class CursorNotComparableException : CursorException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.BAD_REQUEST,
+    msg = "Cursor not comparable",
 )

@@ -63,7 +63,7 @@ data class CursorPageable(
     val size: Int = 5,
 ) {
     fun decodeCursor(): Pair<String, String>? {
-        return cursor?.let {CursorEncoder.decodeCursor(it) }
+        return cursor?.let { CursorEncoder.decodeCursor(it) ?: throw InvalidCursorException() }
     }
 }
 

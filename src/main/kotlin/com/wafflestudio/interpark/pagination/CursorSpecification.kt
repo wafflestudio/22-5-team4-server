@@ -10,16 +10,26 @@ object CursorSpecification {
         isDescending: Boolean = true,
     ): Specification<T>? {
         if (cursor == null) return null
-        val fieldCursor = cursor.first
-        val idCursor = cursor.second
+        val fieldCursor = cursor.first as? Comparable<Any>
+            ?: throw CursorNotComparableException()
+        val idCursor = cursor.second as? String
+            ?: throw CursorNotComparableException()
 
         return Specification {root, _, cb ->
-            val fieldPath = root.get<Comparable<Any>>(sortFieldName)
-            val idPath = root.get<String>("id")
+            val fieldPath = try {
+                root.get<Comparable<Any>>(sortFieldName)
+            } catch (e: IllegalArgumentException) {
+                throw FieldNotFoundException()
+            }
+            val idPath = try {
+                root.get<String>("id")
+            } catch (e: IllegalArgumentException) {
+                throw FieldNotFoundException()
+            }
 
             if(isDescending) {
                 cb.or(
-                    cb.lessThan(fieldPath, fieldCursor as Comparable<Any>),
+                    cb.lessThan(fieldPath, fieldCursor),
                     cb.and(
                         cb.equal(fieldPath, fieldCursor),
                         cb.lessThan(idPath, idCursor)
@@ -28,7 +38,7 @@ object CursorSpecification {
             }
             else {
                 cb.or(
-                    cb.greaterThan(fieldPath, fieldCursor as Comparable<Any>),
+                    cb.greaterThan(fieldPath, fieldCursor),
                     cb.and(
                         cb.equal(fieldPath, fieldCursor),
                         cb.greaterThan(idPath, idCursor)
