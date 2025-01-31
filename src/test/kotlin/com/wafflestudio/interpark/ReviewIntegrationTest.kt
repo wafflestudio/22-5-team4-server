@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
+import java.time.LocalDateTime
 import java.util.UUID
 
 @AutoConfigureMockMvc
@@ -332,8 +333,8 @@ class ReviewIntegrationTest
                 .response
                 .getContentAsString(Charsets.UTF_8)
                 .let { mapper.readTree(it) }
-                .map { Instant.parse(it.get("createdAt").asText()) }
-            val isPerformanceReviewSorted = performanceReviews.zipWithNext { a,b -> !a.isBefore(b) }.all {it}
+                .map { LocalDateTime.parse(it.get("createdAt").asText()) }
+            val isPerformanceReviewSorted = performanceReviews.zipWithNext { a,b -> a>=b }.all {it}
             assert (isPerformanceReviewSorted) { "expected sorted performance reviews but not" }
 
             val userReviews = mvc.perform(
@@ -344,8 +345,8 @@ class ReviewIntegrationTest
                 .response
                 .getContentAsString(Charsets.UTF_8)
                 .let { mapper.readTree(it) }
-                .map { Instant.parse(it.get("createdAt").asText()) }
-            val isUserReviewSorted = userReviews.zipWithNext { a,b -> !a.isBefore(b) }.all {it}
+                .map { LocalDateTime.parse(it.get("createdAt").asText()) }
+            val isUserReviewSorted = userReviews.zipWithNext { a,b -> a>=b }.all {it}
             assert (isUserReviewSorted) { "expected sorted user reviews but not" }
         }
     }

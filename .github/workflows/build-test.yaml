@@ -5,6 +5,10 @@ on:
     branches:
       - main
       - '*'
+  pull_request:
+    branches:
+      - main
+      - release-dev
 
 jobs:
   deploy:
@@ -45,6 +49,11 @@ jobs:
           SPRING_DATASOURCE_PASSWORD: somepassword
           SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
           SPRING_PROFILES_ACTIVE: "prod"
+          KAKAO_CLIENT_ID: ${{ secrets.KAKAO_CLIENT_ID }}
+          KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
+          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
 
       # 배포는 main 브랜치에서만 실행
       - name: Upload JAR to EC2

@@ -1,5 +1,7 @@
 package com.wafflestudio.interpark.review.controller
 
+import com.wafflestudio.interpark.pagination.CursorPageResponse
+import com.wafflestudio.interpark.pagination.CursorPageable
 import com.wafflestudio.interpark.review.*
 import com.wafflestudio.interpark.review.service.ReplyService
 import com.wafflestudio.interpark.review.service.ReviewService
@@ -26,6 +28,16 @@ class ReviewController(
         @PathVariable performanceId: String,
     ): ResponseEntity<GetReviewResponse>{
         val reviews = reviewService.getReviews(performanceId)
+        return ResponseEntity.ok(reviews)
+    }
+
+    @GetMapping("/api/v2/performance/{performanceId}/review")
+    fun getCursorReviews(
+        @PathVariable performanceId: String,
+        @RequestParam cursor: String?,
+    ): ResponseEntity<GetCursorReviewResponse>{
+        val cursorPageable= CursorPageable(sortFieldName = "createdAt", cursor = cursor)
+        val reviews = reviewService.getReviewsWithCursor(performanceId, cursorPageable)
         return ResponseEntity.ok(reviews)
     }
 
@@ -80,6 +92,7 @@ class ReviewController(
 
 typealias GetReviewResponse = List<Review>
 
+typealias GetCursorReviewResponse = CursorPageResponse<Review>
 
 data class CreateReviewRequest(
     val rating: Int,

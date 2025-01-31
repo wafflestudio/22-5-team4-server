@@ -10,7 +10,10 @@ import com.wafflestudio.interpark.performance.service.PerformanceHallService
 import com.wafflestudio.interpark.performance.service.PerformanceService
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Configuration
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 @Configuration
 class DataInitializer(
@@ -164,96 +167,62 @@ class DataInitializer(
             Triple(
                 "뮤지컬 지킬앤하이드",
                 "블루스퀘어 신한카드홀",
-                listOf(
-                    listOf("2024-11-29T16:00:00", "2024-11-29T18:00:00"),
-                    listOf("2025-05-18T16:00:00", "2025-05-18T18:00:00")
-                )
+                generateDateRange("2024-11-29","2025-05-18","16:00:00","18:00:00")
             ),
             Triple(
                 "마타하리",
                 "LG아트센터 서울 SIGNATURE홀",
-                listOf(
-                    listOf("2024-12-05T16:00:00", "2024-12-05T18:00:00"),
-                    listOf("2025-03-02T16:00:00", "2025-03-02T18:00:00")
-                )
+                generateDateRange("2024-12-05", "2025-03-02", "16:00:00","18:00:00")
             ),
             Triple(
                 "웃는남자",
                 "예술의전당 오페라극장",
-                listOf(
-                    listOf("2025-01-09T16:00:00", "2025-01-09T18:00:00"),
-                    listOf("2025-03-09T16:00:00", "2025-03-09T18:00:00")
-                )
+                generateDateRange("2025-01-09", "2025-03-09", "16:00:00","18:00:00")
             ),
             Triple(
                 "2025 기리보이 콘서트",
                 "블루스퀘어 마스터카드홀",
-                listOf(
-                    listOf("2025-02-01T16:00:00", "2025-02-01T18:00:00"),
-                    listOf("2025-02-02T16:00:00", "2025-02-02T18:00:00")
-                )
+                generateDateRange("2025-02-01", "2025-02-02", "16:00:00","18:00:00")
             ),
             Triple(
                 "2025 검정치마 단독공연",
                 "올림픽공원 올림픽홀",
-                listOf(
-                    listOf("2025-02-01T16:00:00", "2025-02-01T18:00:00"),
-                    listOf("2025-02-02T16:00:00", "2025-02-02T18:00:00")
-                )
+                generateDateRange("2025-02-01", "2025-02-02", "16:00:00","18:00:00")
             ),
             Triple(
                 "콜드플레이 내한공연",
                 "고양종합운동장 주경기장",
-                listOf(
-                    listOf("2025-04-16T16:00:00", "2025-04-16T18:00:00"),
-                    listOf("2025-04-25T16:00:00", "2025-04-25T18:00:00")
-                )
+                generateDateRange("2025-04-16", "2025-04-25", "16:00:00","18:00:00")
             ),
             Triple(
                 "브루스 리우 피아노 리사이틀",
                 "예술의전당 콘서트홀",
-                listOf(
-                    listOf("2025-05-11T16:00:00", "2025-05-11T18:00:00")
-                )
+                generateDateRange("2025-05-11", "2025-05-11", "16:00:00","18:00:00")
             ),
             Triple(
                 "크리스티안 테츨라프 바이올린 리사이틀",
                 "예술의전당 콘서트홀",
-                listOf(
-                    listOf("2025-05-01T16:00:00", "2025-05-01T18:00:00")
-                )
+                generateDateRange("2025-05-01", "2025-05-01", "16:00:00","18:00:00")
             ),
             Triple(
                 "발레의 별빛, 글로벌 발레스타 초청 갈라공연",
                 "세종문화회관 대극장",
-                listOf(
-                    listOf("2025-01-11T16:00:00", "2025-01-11T18:00:00"),
-                    listOf("2025-01-12T16:00:00", "2025-01-12T18:00:00")
-                )
+                generateDateRange("2025-01-11", "2025-01-12", "16:00:00","18:00:00")
             ),
             Triple(
                 "연극 애나엑스",
                 "LG아트센터 서울 U+ 스테이지",
-                listOf(
-                    listOf("2025-01-28T16:00:00", "2025-01-28T18:00:00"),
-                    listOf("2025-03-16T16:00:00", "2025-03-16T18:00:00")
-                )
+                generateDateRange("2025-01-28", "2025-03-16", "16:00:00","18:00:00")
             ),
             Triple(
                 "연극 타인의 삶",
                 "LG아트센터 서울 U+ 스테이지",
-                listOf(
-                    listOf("2025-01-28T16:00:00", "2025-01-28T18:00:00"),
-                    listOf("2025-03-16T16:00:00", "2025-03-16T18:00:00")
-                )
+                generateDateRange("2025-01-28", "2025-03-16", "16:00:00","18:00:00")
             ),
             Triple(
                 "세일즈맨의 죽음",
                 "세종문화회관 M씨어터",
-                listOf(
-                    listOf("2025-01-07T16:00:00", "2025-01-07T18:00:00"),
-                    listOf("2025-03-03T16:00:00", "2025-03-03T18:00:00")
-                )
+                generateDateRange("2025-01-07", "2025-03-03", "16:00:00","18:00:00")
             )
         )
 
@@ -276,5 +245,32 @@ class DataInitializer(
                 )
             }
         }
+    }
+
+    fun generateDateRange(
+        startDate: String, endDate: String,
+        startTime: String, endTime: String
+    ): List<List<String>> {
+        val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+        val dateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME
+
+        val startLocalDate = LocalDate.parse(startDate, dateFormatter)
+        val endLocalDate = LocalDate.parse(endDate, dateFormatter)
+        val startLocalTime = LocalTime.parse(startTime, timeFormatter)
+        val endLocalTime = LocalTime.parse(endTime, timeFormatter)
+
+        val dateList = mutableListOf<List<String>>()
+        var currentDate = startLocalDate
+
+        while (!currentDate.isAfter(endLocalDate)) {
+            val startDateTime = LocalDateTime.of(currentDate, startLocalTime)
+            val endDateTime = LocalDateTime.of(currentDate, endLocalTime)
+            dateList.add(listOf(startDateTime.format(dateTimeFormatter), endDateTime.format(dateTimeFormatter)))
+
+            currentDate = currentDate.plusDays(1) // 하루 증가
+        }
+
+        return dateList
     }
 }
