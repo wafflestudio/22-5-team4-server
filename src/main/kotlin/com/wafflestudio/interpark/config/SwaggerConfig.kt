@@ -31,6 +31,8 @@ class SwaggerConfig {
             )
             .addSecurityItem(SecurityRequirement().addList("Bearer Authentication"))
             .addSecurityItem(SecurityRequirement().addList("Google OAuth2"))
+            .addSecurityItem(SecurityRequirement().addList("Kakao OAuth2"))
+            .addSecurityItem(SecurityRequirement().addList("Naver OAuth2"))
             .components(
                 Components()
                     .addSecuritySchemes(
@@ -53,6 +55,42 @@ class SwaggerConfig {
                                             .scopes(
                                                 Scopes()
                                                     .addString("email", "email access")
+                                            )
+                                    )
+                            )
+                    )
+                    .addSecuritySchemes(
+                        "Kakao OAuth2",
+                        SecurityScheme()
+                            .type(SecurityScheme.Type.OAUTH2)
+                            .flows(
+                                OAuthFlows()
+                                    .authorizationCode(
+                                        OAuthFlow()
+                                            .authorizationUrl("https://kauth.kakao.com/oauth/authorize")
+                                            .tokenUrl("https://kauth.kakao.com/oauth/token")
+                                            .scopes(
+                                                Scopes()
+                                                    .addString("account_email", "email access")
+                                                    .addString("profile", "profile access")
+                                            )
+                                    )
+                            )
+                    )
+                    .addSecuritySchemes(
+                        "Naver OAuth2",
+                        SecurityScheme()
+                            .type(SecurityScheme.Type.OAUTH2)
+                            .flows(
+                                OAuthFlows()
+                                    .authorizationCode(
+                                        OAuthFlow()
+                                            .authorizationUrl("https://nid.naver.com/oauth2.0/authorize")
+                                            .tokenUrl("https://nid.naver.com/oauth2.0/token")
+                                            .scopes(
+                                                Scopes()
+                                                    .addString("email", "email access")
+                                                    .addString("name", "name access")
                                             )
                                     )
                             )

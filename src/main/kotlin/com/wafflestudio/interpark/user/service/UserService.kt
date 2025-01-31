@@ -2,6 +2,9 @@ package com.wafflestudio.interpark.user.service
 
 import com.wafflestudio.interpark.user.*
 import com.wafflestudio.interpark.user.controller.User
+import com.wafflestudio.interpark.user.persistence.Provider
+import com.wafflestudio.interpark.user.persistence.SocialAccountEntity
+import com.wafflestudio.interpark.user.persistence.SocialAccountRepository
 import com.wafflestudio.interpark.user.persistence.UserEntity
 import com.wafflestudio.interpark.user.persistence.UserIdentityEntity
 import com.wafflestudio.interpark.user.persistence.UserIdentityRepository
@@ -46,14 +49,15 @@ class UserService(
                     email = email,
                 ),
             )
-        userIdentityRepository.save(
-            UserIdentityEntity(
-                user = user,
-                role = role,
-                hashedPassword = encryptedPassword,
-                provider = "self",
-            ),
-        )
+        val userIdentity =
+            userIdentityRepository.save(
+                UserIdentityEntity(
+                    user = user,
+                    role = role,
+                    hashedPassword = encryptedPassword,
+                ),
+            )
+
         return User.fromEntity(user)
     }
 

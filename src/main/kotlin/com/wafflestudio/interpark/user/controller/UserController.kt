@@ -1,6 +1,7 @@
 package com.wafflestudio.interpark.user.controller
 
 import com.wafflestudio.interpark.user.*
+import com.wafflestudio.interpark.user.persistence.Provider
 import com.wafflestudio.interpark.user.persistence.UserRole
 import com.wafflestudio.interpark.user.service.UserService
 import io.swagger.v3.oas.annotations.Operation

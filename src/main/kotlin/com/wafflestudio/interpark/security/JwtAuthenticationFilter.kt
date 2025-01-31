@@ -1,11 +1,9 @@
 package com.wafflestudio.interpark.security
 
 import com.wafflestudio.interpark.user.UserAccessTokenUtil
-import com.wafflestudio.interpark.user.controller.UserDetailsImpl
 import com.wafflestudio.interpark.user.service.UserDetailsServiceImpl
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.web.filter.OncePerRequestFilter
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
