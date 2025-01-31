@@ -16,6 +16,8 @@ import com.wafflestudio.interpark.seat.persistence.ReservationRepository
 import com.wafflestudio.interpark.seat.persistence.SeatRepository
 import com.wafflestudio.interpark.user.AuthenticateException
 import com.wafflestudio.interpark.user.persistence.UserRepository
+import org.springframework.cache.annotation.Cacheable
+import org.springframework.cache.annotation.CacheEvict
 import org.redisson.api.RedissonClient
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.repository.findByIdOrNull
@@ -32,7 +34,8 @@ class SeatService(
     private val userRepository: UserRepository,
     private val redissonClient: RedissonClient,
 ) {
-    @Transactional
+    @Transactional(readOnly = true)
+    @Cacheable(value = ["availableSeats"], key = "#performanceEventId")
     fun getAvailableSeats(performanceEventId: String): List<Seat> {
         val performanceEvent = performanceEventRepository.findByIdOrNull(performanceEventId) ?: throw PerformanceEventNotFoundException()
         val reservedSeats = reservationRepository.findByPerformanceEventId(performanceEventId).map { it.seat }
@@ -42,6 +45,7 @@ class SeatService(
     }
 
     @Transactional
+    @CacheEvict(value = ["availableSeats"], key = "#performanceEventId")
     fun reserveSeat(
         userId: String,
         performanceEventId: String,
