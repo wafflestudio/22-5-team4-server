@@ -31,7 +31,6 @@ constructor(
     @BeforeEach
     fun setUp() {
         val username = UUID.randomUUID().toString().take(8)
-        val adminname = UUID.randomUUID().toString().takeLast(8)
         val password = "password123"
 
         // 1️⃣ 회원가입

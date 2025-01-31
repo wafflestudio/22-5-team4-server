@@ -112,7 +112,7 @@ constructor(
         // 3️⃣ 테스트용 공연 ID 반환
         performanceId =
             mvc.perform(
-                get("/api/v2/performance/search")
+                get("/api/v1/performance/search")
                     .header("Authorization", "Bearer $userAccessToken")
                     .param("title", "지킬앤하이드")
                     .contentType(MediaType.APPLICATION_JSON),
@@ -122,7 +122,7 @@ constructor(
                 .getContentAsString(Charsets.UTF_8)
                 .let {
                     val node = mapper.readTree(it)
-                    val firstItem = node.get("data").firstOrNull() ?: error("Response array is empty")
+                    val firstItem = node.firstOrNull() ?: error("Response array is empty")
                     val idNode = firstItem.get("id")
                     requireNotNull(idNode) { "ID not found in response item: $firstItem" }
                     idNode.asText()
@@ -133,23 +133,23 @@ constructor(
     fun `공연 검색 플로우 테스트`() {
         // 4️⃣ 공연 검색 (title 조건)
         mvc.perform(
-            get("/api/v2/performance/search")
+            get("/api/v1/performance/search")
                 .header("Authorization", "Bearer $userAccessToken")
                 .param("title", "지킬앤하이드")
                 .contentType(MediaType.APPLICATION_JSON),
         ).andExpect(status().`is`(200))
-            .andExpect(jsonPath("$.data[0].title").value("뮤지컬 지킬앤하이드"))
-            .andExpect(jsonPath("$.data.length()").value(1))
+            .andExpect(jsonPath("$[0].title").value("뮤지컬 지킬앤하이드"))
+            .andExpect(jsonPath("$.length()").value(1))
 
         // 5️⃣ 공연 검색 (category 조건)
         mvc.perform(
-            get("/api/v2/performance/search")
+            get("/api/v1/performance/search")
                 .header("Authorization", "Bearer $userAccessToken")
                 .param("category", PerformanceCategory.CONCERT.name)
                 .contentType(MediaType.APPLICATION_JSON),
         ).andExpect(status().`is`(200))
-            .andExpect(jsonPath("$.data").isArray) // 응답이 배열인지 확인
-            .andExpect(jsonPath("$.data.length()").value(3)) // 배열의 길이가 0인지 확인
+            .andExpect(jsonPath("$").isArray) // 응답이 배열인지 확인
+            .andExpect(jsonPath("$.length()").value(3)) // 배열의 길이가 0인지 확인
     }
 
     @Test

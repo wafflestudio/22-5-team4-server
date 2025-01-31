@@ -73,13 +73,13 @@ class ReviewIntegrationTest
             //테스트 용으로 아무 공연 Id를 하나 가져온다
             performanceId =
                 mvc.perform(
-                    get("/api/v2/performance/search")
+                    get("/api/v1/performance/search")
                 ).andExpect(status().`is`(200))
                     .andReturn()
                     .response
                     .getContentAsString(Charsets.UTF_8)
                     .let {
-                        val performances = mapper.readTree(it).get("data")
+                        val performances = mapper.readTree(it)
                         performances[0].get("id").asText()
                     }
         }
