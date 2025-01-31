@@ -7,6 +7,7 @@ else
 endif
 
 all:
+	docker compose up -d mysql
 	$(GRADLE_CMD) build
 	docker build -t myapp:1.0 .
 	docker compose up
