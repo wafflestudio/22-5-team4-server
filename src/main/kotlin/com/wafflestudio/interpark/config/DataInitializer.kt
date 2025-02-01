@@ -160,6 +160,26 @@ class DataInitializer(
             address = "부산광역시 해운대구",
             maxAudience = 100
         )
+        performanceHallService.createPerformanceHall(
+            name = "용인포은아트홀",
+            address = "경기도 용인시 수지구 포은대로",
+            maxAudience = 1000
+        )
+        performanceHallService.createPerformanceHall(
+            name = "롯데콘서트홀",
+            address = "서울특별시 송파구 올림픽로",
+            maxAudience = 2036
+        )
+        performanceHallService.createPerformanceHall(
+            name = "국립정동극장",
+            address = "서울 중구 정동길",
+            maxAudience = 500
+        )
+        performanceHallService.createPerformanceHall(
+            name = "유니버셜아트센터",
+            address = "서울시 광진구 능동",
+            maxAudience = 1500
+        )
 
         // 2) Performance 데이터 넣기
         performanceService.createPerformance(
@@ -314,63 +334,126 @@ class DataInitializer(
             detail = "https://ticketimage.interpark.com/Play/image/etc/24/24006928-20.jpg",
             category = PerformanceCategory.PLAY,
             posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24006928_p.gif",
-            backdropImageUri = "http://example.com/backdrop/shearmadness.jpg"
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
         performanceService.createPerformance(
             title = "죽여주는 이야기",
             detail = "https://ticketimage.interpark.com/Play/image/etc/25/23008491-103.jpg",
             category = PerformanceCategory.PLAY,
             posterUri = "https://ticketimage.interpark.com/Play/image/large/23/23008491_p.gif",
-            backdropImageUri = "http://example.com/backdrop/killerstory.jpg"
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
         performanceService.createPerformance(
             title = "꽃의 비밀",
             detail = "https://ticketimage.interpark.com/Play/image/etc/25/24018192-06.jpg",
             category = PerformanceCategory.PLAY,
             posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24018192_p.gif",
-            backdropImageUri = "http://example.com/backdrop/flowersecret.jpg"
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
         performanceService.createPerformance(
             title = "한뼘사이",
             detail = "https://ticketimage.interpark.com/Play/image/etc/24/22014277-143.jpg",
             category = PerformanceCategory.PLAY,
             posterUri = "https://ticketimage.interpark.com/Play/image/large/22/22014277_p.gif",
-            backdropImageUri = "http://example.com/backdrop/handspan.jpg"
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
         performanceService.createPerformance(
             title = "붉은 낙엽",
             detail = "https://ticketimage.interpark.com/Play/image/etc/25/24016741-11.jpg",
             category = PerformanceCategory.PLAY,
             posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24016741_p.gif",
-            backdropImageUri = "http://example.com/backdrop/redleaf.jpg"
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
         performanceService.createPerformance(
             title = "사랑해 엄마",
             detail = "https://ticketimage.interpark.com/Play/image/etc/25/24015841-19.jpg",
             category = PerformanceCategory.PLAY,
             posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24015841_p.gif",
-            backdropImageUri = "http://example.com/backdrop/loveyoumom.jpg"
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
         performanceService.createPerformance(
             title = "사내연애 보고서",
             detail = "https://ticketimage.interpark.com/Play/image/etc/24/24008626-24.jpg",
             category = PerformanceCategory.PLAY,
             posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24008626_p.gif",
-            backdropImageUri = "http://example.com/backdrop/officeromance.jpg"
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
         performanceService.createPerformance(
             title = "바닷마을 다이어리",
             detail = "https://ticketimage.interpark.com/Play/image/etc/25/24017992-12.jpg",
             category = PerformanceCategory.PLAY,
             posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24017992_p.gif",
-            backdropImageUri = "http://example.com/backdrop/diaryofseaside.jpg"
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
         performanceService.createPerformance(
             title = "불편한 편의점",
             detail = "https://ticketimage.interpark.com/Play/image/etc/24/24004660-31.jpg",
             category = PerformanceCategory.PLAY,
             posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24004660_p.gif",
-            backdropImageUri = "http://example.com/backdrop/inconvenientstore.jpg"
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "지브리 OST 콘서트 : 디 오케스트라",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/25000133-03.jpg",
+            category = PerformanceCategory.CLASSIC,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/25/25000133_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "라흐마니노프",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/25000715-01.jpg",
+            category = PerformanceCategory.CLASSIC,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/25/25000715_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "코리안챔버오케스트라 창단 60주년 기념",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/24018282-02.jpg",
+            category = PerformanceCategory.CLASSIC,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24018282_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "토요키즈클래식",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/25000321-02.jpg",
+            category = PerformanceCategory.CLASSIC,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/25/25000321_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "IBK기업은행과 함께하는 예술의전당 토요콘서트",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/25000463-02.jpg",
+            category = PerformanceCategory.CLASSIC,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/25/25000463_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "지브리＆디즈니 영화음악 FESTA",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/25000640-05.jpg",
+            category = PerformanceCategory.CLASSIC,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/25/25000640_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "광대",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/24018235-04.jpg",
+            category = PerformanceCategory.CLASSIC,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24018235_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "백건우와 모차르트 〈Program Ⅱ〉",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/24017702-06.jpg",
+            category = PerformanceCategory.CLASSIC,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24017702_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "피아노 파 드 되 - Dancing with Pierrot",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/24018007-04.jpg",
+            category = PerformanceCategory.CLASSIC,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24018007_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
 
         // 3) Performance Event 데이터 넣기
@@ -538,6 +621,51 @@ class DataInitializer(
                 "불편한 편의점",
                 "KNN시어터",
                 generateDateRange("2025-02-03", "2025-02-28", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "지브리 OST 콘서트 : 디 오케스트라",
+                "예술의전당 콘서트홀",
+                generateDateRange("2025-02-15", "2025-02-18", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "라흐마니노프",
+                "예술의전당 콘서트홀",
+                generateDateRange("2025-02-10", "2025-02-10", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "코리안챔버오케스트라 창단 60주년 기념",
+                "예술의전당 콘서트홀",
+                generateDateRange("2025-03-02", "2025-03-02", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "토요키즈클래식",
+                "용인포은아트홀",
+                generateDateRange("2025-02-15", "2025-06-21", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "IBK기업은행과 함께하는 예술의전당 토요콘서트",
+                "예술의전당 콘서트홀",
+                generateDateRange("2025-02-15", "2025-02-15", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "지브리＆디즈니 영화음악 FESTA",
+                "롯데콘서트홀",
+                generateDateRange("2025-03-05", "2025-03-05", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "광대",
+                "국립정동극장",
+                generateDateRange("2025-02-12", "2025-02-21", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "백건우와 모차르트 〈Program Ⅱ〉",
+                "예술의전당 콘서트홀",
+                generateDateRange("2025-03-10", "2025-03-10", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "피아노 파 드 되 - Dancing with Pierrot",
+                "유니버셜아트센터",
+                generateDateRange("2025-02-24", "2025-03-07", "16:00:00","18:00:00")
             ),
         )
 
