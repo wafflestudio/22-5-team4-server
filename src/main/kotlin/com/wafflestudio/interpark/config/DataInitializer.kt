@@ -163,22 +163,47 @@ class DataInitializer(
         performanceHallService.createPerformanceHall(
             name = "용인포은아트홀",
             address = "경기도 용인시 수지구 포은대로",
-            maxAudience = 1000
+            maxAudience = 100
         )
         performanceHallService.createPerformanceHall(
             name = "롯데콘서트홀",
             address = "서울특별시 송파구 올림픽로",
-            maxAudience = 2036
+            maxAudience = 100
         )
         performanceHallService.createPerformanceHall(
             name = "국립정동극장",
             address = "서울 중구 정동길",
-            maxAudience = 500
+            maxAudience = 100
         )
         performanceHallService.createPerformanceHall(
             name = "유니버셜아트센터",
             address = "서울시 광진구 능동",
-            maxAudience = 1500
+            maxAudience = 100
+        )
+        performanceHallService.createPerformanceHall(
+            name = "서울랜드",
+            address = "경기도 과천시 광명로",
+            maxAudience = 100
+        )
+        performanceHallService.createPerformanceHall(
+            name = "KSPO DOME",
+            address = "서울특별시 송파구 올림픽로",
+            maxAudience = 100
+        )
+        performanceHallService.createPerformanceHall(
+            name = "인스파이어 아레나",
+            address = "인천광역시 중구 공항문화로",
+            maxAudience = 100
+        )
+        performanceHallService.createPerformanceHall(
+            name = "광주예술의전당 대극장",
+            address = "광주광역시 북구 북문대로",
+            maxAudience = 100
+        )
+        performanceHallService.createPerformanceHall(
+            name = "의정부예술의전당 대극장",
+            address = "경기도 의정부시 의정로 1",
+            maxAudience = 100
         )
 
         // 2) Performance 데이터 넣기
@@ -455,6 +480,69 @@ class DataInitializer(
             posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24018007_p.gif",
             backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
+        performanceService.createPerformance(
+            title = "정동원棟동 이야기話화 3rd 전국투어 콘서트",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/25001118-01.jpg",
+            category = PerformanceCategory.CONCERT,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/25/25001118_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "2025 폴킴 소극장 콘서트",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/25000089-04.jpg",
+            category = PerformanceCategory.CONCERT,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/25/25000089_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "2025 World DJ Festival",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/24010212-04.jpg",
+            category = PerformanceCategory.CONCERT,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24010212_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "j-hope Tour ‘HOPE ON THE STAGE’ in SEOUL",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/25000014-01.jpg",
+            category = PerformanceCategory.CONCERT,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/25/25000014_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "TAEYANG 2025 TOUR",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/24018375-04.jpg",
+            category = PerformanceCategory.CONCERT,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/25/25000516_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "“TAK SHOW3” - 앙코르",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/24018317-05.jpg",
+            category = PerformanceCategory.CONCERT,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24018317_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "2025 윤하 앵콜 콘서트 〈GROWTH THEORY : Final Edition〉",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/25000432-02.jpg",
+            category = PerformanceCategory.CONCERT,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/25/25000432_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "2024-25 Theatre 이문세",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/25000934-01.jpg",
+            category = PerformanceCategory.CONCERT,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/25/25000934_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "김창옥 토크콘서트 시즌4",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/25000115-01.jpg",
+            category = PerformanceCategory.CONCERT,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/25/25000115_p.gif",
+            backdropImageUri = "http://example.com/backdrop/mom.jpg"
+        )
 
         // 3) Performance Event 데이터 넣기
         val performanceEvents = listOf(
@@ -666,6 +754,51 @@ class DataInitializer(
                 "피아노 파 드 되 - Dancing with Pierrot",
                 "유니버셜아트센터",
                 generateDateRange("2025-02-24", "2025-03-07", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "정동원棟동 이야기話화 3rd 전국투어 콘서트",
+                "올림픽공원 올림픽홀",
+                generateDateRange("2025-03-28", "2025-03-30", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "2025 폴킴 소극장 콘서트",
+                "블루스퀘어 마스터카드홀",
+                generateDateRange("2025-02-08", "2025-02-16", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "2025 World DJ Festival",
+                "서울랜드",
+                generateDateRange("2025-06-14", "2025-06-15", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "j-hope Tour ‘HOPE ON THE STAGE’ in SEOUL",
+                "KSPO DOME",
+                generateDateRange("2025-02-28", "2025-03-02", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "TAEYANG 2025 TOUR",
+                "인스파이어 아레나",
+                generateDateRange("2025-02-05", "2025-02-05", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "“TAK SHOW3” - 앙코르",
+                "KSPO DOME",
+                generateDateRange("2025-02-22", "2025-02-23", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "2025 윤하 앵콜 콘서트 〈GROWTH THEORY : Final Edition〉",
+                "KSPO DOME",
+                generateDateRange("2025-02-14", "2025-02-16", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "2024-25 Theatre 이문세",
+                "광주예술의전당 대극장",
+                generateDateRange("2025-04-11", "2025-04-12", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "김창옥 토크콘서트 시즌4",
+                "의정부예술의전당 대극장",
+                generateDateRange("2025-03-16", "2025-03-16", "16:00:00","18:00:00")
             ),
         )
 
