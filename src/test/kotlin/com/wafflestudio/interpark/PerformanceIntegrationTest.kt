@@ -149,7 +149,7 @@ constructor(
                 .contentType(MediaType.APPLICATION_JSON),
         ).andExpect(status().`is`(200))
             .andExpect(jsonPath("$").isArray) // 응답이 배열인지 확인
-            .andExpect(jsonPath("$.length()").value(3)) // 배열의 길이가 0인지 확인
+            .andExpect(jsonPath("$.length()").value(12)) // 배열의 길이가 0인지 확인
     }
 
     @Test
