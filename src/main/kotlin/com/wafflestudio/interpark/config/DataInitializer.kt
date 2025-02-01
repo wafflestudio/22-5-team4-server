@@ -115,6 +115,51 @@ class DataInitializer(
             address = "서울특별시 종로구 동숭동",
             maxAudience = 100
         )
+        performanceHallService.createPerformanceHall(
+            name = "콘텐츠박스",
+            address = "서울시 종로구 동숭동",
+            maxAudience = 100
+        )
+        performanceHallService.createPerformanceHall(
+            name = "지인시어터",
+            address = "서울특별시 종로구 동숭길 25",
+            maxAudience = 100
+        )
+        performanceHallService.createPerformanceHall(
+            name = "링크아트센터 벅스홀",
+            address = "서울특별시 종로구 대학로",
+            maxAudience = 100
+        )
+        performanceHallService.createPerformanceHall(
+            name = "라온아트홀",
+            address = "서울특별시 종로구 대학로",
+            maxAudience = 100
+        )
+        performanceHallService.createPerformanceHall(
+            name = "국립극장 달오름극장",
+            address = "서울 중구 장충단로",
+            maxAudience = 100
+        )
+        performanceHallService.createPerformanceHall(
+            name = "대학로 아트하우스",
+            address = "서울특별시 종로구 대학로10길",
+            maxAudience = 100
+        )
+        performanceHallService.createPerformanceHall(
+            name = "대학로 제나아트홀",
+            address = "서울특별시 종로구 대학로",
+            maxAudience = 100
+        )
+        performanceHallService.createPerformanceHall(
+            name = "예술의전당 자유소극장",
+            address = "서울특별시 서초구 서초동",
+            maxAudience = 100
+        )
+        performanceHallService.createPerformanceHall(
+            name = "KNN시어터",
+            address = "부산광역시 해운대구",
+            maxAudience = 100
+        )
 
         // 2) Performance 데이터 넣기
         performanceService.createPerformance(
@@ -264,6 +309,69 @@ class DataInitializer(
             posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24006709_p.gif",
             backdropImageUri = "http://example.com/backdrop/mom.jpg"
         )
+        performanceService.createPerformance(
+            title = "쉬어매드니스",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/24006928-20.jpg",
+            category = PerformanceCategory.PLAY,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24006928_p.gif",
+            backdropImageUri = "http://example.com/backdrop/shearmadness.jpg"
+        )
+        performanceService.createPerformance(
+            title = "죽여주는 이야기",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/23008491-103.jpg",
+            category = PerformanceCategory.PLAY,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/23/23008491_p.gif",
+            backdropImageUri = "http://example.com/backdrop/killerstory.jpg"
+        )
+        performanceService.createPerformance(
+            title = "꽃의 비밀",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/24018192-06.jpg",
+            category = PerformanceCategory.PLAY,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24018192_p.gif",
+            backdropImageUri = "http://example.com/backdrop/flowersecret.jpg"
+        )
+        performanceService.createPerformance(
+            title = "한뼘사이",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/22014277-143.jpg",
+            category = PerformanceCategory.PLAY,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/22/22014277_p.gif",
+            backdropImageUri = "http://example.com/backdrop/handspan.jpg"
+        )
+        performanceService.createPerformance(
+            title = "붉은 낙엽",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/24016741-11.jpg",
+            category = PerformanceCategory.PLAY,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24016741_p.gif",
+            backdropImageUri = "http://example.com/backdrop/redleaf.jpg"
+        )
+        performanceService.createPerformance(
+            title = "사랑해 엄마",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/24015841-19.jpg",
+            category = PerformanceCategory.PLAY,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24015841_p.gif",
+            backdropImageUri = "http://example.com/backdrop/loveyoumom.jpg"
+        )
+        performanceService.createPerformance(
+            title = "사내연애 보고서",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/24008626-24.jpg",
+            category = PerformanceCategory.PLAY,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24008626_p.gif",
+            backdropImageUri = "http://example.com/backdrop/officeromance.jpg"
+        )
+        performanceService.createPerformance(
+            title = "바닷마을 다이어리",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/25/24017992-12.jpg",
+            category = PerformanceCategory.PLAY,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24017992_p.gif",
+            backdropImageUri = "http://example.com/backdrop/diaryofseaside.jpg"
+        )
+        performanceService.createPerformance(
+            title = "불편한 편의점",
+            detail = "https://ticketimage.interpark.com/Play/image/etc/24/24004660-31.jpg",
+            category = PerformanceCategory.PLAY,
+            posterUri = "https://ticketimage.interpark.com/Play/image/large/24/24004660_p.gif",
+            backdropImageUri = "http://example.com/backdrop/inconvenientstore.jpg"
+        )
 
         // 3) Performance Event 데이터 넣기
         val performanceEvents = listOf(
@@ -385,6 +493,51 @@ class DataInitializer(
                     listOf("2025-02-15T16:00:00", "2025-02-15T18:00:00"),
                     listOf("2025-02-16T16:00:00", "2025-02-16T18:00:00"),
                 )
+            ),
+            Triple(
+                "쉬어매드니스",
+                "콘텐츠박스",
+                generateDateRange("2025-02-15", "2025-02-18", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "죽여주는 이야기",
+                "지인시어터",
+                generateDateRange("2025-02-15", "2025-02-18", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "꽃의 비밀",
+                "링크아트센터 벅스홀",
+                generateDateRange("2025-02-15", "2025-02-28", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "한뼘사이",
+                "라온아트홀",
+                generateDateRange("2025-02-28", "2025-03-01", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "붉은 낙엽",
+                "국립극장 달오름극장",
+                generateDateRange("2025-02-20", "2025-02-25", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "사랑해 엄마",
+                "대학로 아트하우스",
+                generateDateRange("2025-02-20", "2025-02-25", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "사내연애 보고서",
+                "대학로 제나아트홀",
+                generateDateRange("2025-02-20", "2025-02-25", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "바닷마을 다이어리",
+                "예술의전당 자유소극장",
+                generateDateRange("2025-03-01", "2025-03-31", "16:00:00","18:00:00")
+            ),
+            Triple(
+                "불편한 편의점",
+                "KNN시어터",
+                generateDateRange("2025-02-03", "2025-02-28", "16:00:00","18:00:00")
             ),
         )
 
