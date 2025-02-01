@@ -103,6 +103,10 @@ class UserController(
     }
 
     @PostMapping("/api/v1/local/signin")
+    @Operation(
+        summary = "로그인",
+        description = "로그인을 처리하고 성공하면 accessToken을 반환하고, refreshToken을 쿠키에 저장한다."
+    )
     fun signin(
         @RequestBody request: SignInRequest,
         response: HttpServletResponse,
@@ -122,6 +126,9 @@ class UserController(
     }
 
     @GetMapping("/api/v1/users/me")
+    @Operation(
+        summary = "내 정보 확인",
+    )
     fun me(
         @AuthenticationPrincipal userDetails: UserDetailsImpl,
     ): ResponseEntity<User> {
@@ -137,6 +144,10 @@ class UserController(
     }
 
     @PostMapping("/api/v1/auth/signout")
+    @Operation(
+        summary = "로그아웃",
+        description = "로그아웃을 처리하고 refreshToken을 사용할 수 없도록 한다."
+    )
     fun signout(
         @CookieValue(value = "refreshToken", required = false) refreshToken: String?,
     ): ResponseEntity<Void> {
@@ -148,6 +159,10 @@ class UserController(
     }
 
     @PostMapping("/api/v1/auth/refresh_token")
+    @Operation(
+        summary = "토큰 재발행",
+        description = "refreshToken이 유효할 때 accessToken과 refreshToken을 다시 발급한다."
+    )
     fun refreshToken(
         @CookieValue(value = "refreshToken", required = false) refreshToken: String?,
         response: HttpServletResponse,
