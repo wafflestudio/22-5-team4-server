@@ -5433,3 +5433,80 @@ Jan 31, 2025 4:42:08 AM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notif
 WARNING: Unsupported notification method: metals/windowStateDidChange
 Jan 31, 2025 4:42:09 AM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
 WARNING: Unsupported notification method: metals/windowStateDidChange
+2025.01.31 22:46:44 ERROR Unexpected error initializing server: 
+org.eclipse.lsp4j.jsonrpc.ResponseErrorException: Request window/showMessageRequest failed with message: Canceled
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.handleResponse(RemoteEndpoint.java:220)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.consume(RemoteEndpoint.java:204)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.handleMessage(StreamMessageProducer.java:185)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.listen(StreamMessageProducer.java:97)
+	at org.eclipse.lsp4j.jsonrpc.json.ConcurrentMessageProcessor.run(ConcurrentMessageProcessor.java:114)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.lang.Thread.run(Thread.java:1575)
+
+2025.01.31 22:50:45 INFO  Started: Metals version 1.5.1 in folders '/home/grantzile/development/waffle/22-5-team4-server' for client Visual Studio Code 1.92.0.
+2025.01.31 22:50:45 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:50:48 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+Jan 31, 2025 10:50:48 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 3
+2025.01.31 22:50:48 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+Jan 31, 2025 10:50:48 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 2
+2025.01.31 22:50:51 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+Jan 31, 2025 10:50:52 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+WARNING: Unsupported notification method: metals/windowStateDidChange
+2025.01.31 22:50:56 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:50:56 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+Jan 31, 2025 10:50:57 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+WARNING: Unsupported notification method: metals/windowStateDidChange
+2025.01.31 22:50:56 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:50:56 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:50:58 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:50:58 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:50:58 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:50:58 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:50:58 WARN  no build target for: /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala
+2025.01.31 22:50:58 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:50:58 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:50:58 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:50:59 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:50:59 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:51:00 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:51:00 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:51:02 WARN  no build target for: /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala
+2025.01.31 22:51:02 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:51:02 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:51:04 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+Jan 31, 2025 10:51:05 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+WARNING: Unsupported notification method: metals/windowStateDidChange
+2025.01.31 22:51:14 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+Jan 31, 2025 10:51:14 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+WARNING: Unsupported notification method: metals/windowStateDidChange
+2025.01.31 22:51:14 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:51:14 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:51:15 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:51:15 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:51:15 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:51:15 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+Jan 31, 2025 10:51:25 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+WARNING: Unsupported notification method: metals/windowStateDidChange
+2025.01.31 22:51:26 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+Jan 31, 2025 10:51:27 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+WARNING: Unsupported notification method: metals/windowStateDidChange
+Jan 31, 2025 10:51:44 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+WARNING: Unsupported notification method: metals/windowStateDidChange
+Jan 31, 2025 10:51:55 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+WARNING: Unsupported notification method: metals/windowStateDidChange
+2025.01.31 22:52:17 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:52:17 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:52:17 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:52:19 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:52:20 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:52:21 WARN  no build target for: /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala
+2025.01.31 22:52:21 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:52:21 INFO  no build target found for /home/grantzile/development/waffle/22-5-team4-server/stress_test/src/gatling/scala/computerdatabase/ComputerDatabaseSimulation.scala. Using presentation compiler with project's scala-library version: 3.3.4
+2025.01.31 22:52:23 INFO  Shutting down server
+2025.01.31 22:52:23 INFO  shutting down Metals
+2025.01.31 22:52:23 INFO  Exiting server

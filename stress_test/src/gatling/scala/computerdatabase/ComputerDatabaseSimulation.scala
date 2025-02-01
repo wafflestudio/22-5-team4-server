@@ -1,5 +1,6 @@
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
+import io.gatling.amqp.Predef._
 import java.util.UUID
 
 class DynamicReservationSimulation extends Simulation {
@@ -10,9 +11,6 @@ class DynamicReservationSimulation extends Simulation {
     .acceptHeader("application/json")
     .contentTypeHeader("application/json")
     .acceptLanguageHeader("en-US,en;q=0.5")
-
-  // 🔹 공유할 값 저장 (Scala 변수)
-  val sharedUsername = UUID.randomUUID().toString.take(8) // 회원가입은 한 번만 수행
 
   val setup = exec { session =>
     val newSession = session.set("username", UUID.randomUUID().toString.take(8))

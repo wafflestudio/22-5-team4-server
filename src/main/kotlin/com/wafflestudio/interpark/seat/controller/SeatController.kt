@@ -26,6 +26,7 @@ class SeatController(
         return ResponseEntity.ok(GetAvailableSeatsResponse(seats))
     }
 
+    // 사실상 실행 안됨
     @PostMapping("/api/v1/reservation/reserve")
     fun reserveSeat(
         @RequestBody request: ReserveSeatRequest,
