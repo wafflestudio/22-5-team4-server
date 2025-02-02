@@ -5,7 +5,8 @@
 
 > 이 프로젝트는 **Spring Boot**를 사용한 **RESTful API 서버**이며,  
 > 주요 기능은 **사용자 인증/인가(JWT)**, **게시글 CRUD** 등입니다.  
-> 와플티켓 안드로이드 앱의 백엔드 서버 역할을 합니다.
+> 와플티켓 안드로이드 앱의 백엔드 서버 역할을 합니다.  
+> [와플티켓 안드로이드 앱 깃헙 바로가기](https://github.com/wafflestudio/22-5-team4-android)
 ---
 
 ## 목차
@@ -17,10 +18,8 @@
 5. [환경 변수 / 설정](#환경-변수--설정-environment-variables)
 6. [DB 구조](#db-구조-database-schema)
 7. [API 명세](#api-명세-api-documentation)
-8. [테스트](#테스트-testing)
-9. [배포](#배포-deployment)
-10. [라이선스](#라이선스-license)
-11. [기여](#기여-contributing)
+8. [배포](#배포-deployment)
+9. [기여](#기여-contributing)
 
 ---
 
@@ -130,7 +129,7 @@ cursor는 id와 정렬기준값을 기반으로 서버에서 생성하였습니�
    make 명령어 실행 시 빌드와 docker를 이용한 배포가 같이 이루어집니다
 
    접속 도메인: `http://localhost`
-## 환경 변수 / 설정
+## 환경 변수 / 설정 (Environment Variables)
 로컬 배포시 .env 파일을 아래와 같이 설정합니다
 ```aiignore
 SPRING_DATASOURCE_URL: "jdbc:mysql://mysql-db:3306/testdb"
@@ -145,11 +144,15 @@ NAVER_CLIENT_SECRET: ???
 JWT_SECRET_KEY는 32자 이상의 적당한 문자열을 사용하면 됩니다
 
 ---
-## DB 구조
+## DB 구조 (Database Schema)
 ### 엔티티 구조
 ![EntityRelationDiagram.png](EntityRelationDiagram.png)
 ## API 명세
 [와플 티켓 벡엔드 서버 API 문서](http://15.164.225.121/swagger-ui/index.html#/)
-## 배포 deployment
-## 라이선스 license
-## 기여 contributing
+## 배포 (deployment)
+
+## 기여 (contributing)
+
+- [@Grantzile](https://github.com/Grantzile)
+- [@ChungPlusPlus](https://github.com/ChungPlusPlus)
+- [@kdh8156](https://github.com/kdh8156)
