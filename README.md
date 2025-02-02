@@ -1,10 +1,12 @@
 # 22-5-team4-server
 
+<br/>
 <div align="center">
   <h3></h3>
   <h1>🧇 WaffleTicket 🎫 (Interpark Ticket clone)</h1>
   <h3></h3>
 </div>
+<br/><br/>
 
 > 이 프로젝트는 **Spring Boot**를 사용한 **RESTful API 서버**이며,  
 > 주요 기능은 **공연 검색 및 예매**, **게시글 CRUD** 등입니다.  
