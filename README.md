@@ -1,7 +1,9 @@
 # 22-5-team4-server
 
 <div align="center">
-  <h1>🧇 WaffleTicket 🎫 (Interpark Ticket clone)</h1> 
+  <h3></h3>
+  <h1>🧇 WaffleTicket 🎫 (Interpark Ticket clone)</h1>
+  <h3></h3>
 </div>
 
 > 이 프로젝트는 **Spring Boot**를 사용한 **RESTful API 서버**이며,  
