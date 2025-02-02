@@ -1,5 +1,8 @@
 package com.wafflestudio.interpark.performance.persistence
 
+import com.wafflestudio.interpark.review.persistence.ReplyEntity
+import com.wafflestudio.interpark.review.persistence.ReviewEntity
+import com.wafflestudio.interpark.seat.persistence.ReservationEntity
 import jakarta.persistence.*
 import java.time.Instant
 
@@ -23,4 +26,7 @@ data class PerformanceEventEntity(
 
     @Column(name = "end_at", nullable = false)
     val endAt: Instant,
+
+    @OneToMany(mappedBy = "performanceEvent", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var reservations: MutableSet<ReservationEntity> = mutableSetOf(),
 )

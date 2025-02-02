@@ -1,5 +1,7 @@
 package com.wafflestudio.interpark.performance.persistence
 
+import com.wafflestudio.interpark.review.persistence.ReplyEntity
+import com.wafflestudio.interpark.review.persistence.ReviewEntity
 import jakarta.persistence.*
 import java.time.Instant
 import java.time.LocalDate
@@ -26,6 +28,12 @@ class PerformanceEntity(
 
     @Column(name = "backdrop_image_uri", nullable = false)
     val backdropImageUri: String,
+
+    @OneToMany(mappedBy = "performance", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var reviews: MutableSet<ReviewEntity> = mutableSetOf(),
+
+    @OneToMany(mappedBy = "performance", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var performanceEvents: MutableSet<PerformanceEventEntity> = mutableSetOf(),
 )
 
 enum class PerformanceCategory {

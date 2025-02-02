@@ -94,7 +94,7 @@ constructor(
     @Test
     fun `공연 전체 조회 페이지네이션 테스트`() {
         var cursor: String? = null
-        val maxIteration = 4
+        val maxIteration = 15
         var iterations = 0
         var totalItems = 0
 
@@ -137,7 +137,7 @@ constructor(
     @Test
     fun `공연 일부 조회 페이지네이션 테스트`() {
         var cursor: String? = null
-        val maxIteration = 4
+        val maxIteration = 15
         var iterations = 0
         var totalItems = 0
 

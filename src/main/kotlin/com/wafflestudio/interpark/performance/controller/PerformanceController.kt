@@ -32,6 +32,10 @@ class PerformanceController(
     }
 
     @GetMapping("/api/v2/performance/search")
+    @Operation(
+        summary = "페이지네이션이 적용된 공연 조회",
+        description = "제목과 카테고리에 해당하는 공연들의 리스트를 반환합니다."
+    )
     fun searchCursorPerformance(
         @RequestParam title: String?,
         @RequestParam category: PerformanceCategory?,
@@ -47,6 +51,10 @@ class PerformanceController(
     // WARN: THIS IS FOR ADMIN.
     // TODO: SEPERATE THIS TO OTHER APPLICATION
     @PostMapping("/admin/v1/performance")
+    @Operation(
+        summary = "공연 생성",
+        description = "관리자가 공연을 생성할 수 있습니다."
+    )
     fun createPerformance(
         @Valid @RequestBody request: CreatePerformanceRequest,
         @AuthenticationPrincipal userDetails: UserDetailsImpl,
@@ -76,6 +84,10 @@ class PerformanceController(
     }
 
     @DeleteMapping("/admin/v1/performance/{performanceId}")
+    @Operation(
+        summary = "공연 삭제",
+        description = "관리자가 공연을 삭제할 수 있습니다."
+    )
     fun deletePerformance(
         @PathVariable performanceId: String,
         @AuthenticationPrincipal userDetails: UserDetailsImpl,

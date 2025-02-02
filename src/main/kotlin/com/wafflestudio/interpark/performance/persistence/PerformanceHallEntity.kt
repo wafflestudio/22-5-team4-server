@@ -1,5 +1,7 @@
 package com.wafflestudio.interpark.performance.persistence
 
+import com.wafflestudio.interpark.review.persistence.ReviewEntity
+import com.wafflestudio.interpark.seat.persistence.SeatEntity
 import jakarta.persistence.*
 import java.time.Instant
 
@@ -18,4 +20,10 @@ class PerformanceHallEntity(
 
     @Column(name = "max_audience", nullable = false)
     val maxAudience: Int,
+
+    @OneToMany(mappedBy = "performanceHall", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var performanceEvents: MutableSet<PerformanceEventEntity> = mutableSetOf(),
+
+    @OneToMany(mappedBy = "performanceHall", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var seats: MutableSet<SeatEntity> = mutableSetOf(),
 )
