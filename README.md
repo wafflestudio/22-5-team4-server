@@ -3,15 +3,12 @@
 <div align="center">
   <h1>🧇 WaffleTicket 🎫 (Interpark Ticket clone)</h1> 
 </div>
-<br/>
 
 > 이 프로젝트는 **Spring Boot**를 사용한 **RESTful API 서버**이며,  
 > 주요 기능은 **공연 검색 및 예매**, **게시글 CRUD** 등입니다.  
 > 와플티켓 안드로이드 앱의 백엔드 서버 역할을 합니다.
 
 [와플티켓 안드로이드 앱 바로가기](https://github.com/wafflestudio/22-5-team4-android)
-
----
 
 ## 목차
 
@@ -34,7 +31,7 @@
 - **주요 특징**: 공연 일정/좌석/가격 관리, 예매/결제/취소, 리뷰 작성, 소셜 로그인 등
 - **추가 내용**: 관리자와 일반 사용자의 접근 권한을 구분하며, 앱에서 직접 공연을 추가할 수 있도록 합니다
 
----
+
 
 ## 기술 스택 (Tech Stack)
 
@@ -55,7 +52,7 @@
 | Auth         | JWT, Social(OAuth2)            | Access/Refresh Token 발급, 카카오/네이버 로그인 |
 | Infra        | AWS (EC2, RDS), Docker         | 개발/테스트/운영 환경 분리                      |
 
----
+
 
 ## 주요 기능 (Features)
 
@@ -75,7 +72,7 @@
 5. **캐싱 / 성능 최적화**
     - 공연 목록, 좌석 정보 캐싱
     - 대규모 트래픽 대비 확장성 확보
----
+
 ## 주요 기능 구현 방식
 - ### 액세스 토큰 발급, 재발급
 기본적인 유저 인증은 Jwt를 이용해 처리했습니다
@@ -112,7 +109,7 @@ cursor는 id와 정렬기준값을 기반으로 서버에서 생성하였습니�
 
 같은 좌석에 여러 예매 요청이 들어왔을 때 하나만 통과하는 것을 테스트로 확인했습니다.
 
----
+
 ## 설치 및 실행 (Getting Started)
 
 ### 사전 요구사항 (Prerequisites)
@@ -155,22 +152,22 @@ NAVER_CLIENT_SECRET: ???
 ```
 JWT_SECRET_KEY는 32자 이상의 적당한 문자열을 사용하면 됩니다
 
----
+
 ## DB 구조 (Database Schema)
 
----
+
 ### 엔티티 구조
 ![EntityRelationDiagram.png](EntityRelationDiagram.png)
 
----
+
 ## API 명세
 ### [와플 티켓 벡엔드 서버 API 문서](http://15.164.225.121/swagger-ui/index.html#/)  
 위 링크가 만료되었거나 접근이 불가능한 경우, 프로젝트를 직접 빌드 및 실행한 후 [링크](http://localhost/swagger-ui/index.html)에서 API 문서를 확인할 수 있습니다.
 
----
+
 ## 배포 (deployment)
 
----
+
 ## 기여 (contributing)
 
 - [@Grantzile](https://github.com/Grantzile)
