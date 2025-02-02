@@ -1,8 +1,12 @@
 # 22-5-team4-server
 
+<br/>
 <div align="center">
-  <h1>🧇 WaffleTicket 🎫 (Interpark Ticket clone)</h1> 
+  <h3></h3>
+  <h1>🧇 WaffleTicket 🎫 (Interpark Ticket clone)</h1>
+  <h3></h3>
 </div>
+<br/><br/>
 
 > 이 프로젝트는 **Spring Boot**를 사용한 **RESTful API 서버**이며,  
 > 주요 기능은 **공연 검색 및 예매**, **게시글 CRUD** 등입니다.  
@@ -39,7 +43,7 @@
 - **프레임워크(Framework)**: <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat&logo=springboot&logoColor=white" style="vertical-align: middle;">
 - **DB(Database)**: <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white" style="vertical-align: middle;">
 - **빌드/의존성 관리**:  <img src="https://img.shields.io/badge/Gradle-02303A?style=flat&logo=gradle&logoColor=white" style="vertical-align: middle;">
-- **인증(Authentication)**: JWT (<img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat&logo=springsecurity&logoColor=white" style="vertical-align: middle;">), OAuth 2.0(<img src="https://img.shields.io/badge/kakao-FFCD00?style=flat&logo=kakao&logoColor=black" style="vertical-align: middle;"> <img src="https://img.shields.io/badge/NAVER-03C75A?style=flat&logo=naver&logoColor=white" style="vertical-align: middle;">)
+- **인증(Authentication)**: JWT (<img src="https://img.shields.io/badge/JSON Web Tokens-000000?style=flat&logo=jsonwebtokens&logoColor=white" style="vertical-align: middle;"> <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat&logo=springsecurity&logoColor=white" style="vertical-align: middle;">), OAuth 2.0(<img src="https://img.shields.io/badge/kakao-FFCD00?style=flat&logo=kakao&logoColor=black" style="vertical-align: middle;"> <img src="https://img.shields.io/badge/NAVER-03C75A?style=flat&logo=naver&logoColor=white" style="vertical-align: middle;">)
 - **부하 테스트**: <img src="https://img.shields.io/badge/Gatling-FF9E2A?logo=gatling&logoColor=fff&style=flat" style="vertical-align: middles;">
 - **기타**:
     - Docker & Docker Compose <img src="https://img.shields.io/badge/docker-2496ED?style=flat&logo=docker&logoColor=white" style="vertical-align: middle;">
@@ -205,7 +209,13 @@ JWT_SECRET_KEY는 32자 이상의 적당한 문자열을 사용하면 됩니다
 
 
 ## 배포 (deployment)
-
+- Github workflow를 통해 자동으로 이루어집니다.
+    - 현재 단일 EC2에 배포하는 형식으로 이루어져 있으며, 권한이 제한된 배포용 계정으로 접속해 배포합니다.
+    - IP 제어가 필요하나 현재는 적용되어 있지 않습니다.
+        - 추후 IAM 인증을 통해 Workflow의 EC2 SSH 접근 권한을 일시적으로 허용하고 배포한 뒤 다시 롤백하는 방식으로 변경 예정
+    - 추후 MSA 구조 적용 시 ArgoCD를 이용할 예정
+        - Fargate는 k8s 노드 롤링 등으로 인한 예상치 못한 다운타임을 생각하지 않아도 되나, 현재 서비스에 stateful하게 동작하는 메커니즘이 없어 문제가 되지 않는다고 판단함.
+        - 결정적으로, stateless하게 동작한다면 k8s 노드 또한 노드 롤링 시 graceful shutdown을 지원하기에 문제가 되지 않습니다.
 
 ## 기여 (contributing)
 
