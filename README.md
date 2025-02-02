@@ -7,7 +7,6 @@
 > 주요 기능은 **사용자 인증/인가(JWT)**, **게시글 CRUD** 등입니다.  
 > 와플티켓 안드로이드 앱의 백엔드 서버 역할을 합니다.
 ---
-[와플 티켓 벡엔드 서버 API 문서](http://15.164.225.121/swagger-ui/index.html#/)
 
 ## 목차
 
@@ -15,13 +14,12 @@
 2. [기술 스택](#기술-스택-tech-stack)
 3. [주요 기능](#주요-기능-features)
 4. [설치 및 실행](#설치-및-실행-getting-started)
-5. [환경 변수 / 설정](#환경-변수--설정-environment-variables)
-6. [DB 구조](#db-구조-database-schema)
-7. [API 명세](#api-명세-api-documentation)
-8. [테스트](#테스트-testing)
-9. [배포](#배포-deployment)
-10. [라이선스](#라이선스-license)
-11. [기여](#기여-contributing)
+5. [DB 구조](#db-구조-database-schema)
+6. [API 명세](#api-명세-api-documentation)
+7. [테스트](#테스트-testing)
+8. [배포](#배포-deployment)
+9. [라이선스](#라이선스-license)
+10. [기여](#기여-contributing)
 
 ---
 
@@ -111,3 +109,8 @@
     ./gradlew bootRun
     ```
     - 기본 포트: `http://localhost:8080`
+
+## DB 구조 (Database schema)
+
+## API 명세 (API documentation)
+[와플 티켓 벡엔드 서버 API 문서](http://15.164.225.121/swagger-ui/index.html#/)
