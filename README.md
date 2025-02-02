@@ -43,10 +43,23 @@
 - **DB(Database)**: <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white" style="vertical-align: middle;">
 - **빌드/의존성 관리**:  <img src="https://img.shields.io/badge/Gradle-02303A?style=flat-square&logo=gradle&logoColor=white" style="vertical-align: middle;">
 - **인증(Authentication)**: JWT (<img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat-square&logo=springsecurity&logoColor=white" style="vertical-align: middle;">), OAuth 2.0(<img src="https://img.shields.io/badge/kakao-FFCD00?style=flat-square&logo=kakao&logoColor=black" style="vertical-align: middle;"> <img src="https://img.shields.io/badge/NAVER-03C75A?style=flat-square&logo=naver&logoColor=white" style="vertical-align: middle;">)
+- **부하 테스트**: <img src="https://img.shields.io/badge/Gatling-FF9E2A?logo=gatling&logoColor=fff&style=flat" style="vertical-align: middles;">
 - **기타**:
     - Docker & Docker Compose <img src="https://img.shields.io/badge/docker-2496ED?style=flat-square&logo=docker&logoColor=white" style="vertical-align: middle;">
     - Swagger (Springdoc) for API 문서화 <img src="https://img.shields.io/badge/Swagger-85EA2D?style=flat-square&logo=swagger&logoColor=black" style="vertical-align: middle;">
     - AWS (EC2, RDS) 배포 가능 <img src="https://img.shields.io/badge/Amazon EC2-FF9900?style=flat-square&logo=amazon ec2&logoColor=white" style="vertical-align: middle;"> <img src="https://img.shields.io/badge/Amazon RDS-527FFF?style=flat-square&logo=Amazon rds&logoColor=white" style="vertical-align: middle;">
+
+- **도입 중**
+    - Web proxy: <img src="https://img.shields.io/badge/NGINX-009639?logo=nginx&logoColor=fff&style=flat" style="vertical-align: middle;">
+    - MessageQueue: <img src="https://img.shields.io/badge/RabbitMQ-F60?logo=rabbitmq&logoColor=fff&style=flat" style="vertical-align: middle;">
+
+- **적용 검토 중**
+    - SonarLint: ![SonarLint Badge](https://img.shields.io/badge/SonarLint-CB2029?logo=sonarlint&logoColor=fff&style=flat)
+    - Orchestration: ![Kubernetes Badge](https://img.shields.io/badge/Kubernetes-326CE5?logo=kubernetes&logoColor=fff&style=flat)
+    - GitOps: ![ArgoCD Badge](https://img.shields.io/badge/ArgoCD-EF7B4D?logo=argo&logoColor=fff&style=flat)
+    - MSA:
+        - ![Phoenix Framework Badge](https://img.shields.io/badge/Phoenix%20Framework-FD4F00?logo=phoenixframework&logoColor=fff&style=flat)
+        - ![Actix Badge](https://img.shields.io/badge/Actix-000?logo=actix&logoColor=fff&style=flat)
 
 | 구분         | 기술                           | 비고                                   |
 |--------------|--------------------------------|--------------------------------------|
