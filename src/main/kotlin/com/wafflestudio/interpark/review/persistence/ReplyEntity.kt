@@ -5,7 +5,10 @@ import jakarta.persistence.*
 import java.time.Instant
 
 @Entity
-@Table(name = "reply")
+@Table(
+    name = "reply",
+    indexes = [jakarta.persistence.Index(name = "idx__createdAt", columnList = "created_at")]
+)
 data class ReplyEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
