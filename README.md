@@ -199,7 +199,7 @@ JWT_SECRET_KEY는 32자 이상의 적당한 문자열을 사용하면 됩니다
 ![EntityRelationDiagram.png](EntityRelationDiagram.png)
 
 
-## API 명세
+## API 명세 (API Documentation)
 ### [와플 티켓 벡엔드 서버 API 문서](http://15.164.225.121/swagger-ui/index.html#/)  
 위 링크가 만료되었거나 접근이 불가능한 경우, 프로젝트를 직접 빌드 및 실행한 후 [링크](http://localhost/swagger-ui/index.html)에서 API 문서를 확인할 수 있습니다.
 
