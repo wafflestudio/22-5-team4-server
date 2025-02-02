@@ -39,7 +39,7 @@
 - **프레임워크(Framework)**: <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat&logo=springboot&logoColor=white" style="vertical-align: middle;">
 - **DB(Database)**: <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white" style="vertical-align: middle;">
 - **빌드/의존성 관리**:  <img src="https://img.shields.io/badge/Gradle-02303A?style=flat&logo=gradle&logoColor=white" style="vertical-align: middle;">
-- **인증(Authentication)**: JWT (<img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat&logo=springsecurity&logoColor=white" style="vertical-align: middle;">), OAuth 2.0(<img src="https://img.shields.io/badge/kakao-FFCD00?style=flat&logo=kakao&logoColor=black" style="vertical-align: middle;"> <img src="https://img.shields.io/badge/NAVER-03C75A?style=flat&logo=naver&logoColor=white" style="vertical-align: middle;">)
+- **인증(Authentication)**: JWT (<img src="https://img.shields.io/badge/JSON Web Tokens-000000?style=flat&logo=jsonwebtokens&logoColor=white" style="vertical-align: middle;"> <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat&logo=springsecurity&logoColor=white" style="vertical-align: middle;">), OAuth 2.0(<img src="https://img.shields.io/badge/kakao-FFCD00?style=flat&logo=kakao&logoColor=black" style="vertical-align: middle;"> <img src="https://img.shields.io/badge/NAVER-03C75A?style=flat&logo=naver&logoColor=white" style="vertical-align: middle;">)
 - **부하 테스트**: <img src="https://img.shields.io/badge/Gatling-FF9E2A?logo=gatling&logoColor=fff&style=flat" style="vertical-align: middles;">
 - **기타**:
     - Docker & Docker Compose <img src="https://img.shields.io/badge/docker-2496ED?style=flat&logo=docker&logoColor=white" style="vertical-align: middle;">
@@ -199,7 +199,7 @@ JWT_SECRET_KEY는 32자 이상의 적당한 문자열을 사용하면 됩니다
 ![EntityRelationDiagram.png](EntityRelationDiagram.png)
 
 
-## API 명세
+## API 명세 (API Documentation)
 ### [와플 티켓 벡엔드 서버 API 문서](http://15.164.225.121/swagger-ui/index.html#/)  
 위 링크가 만료되었거나 접근이 불가능한 경우, 프로젝트를 직접 빌드 및 실행한 후 [링크](http://localhost/swagger-ui/index.html)에서 API 문서를 확인할 수 있습니다.
 
