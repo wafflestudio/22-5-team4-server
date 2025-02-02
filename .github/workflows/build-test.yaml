@@ -100,4 +100,4 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
             echo "Starting containers..."
-            docker compose up -d --no-deps myapp
+            docker compose up -d --no-deps myapp --build
