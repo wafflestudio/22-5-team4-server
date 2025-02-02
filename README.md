@@ -38,7 +38,7 @@
 
 ## 기술 스택 (Tech Stack)
 
-- **언어(Language)**: <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=flat-square&logo=kotlin&logoColor=white" style="vertical-align: middle;">
+- **언어(Language)**: <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=flat-square&logo=kotlin&logoColor=white" style="vertical-align: middle;"> <img src="https://img.shields.io/badge/Scala-DC322F?logo=scala&logoColor=fff&style=flat" style="vertical-align: middle;">
 - **프레임워크(Framework)**: <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white" style="vertical-align: middle;">
 - **DB(Database)**: <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white" style="vertical-align: middle;">
 - **빌드/의존성 관리**:  <img src="https://img.shields.io/badge/Gradle-02303A?style=flat-square&logo=gradle&logoColor=white" style="vertical-align: middle;">
