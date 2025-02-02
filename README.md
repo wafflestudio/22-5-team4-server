@@ -47,6 +47,7 @@
     - AWS (EC2, RDS) 배포 가능 <img src="https://img.shields.io/badge/Amazon EC2-FF9900?style=flat&logo=amazon ec2&logoColor=white" style="vertical-align: middle;"> <img src="https://img.shields.io/badge/Amazon RDS-527FFF?style=flat&logo=Amazon rds&logoColor=white" style="vertical-align: middle;">
 
 - **도입 중**
+    - <img src="https://img.shields.io/badge/Redis-FF4438?logo=redis&logoColor=fff&style=flat" style="vertical-align: middle;">
     - Web proxy: <img src="https://img.shields.io/badge/NGINX-009639?logo=nginx&logoColor=fff&style=flat" style="vertical-align: middle;">
     - MessageQueue: <img src="https://img.shields.io/badge/RabbitMQ-F60?logo=rabbitmq&logoColor=fff&style=flat" style="vertical-align: middle;">
 
