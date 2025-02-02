@@ -37,4 +37,7 @@ class ReviewEntity(
 
     @OneToMany(mappedBy = "review")
     var reviewLikes: List<ReviewLikeEntity> = emptyList(),
+
+    @OneToMany(mappedBy = "review", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var replies: MutableSet<ReplyEntity> = mutableSetOf(),
 )

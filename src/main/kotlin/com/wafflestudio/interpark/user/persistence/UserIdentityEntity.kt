@@ -1,5 +1,6 @@
 package com.wafflestudio.interpark.user.persistence
 
+import com.wafflestudio.interpark.review.persistence.ReviewEntity
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -24,8 +25,11 @@ class UserIdentityEntity(
     var role: UserRole = UserRole.USER,
     @Column(name = "hashed_password", nullable = false)
     val hashedPassword: String,
+
 //    @OneToMany(mappedBy = "userIdentity", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
 //    val socialAccounts: MutableList<SocialAccountEntity> = mutableListOf(),
+    @OneToMany(mappedBy = "userIdentity", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var socialAccounts: MutableSet<SocialAccountEntity> = mutableSetOf(),
 )
 
 enum class UserRole : GrantedAuthority {
