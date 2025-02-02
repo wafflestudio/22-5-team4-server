@@ -6,7 +6,7 @@ import jakarta.persistence.*
 import java.time.Instant
 
 @Entity
-@Table(name = "reviews")
+@Table(name = "reviews", indexes = @Index(name = "idx__createdAt", columnList = "created_at"))
 class ReviewEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
