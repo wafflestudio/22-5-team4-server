@@ -60,6 +60,12 @@ class TokenExpiredException : UserException(
     msg = "Token Expired",
 )
 
+class InvalidTokenException : UserException(
+    errorCode = 0,
+    httpStatusCode = HttpStatus.UNAUTHORIZED,
+    msg = "Invalid Token(Wrong Signing Algorithm)",
+)
+
 class NoRefreshTokenException : UserException(
     errorCode = 0,
     httpStatusCode = HttpStatus.UNAUTHORIZED,
