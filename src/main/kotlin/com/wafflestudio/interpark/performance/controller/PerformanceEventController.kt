@@ -2,6 +2,7 @@ package com.wafflestudio.interpark.performance.controller
 
 import com.wafflestudio.interpark.performance.service.PerformanceEventService
 import com.wafflestudio.interpark.user.controller.UserDetailsImpl
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -14,6 +15,9 @@ class PerformanceEventController(
     private val performanceEventService: PerformanceEventService,
 ) {
     @GetMapping("/api/v1/performance-event")
+    @Operation(
+        summary = "전체 공연이벤트 조회",
+    )
     fun getPerformanceEvent(
     ): ResponseEntity<GetPerformanceEventResponse> {
         // Currently, no search
@@ -23,6 +27,10 @@ class PerformanceEventController(
     }
 
     @GetMapping("/api/v1/performance-event/{performanceId}/{performanceDate}")
+    @Operation(
+        summary = "특정 공연의 공연이벤트 조회",
+        description = "공연와 특정 공연일이 주어졌을 때 실제 이루어지는 공연들의 정보를 반환합니다."
+    )
     fun getPerformanceEventFromDate(
         @PathVariable performanceId: String,
         @PathVariable performanceDate: String,
@@ -38,6 +46,9 @@ class PerformanceEventController(
     // WARN: THIS IS FOR ADMIN.
     // TODO: SEPERATE THIS TO OTHER APPLICATION
     @PostMapping("/admin/v1/performance-event")
+    @Operation(
+        summary = "공연이벤트 생성",
+    )
     fun createPerformanceEvent(
         @RequestBody request: CreatePerformanceEventRequest,
         @AuthenticationPrincipal userDetails: UserDetailsImpl,
@@ -54,6 +65,9 @@ class PerformanceEventController(
     }
 
     @DeleteMapping("/admin/v1/performance-event/{performanceEventId}")
+    @Operation(
+        summary = "공연이벤트 삭제",
+    )
     fun deletePerformanceEvent(
         @PathVariable performanceEventId: String,
         @AuthenticationPrincipal userDetails: UserDetailsImpl,

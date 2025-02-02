@@ -6,6 +6,7 @@ import com.wafflestudio.interpark.review.*
 import com.wafflestudio.interpark.review.service.ReplyService
 import com.wafflestudio.interpark.review.service.ReviewService
 import com.wafflestudio.interpark.user.controller.UserDetailsImpl
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -16,6 +17,10 @@ class ReviewController(
 ) {
 
     @GetMapping("/api/v1/me/review")
+    @Operation(
+        summary = "작성한 리뷰 조회",
+        description = "본인이 작성했던 리뷰들을 조회할 수 있습니다."
+    )
     fun getMyReviews(
         @AuthenticationPrincipal userDetails: UserDetailsImpl
     ): ResponseEntity<GetReviewResponse>{
@@ -24,6 +29,10 @@ class ReviewController(
     }
 
     @GetMapping("/api/v1/performance/{performanceId}/review")
+    @Operation(
+        summary = "공연의 리뷰 조회",
+        description = "특정 공연에 달린 리뷰들을 조회할 수 있습니다."
+    )
     fun getReviews(
         @PathVariable performanceId: String,
     ): ResponseEntity<GetReviewResponse>{
@@ -32,6 +41,10 @@ class ReviewController(
     }
 
     @GetMapping("/api/v2/performance/{performanceId}/review")
+    @Operation(
+        summary = "페이지네이션이 적용된 공연의 리뷰 조회",
+        description = "특정 공연에 달린 리뷰들을 조회할 수 있습니다."
+    )
     fun getCursorReviews(
         @PathVariable performanceId: String,
         @RequestParam cursor: String?,
@@ -42,6 +55,9 @@ class ReviewController(
     }
 
     @PostMapping("/api/v1/performance/{performanceId}/review")
+    @Operation(
+        summary = "리뷰 작성",
+    )
     fun createReview(
         @RequestBody request: CreateReviewRequest,
         @PathVariable performanceId: String,
@@ -52,6 +68,9 @@ class ReviewController(
     }
 
     @PutMapping("/api/v1/review/{reviewId}")
+    @Operation(
+        summary = "리뷰 수정",
+    )
     fun editReview(
         @RequestBody request: EditReviewRequest,
         @PathVariable reviewId: String,
@@ -62,6 +81,9 @@ class ReviewController(
     }
 
     @DeleteMapping("/api/v1/review/{reviewId}")
+    @Operation(
+        summary = "리뷰 삭제",
+    )
     fun deleteReview(
         @PathVariable reviewId: String,
         @AuthenticationPrincipal userDetails: UserDetailsImpl
@@ -71,6 +93,9 @@ class ReviewController(
     }
 
     @PostMapping("/api/v1/review/{reviewId}/like")
+    @Operation(
+        summary = "리뷰 공감",
+    )
     fun likeReview(
         @PathVariable reviewId: String,
         @AuthenticationPrincipal userDetails: UserDetailsImpl
@@ -80,6 +105,9 @@ class ReviewController(
     }
 
     @DeleteMapping("/api/v1/review/{reviewId}/like")
+    @Operation(
+        summary = "리뷰 공감 취소",
+    )
     fun cancelLikeReview(
         @PathVariable reviewId: String,
         @AuthenticationPrincipal userDetails: UserDetailsImpl

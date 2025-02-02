@@ -2,6 +2,7 @@ package com.wafflestudio.interpark.performance.controller
 
 import com.wafflestudio.interpark.performance.service.PerformanceHallService
 import com.wafflestudio.interpark.user.controller.UserDetailsImpl
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -12,6 +13,9 @@ class PerformanceHallController(
     private val performanceHallService: PerformanceHallService,
 ) {
     @GetMapping("/api/v1/performance-hall")
+    @Operation(
+        summary = "전체 공연장 조회",
+    )
     fun getPerformanceHall(
     ): ResponseEntity<GetPerformanceHallResponse> {
         // Currently, no search
@@ -23,6 +27,9 @@ class PerformanceHallController(
     // WARN: THIS IS FOR ADMIN.
     // TODO: SEPERATE THIS TO OTHER APPLICATION
     @PostMapping("/admin/v1/performance-hall")
+    @Operation(
+        summary = "공연장 생성",
+    )
     fun createPerformanceHall(
         @RequestBody request: CreatePerformanceHallRequest,
         @AuthenticationPrincipal userDetails: UserDetailsImpl,
@@ -38,6 +45,9 @@ class PerformanceHallController(
     }
 
     @DeleteMapping("/admin/v1/performance-hall/{performanceHallId}")
+    @Operation(
+        summary = "공연장 삭제",
+    )
     fun deletePerformance(
         @PathVariable performanceHallId: String,
         @AuthenticationPrincipal userDetails: UserDetailsImpl,
