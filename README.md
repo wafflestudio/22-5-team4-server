@@ -35,16 +35,16 @@
 
 ## 기술 스택 (Tech Stack)
 
-- **언어(Language)**: <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=flat-square&logo=kotlin&logoColor=white" style="vertical-align: middle;"> <img src="https://img.shields.io/badge/Scala-DC322F?logo=scala&logoColor=fff&style=flat" style="vertical-align: middle;">
-- **프레임워크(Framework)**: <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white" style="vertical-align: middle;">
-- **DB(Database)**: <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white" style="vertical-align: middle;">
-- **빌드/의존성 관리**:  <img src="https://img.shields.io/badge/Gradle-02303A?style=flat-square&logo=gradle&logoColor=white" style="vertical-align: middle;">
-- **인증(Authentication)**: JWT (<img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat-square&logo=springsecurity&logoColor=white" style="vertical-align: middle;">), OAuth 2.0(<img src="https://img.shields.io/badge/kakao-FFCD00?style=flat-square&logo=kakao&logoColor=black" style="vertical-align: middle;"> <img src="https://img.shields.io/badge/NAVER-03C75A?style=flat-square&logo=naver&logoColor=white" style="vertical-align: middle;">)
+- **언어(Language)**: <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=flat&logo=kotlin&logoColor=white" style="vertical-align: middle;"> <img src="https://img.shields.io/badge/Scala-DC322F?logo=scala&logoColor=fff&style=flat" style="vertical-align: middle;">
+- **프레임워크(Framework)**: <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat&logo=springboot&logoColor=white" style="vertical-align: middle;">
+- **DB(Database)**: <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white" style="vertical-align: middle;">
+- **빌드/의존성 관리**:  <img src="https://img.shields.io/badge/Gradle-02303A?style=flat&logo=gradle&logoColor=white" style="vertical-align: middle;">
+- **인증(Authentication)**: JWT (<img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat&logo=springsecurity&logoColor=white" style="vertical-align: middle;">), OAuth 2.0(<img src="https://img.shields.io/badge/kakao-FFCD00?style=flat&logo=kakao&logoColor=black" style="vertical-align: middle;"> <img src="https://img.shields.io/badge/NAVER-03C75A?style=flat&logo=naver&logoColor=white" style="vertical-align: middle;">)
 - **부하 테스트**: <img src="https://img.shields.io/badge/Gatling-FF9E2A?logo=gatling&logoColor=fff&style=flat" style="vertical-align: middles;">
 - **기타**:
-    - Docker & Docker Compose <img src="https://img.shields.io/badge/docker-2496ED?style=flat-square&logo=docker&logoColor=white" style="vertical-align: middle;">
-    - Swagger (Springdoc) for API 문서화 <img src="https://img.shields.io/badge/Swagger-85EA2D?style=flat-square&logo=swagger&logoColor=black" style="vertical-align: middle;">
-    - AWS (EC2, RDS) 배포 가능 <img src="https://img.shields.io/badge/Amazon EC2-FF9900?style=flat-square&logo=amazon ec2&logoColor=white" style="vertical-align: middle;"> <img src="https://img.shields.io/badge/Amazon RDS-527FFF?style=flat-square&logo=Amazon rds&logoColor=white" style="vertical-align: middle;">
+    - Docker & Docker Compose <img src="https://img.shields.io/badge/docker-2496ED?style=flat&logo=docker&logoColor=white" style="vertical-align: middle;">
+    - Swagger (Springdoc) for API 문서화 <img src="https://img.shields.io/badge/Swagger-85EA2D?style=flat&logo=swagger&logoColor=black" style="vertical-align: middle;">
+    - AWS (EC2, RDS) 배포 가능 <img src="https://img.shields.io/badge/Amazon EC2-FF9900?style=flat&logo=amazon ec2&logoColor=white" style="vertical-align: middle;"> <img src="https://img.shields.io/badge/Amazon RDS-527FFF?style=flat&logo=Amazon rds&logoColor=white" style="vertical-align: middle;">
 
 - **도입 중**
     - Web proxy: <img src="https://img.shields.io/badge/NGINX-009639?logo=nginx&logoColor=fff&style=flat" style="vertical-align: middle;">
